@@ -5,7 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 
 const JobCard = ({ job }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6 hover:shadow-xl hover:scale-105 transition">
       {/* Company Logo */}
       <div className="mb-4">
         <img

@@ -225,7 +225,7 @@ export const jobsData = [
     _id: "1",
     title: "Full Stack Developer",
     location: "California",
-    level: "Senior Level",
+    level: "Senior",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -258,7 +258,7 @@ export const jobsData = [
     _id: "2",
     title: "Data Scientist",
     location: "New York",
-    level: "Intermediate Level",
+    level: "Intermediate ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -291,7 +291,7 @@ export const jobsData = [
     _id: "3",
     title: "UI/UX Designer",
     location: "Bangalore",
-    level: "Beginner Level",
+    level: "Beginner",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -324,7 +324,7 @@ export const jobsData = [
     _id: "4",
     title: "DevOps Engineer",
     location: "Washington",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -357,7 +357,7 @@ export const jobsData = [
     _id: "5",
     title: "Software Engineer",
     location: "Hyderabad",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -390,7 +390,7 @@ export const jobsData = [
     _id: "6",
     title: "Network Engineer",
     location: "Bangalore",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -423,7 +423,7 @@ export const jobsData = [
     _id: "7",
     title: "Project Manager",
     location: "Bangalore",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -456,7 +456,7 @@ export const jobsData = [
     _id: "8",
     title: "Mobile App Developer",
     location: "Hyderabad",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -489,7 +489,7 @@ export const jobsData = [
     _id: "9",
     title: "Cloud Architect",
     location: "Hyderabad",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -522,7 +522,7 @@ export const jobsData = [
     _id: "10",
     title: "Technical Writer",
     location: "Mumbai",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -555,7 +555,7 @@ export const jobsData = [
     _id: "11",
     title: "Cybersecurity Analyst",
     location: "Mumbai",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -588,7 +588,7 @@ export const jobsData = [
     _id: "12",
     title: "Business Analyst",
     location: "Mumbai",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -621,7 +621,7 @@ export const jobsData = [
     _id: "13",
     title: "Marketing Specialist",
     location: "Chennai",
-    level: "Beginner Level",
+    level: "Beginner  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -654,7 +654,7 @@ export const jobsData = [
     _id: "14",
     title: "Data Scientist",
     location: "California",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -687,7 +687,7 @@ export const jobsData = [
     _id: "15",
     title: "UX/UI Designer",
     location: "Hyderabad",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -720,7 +720,7 @@ export const jobsData = [
     _id: "16",
     title: "DevOps Engineer",
     location: "Bangalore",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -753,7 +753,7 @@ export const jobsData = [
     _id: "17",
     title: "Sales Manager",
     location: "New York",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -786,7 +786,7 @@ export const jobsData = [
     _id: "18",
     title: "Human Resources Specialist",
     location: "Washington",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -819,7 +819,7 @@ export const jobsData = [
     _id: "19",
     title: "Content Marketing Manager",
     location: "Mumbai",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -852,7 +852,7 @@ export const jobsData = [
     _id: "20",
     title: "Graphic Designer",
     location: "Chennai",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -885,7 +885,7 @@ export const jobsData = [
     _id: "21",
     title: "Software Tester",
     location: "Chennai",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -918,7 +918,7 @@ export const jobsData = [
     _id: "22",
     title: "Network Security Engineer",
     location: "Bangalore",
-    level: "Senior Level",
+    level: "Senior  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",
@@ -951,7 +951,7 @@ export const jobsData = [
     _id: "23",
     title: "Cloud Engineer",
     location: "Hyderabad",
-    level: "Intermediate Level",
+    level: "Intermediate  ",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
       name: "Slack",

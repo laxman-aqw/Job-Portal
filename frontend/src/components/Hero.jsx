@@ -21,7 +21,7 @@ const Hero = () => {
 
   return (
     <>
-      <div className="mx-10 mt-10 rounded-2xl md:mx-32 bg-gradient-to-r from-gray-100 to-gray-200">
+      <div className="mx-10 lg:mx-30 mt-10 rounded-2xl bg-gradient-to-r from-gray-100 to-gray-200">
         <div className="container mx-auto px-4 py-12 ">
           <div className=" text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">

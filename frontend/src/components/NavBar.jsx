@@ -22,7 +22,7 @@ const NavBar = () => {
                 Applied Jobs
               </Link>
               <p></p>
-              <p className=" py-2">Hi,{user.firstName}</p>
+              <p className=" max-sm:hidden py-2">Hi,{user.firstName}</p>
               <UserButton />
             </div>
           ) : (

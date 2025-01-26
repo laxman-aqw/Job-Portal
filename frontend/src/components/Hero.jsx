@@ -21,7 +21,7 @@ const Hero = () => {
 
   return (
     <>
-      <div className="mx-10 lg:mx-30 mt-10 rounded-2xl bg-gradient-to-r from-gray-100 to-gray-200">
+      <div className="mx-10 md:mx-20 lg:mx-30 mt-10 rounded-2xl bg-gradient-to-r from-gray-100 to-gray-200">
         <div className="container mx-auto px-4 py-12 ">
           <div className=" text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
@@ -52,9 +52,9 @@ const Hero = () => {
               </div>
               <button
                 onClick={onSearch}
-                className="w-full hover:bg-blue-500 cursor-pointer sm:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-r-lg shadow border-none"
+                className="w-10 md:w-auto hover:bg-blue-500 cursor-pointer px-2 py-3 md:px-6 bg-blue-600 text-white font-medium rounded-r-lg shadow border-none"
               >
-                Search
+                <CiSearch className="text-2xl font-bold" />
               </button>
             </div>
           </div>

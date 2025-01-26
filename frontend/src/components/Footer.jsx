@@ -14,7 +14,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="flex flex-col justify-start mb-6 md:mb-0 items-center">
             <h2 className="text-2xl font-semibold text-white mb-3">
-              Rojgar<span className="text-blue-600">Chowk</span>
+              Rojgar<span className="text-sky-700">Chowk</span>
             </h2>
             <p className="text-sm text-gray-400 leading-relaxed">
               Find your dream job at JobPortal. Explore a variety of job
@@ -60,7 +60,7 @@ const Footer = () => {
               Email:
               <a
                 href="mailto:support@rojgarchowk.com"
-                className="hover:text-blue-400 transition"
+                className="hover:text-sky-700 transition"
               >
                 {" "}
                 support@rojgarchowk.com

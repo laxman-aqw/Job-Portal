@@ -11,12 +11,12 @@ const NavBar = () => {
         <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
           <Link className="logo cursor-pointer" to="/">
             <span className="text-2xl font-medium">Rojgar</span>
-            <span className="text-2xl font-medium text-blue-600">Chowk</span>
+            <span className="text-2xl font-medium text-sky-700">Chowk</span>
           </Link>
           {user ? (
             <div className="flex item-center gap-3">
               <Link
-                className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 active:bg-blue-400"
+                className="px-3 py-2 bg-sky-700 text-white rounded-full hover:bg-sky-600 active:bg-blue-400"
                 to="/applications"
               >
                 Applied Jobs

@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
-import { CiSearch } from "react-icons/ci";
-import { CiLocationOn } from "react-icons/ci";
+import { FaSearch } from "react-icons/fa";
+import { IoLocation } from "react-icons/io5";
 import { AppContext } from "../context/appContext";
 const Hero = () => {
   const { setSearchFilter, setIsSearched } = useContext(AppContext);
@@ -25,7 +25,7 @@ const Hero = () => {
         <div className="container mx-auto px-4 py-4 ">
           <div className=" text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-              Find Your <span className="text-blue-600">Dream Job</span> Today
+              Find Your <span className="text-sky-700">Dream Job</span> Today
             </h1>
             <p className="mt-4 text-gray-600 text-lg">
               Explore thousands of job listings from top companies worldwide.
@@ -33,7 +33,7 @@ const Hero = () => {
             </p>
             <div className="mt-6 flex flex-row justify-center ">
               <div className="relative flex items-center">
-                <CiSearch className="absolute left-3 text-gray-400 text-xl md:text-2xl" />
+                <FaSearch className="absolute left-3 text-gray-400 text-xl " />
                 <input
                   type="text"
                   className="w-full sm:w-auto px-10 py-3 rounded-l-lg border border-gray-300 focus:outline-none bg-white"
@@ -42,7 +42,7 @@ const Hero = () => {
                 />
               </div>
               <div className="relative flex items-center -ml-2">
-                <CiLocationOn className="absolute left-3 text-gray-400 text-xl md:text-2xl" />
+                <IoLocation className="absolute left-3 text-gray-400 text-xl md:text-2xl" />
                 <input
                   type="text"
                   className="w-full sm:w-auto px-10 py-3 border border-gray-300 focus:outline-none bg-white"
@@ -52,9 +52,9 @@ const Hero = () => {
               </div>
               <button
                 onClick={onSearch}
-                className="w-10 md:w-auto hover:bg-blue-500 active:bg-blue-400 cursor-pointer px-2 py-3 md:px-6 bg-blue-600 text-white font-medium rounded-r-lg shadow border-none"
+                className="w-10 md:w-auto hover:bg-sky-600 active:bg-sky-500 cursor-pointer px-2 py-3 md:px-6 bg-sky-700 text-white font-medium rounded-r-lg shadow border-none"
               >
-                <CiSearch className="text-2xl font-bold" />
+                <FaSearch className="text-2xl font-bold" />
               </button>
             </div>
           </div>

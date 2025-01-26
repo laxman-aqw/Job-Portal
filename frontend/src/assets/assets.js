@@ -97,6 +97,7 @@ export const manageJobsData = [
   {
     _id: 1,
     title: "Full Stack Developer",
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729102298497,
     location: "Bangalore",
     applicants: 20,
@@ -104,6 +105,7 @@ export const manageJobsData = [
   {
     _id: 2,
     title: "Data Scientist",
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729102298497,
     location: "San Francisco",
     applicants: 15,
@@ -111,6 +113,7 @@ export const manageJobsData = [
   {
     _id: 3,
     title: "Marketing Manager",
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729102298497,
     location: "London",
     applicants: 2,
@@ -118,6 +121,7 @@ export const manageJobsData = [
   {
     _id: 4,
     title: "UI/UX Designer",
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729102298497,
     location: "Dubai",
     applicants: 25,
@@ -130,6 +134,7 @@ export const jobsApplied = [
     company: "Amazon",
     title: "Full Stack Developer",
     location: "Bangalore",
+    deadline: "2025-02-01T00:00:00Z",
     date: "22 Aug, 2024",
     status: "Pending",
     logo: company_icon,
@@ -138,6 +143,7 @@ export const jobsApplied = [
     company: "Meta",
     title: "Data Scientist",
     location: "San Francisco",
+    deadline: "2025-02-01T00:00:00Z",
     date: "22 Aug, 2024",
     status: "Rejected",
     logo: company_icon,
@@ -146,6 +152,7 @@ export const jobsApplied = [
     company: "Google",
     title: "Marketing Manager",
     location: "London",
+    deadline: "2025-02-01T00:00:00Z",
     date: "25 Sep, 2024",
     status: "Accepted",
     logo: company_icon,
@@ -154,6 +161,7 @@ export const jobsApplied = [
     company: "Qualcomm",
     title: "UI/UX Designer",
     location: "Dubai",
+    deadline: "2025-02-01T00:00:00Z",
     date: "15 Oct, 2024",
     status: "Pending",
     logo: company_icon,
@@ -162,6 +170,7 @@ export const jobsApplied = [
     company: "Microsoft",
     title: "Full Stack Developer",
     location: "Hyderabad",
+    deadline: "2025-02-01T00:00:00Z",
     date: "25 Sep, 2024",
     status: "Accepted",
     logo: company_icon,
@@ -251,6 +260,7 @@ export const jobsData = [
             <li>Ability to work in an Agile environment.</li>
         </ol>`,
     salary: 82000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -284,6 +294,7 @@ export const jobsData = [
             <li>Excellent problem-solving and critical-thinking skills.</li>
         </ol>`,
     salary: 72000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Data Science",
   },
@@ -317,6 +328,7 @@ export const jobsData = [
             <li>Creative problem-solving abilities.</li>
         </ol>`,
     salary: 61000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Designing",
   },
@@ -350,6 +362,7 @@ export const jobsData = [
             <li>Excellent troubleshooting and analytical skills.</li>
         </ol>`,
     salary: 53000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -383,6 +396,7 @@ export const jobsData = [
             <li>Excellent communication and teamwork abilities.</li>
         </ol>`,
     salary: 91000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -416,6 +430,7 @@ export const jobsData = [
             <li>Relevant certifications (e.g., CCNA, CCNP) are a plus.</li>
         </ol>`,
     salary: 77000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Networking",
   },
@@ -449,6 +464,7 @@ export const jobsData = [
             <li>Certification in project management (e.g., PMP, Scrum Master) is preferred.</li>
         </ol>`,
     salary: 60000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Management",
   },
@@ -482,6 +498,7 @@ export const jobsData = [
             <li>Familiarity with version control systems (e.g., Git).</li>
         </ol>`,
     salary: 112000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -515,6 +532,7 @@ export const jobsData = [
             <li>Relevant certifications (e.g., AWS Certified Solutions Architect) are preferred.</li>
         </ol>`,
     salary: 96000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -548,6 +566,7 @@ export const jobsData = [
             <li>Attention to detail and a commitment to quality.</li>
         </ol>`,
     salary: 72000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Marketing",
   },
@@ -581,6 +600,7 @@ export const jobsData = [
             <li>Relevant certifications (e.g., CISSP, CEH) are a plus.</li>
         </ol>`,
     salary: 62000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Cybersecurity",
   },
@@ -614,6 +634,7 @@ export const jobsData = [
             <li>Familiarity with Agile methodologies is a plus.</li>
         </ol>`,
     salary: 68000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Management",
   },
@@ -647,6 +668,7 @@ export const jobsData = [
             <li>Willingness to learn and adapt in a fast-paced environment.</li>
         </ol>`,
     salary: 77000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Marketing",
   },
@@ -680,6 +702,7 @@ export const jobsData = [
             <li>Ability to communicate complex concepts to non-technical audiences.</li>
         </ol>`,
     salary: 65000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Data Science",
   },
@@ -713,6 +736,7 @@ export const jobsData = [
             <li>A portfolio showcasing relevant design projects is required.</li>
         </ol>`,
     salary: 64000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Design",
   },
@@ -746,6 +770,7 @@ export const jobsData = [
             <li>Relevant certifications (e.g., AWS Certified DevOps Engineer) are a plus.</li>
         </ol>`,
     salary: 74000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -779,6 +804,7 @@ export const jobsData = [
             <li>A results-oriented mindset with a focus on meeting targets.</li>
         </ol>`,
     salary: 59000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Marketing",
   },
@@ -812,6 +838,7 @@ export const jobsData = [
             <li>Attention to detail and strong organizational skills.</li>
         </ol>`,
     salary: 89000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Management",
   },
@@ -845,6 +872,7 @@ export const jobsData = [
             <li>Strong leadership and project management skills.</li>
         </ol>`,
     salary: 99000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Marketing",
   },
@@ -878,6 +906,7 @@ export const jobsData = [
             <li>A portfolio showcasing relevant design work is required.</li>
         </ol>`,
     salary: 91000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Design",
   },
@@ -911,6 +940,7 @@ export const jobsData = [
             <li>Good communication skills to articulate testing outcomes and challenges.</li>
         </ol>`,
     salary: 123000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },
@@ -944,6 +974,7 @@ export const jobsData = [
             <li>Strong communication skills to work with technical and non-technical teams.</li>
         </ol>`,
     salary: 87000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Cybersecurity",
   },
@@ -977,6 +1008,7 @@ export const jobsData = [
             <li>Good problem-solving skills and attention to detail.</li>
         </ol>`,
     salary: 102000,
+    deadline: "2025-02-01T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },

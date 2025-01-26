@@ -78,7 +78,7 @@ const JobListing = () => {
               </h3>
               <div className="mb-4 text-gray-700 space-y-2">
                 {searchFilter.title && (
-                  <span className="inline-flex items-center gap-2 mx-2 bg-blue-100 border border-blue-300 px-4 py-2 rounded-full text-blue-700">
+                  <span className="inline-flex items-center gap-2 mx-2 bg-blue-100 border border-blue-300 px-4 py-2 rounded-full text-bsky-700">
                     {searchFilter.title}
                     <CiSquareRemove
                       className="text-2xl cursor-pointer  hover:scale-110"
@@ -127,7 +127,7 @@ const JobListing = () => {
                 key={index}
               >
                 <input
-                  className="scale-125 accent-blue-600 cursor-pointer"
+                  className="scale-125 accent-sky-700 cursor-pointer"
                   type="checkbox"
                   onChange={() => handleCategoryChange(category)}
                   checked={selectedCategories.includes(category)}
@@ -192,7 +192,7 @@ const JobListing = () => {
               onClick={() =>
                 setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))
               }
-              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-blue-500 hover:text-white transition"
+              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
             >
               <FaAngleLeft />
             </button>
@@ -205,7 +205,7 @@ const JobListing = () => {
                   onClick={() => setCurrentPage(index + 1)}
                   className={`flex hover:scale-120 items-center justify-center w-8 h-8 rounded-full transition ${
                     currentPage === index + 1
-                      ? "bg-blue-100 text-blue-500"
+                      ? "bg-blue-100 text-sky-700"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
@@ -221,7 +221,7 @@ const JobListing = () => {
                   prev < Math.ceil(filteredJobs.length / 6) ? prev + 1 : prev
                 )
               }
-              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-blue-500 hover:text-white transition"
+              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
             >
               <FaAngleRight />
             </button>

@@ -396,7 +396,7 @@ export const jobsData = [
             <li>Excellent communication and teamwork abilities.</li>
         </ol>`,
     salary: 91000,
-    deadline: "2025-02-01T00:00:00Z",
+    deadline: "2025-01-22T00:00:00Z",
     date: 1729681667114,
     category: "Programming",
   },

@@ -9,7 +9,9 @@ import { BsPerson } from "react-icons/bs";
 import { BiDollar } from "react-icons/bi";
 import kconverter from "k-converter";
 import moment from "moment";
+import JobCard from "../components/JobCard";
 
+import Footer from "../components/Footer";
 const ApplyJob = () => {
   const { id } = useParams();
   const [jobData, setJobData] = useState(null);
@@ -46,7 +48,7 @@ const ApplyJob = () => {
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
                   {jobData.title}
                 </h1>
-                <div className="flex items-center justify-center md:justify-start space-x-6 mt-2 text-gray-600">
+                <div className="flex flex-col md:flex-row gap-y-2 items-center justify-center md:justify-start space-x-6 mt-2 text-gray-600">
                   <div className="flex items-center gap-2">
                     <PiSuitcaseSimple className="text-2xl text-gray-600" />
                     <span className="font-medium">
@@ -72,36 +74,66 @@ const ApplyJob = () => {
             </div>
 
             {/* Apply and Date */}
-            <div className="mt-8 md:mt-0 text-center md:text-right">
+            <div className=" md:mt-0 text-center md:text-right">
               <button className="px-6 py-3 bg-sky-700 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-all">
                 Apply Now
               </button>
+              {/* posted date */}
               <p className="mt-4 font-medium text-gray-500 text-sm">
                 Posted {moment(jobData.date).fromNow()}
               </p>
+              {/* deadline date */}
               <p className="mt-2 font-medium text-center text-sm text-red-600">
-                Deadline: {moment(jobData.deadline).fromNow()}
+                Deadline:{" "}
+                {moment(jobData.deadline).isBefore(moment()) ? (
+                  <span>Expired</span>
+                ) : (
+                  moment(jobData.deadline).fromNow()
+                )}
               </p>
             </div>
           </div>
         </div>
-
-        {/* Job Description Section */}
-        <div className="mt-12 w-full lg:w-2/3 job-description-container shadow-lg p-5 rounded-3xl">
-          <h2 className="text-2xl font-bold text-gray-800">
-            <strong>Job Description</strong>
-          </h2>
-          <div className="prose max-w-none">
-            <div
-              className="rich-text"
-              dangerouslySetInnerHTML={{ __html: jobData.description }}
-            />
+        {/* Description grid */}
+        <div className="flex flex-col lg:flex-row gap-8 px-2 py-4 rounded-xl">
+          {/* Job Description Section */}
+          <div className="flex-grow w-full lg:w-2/3 job-description-container shadow-lg p-5 lg:p-16 rounded-3xl">
+            <h2 className="text-2xl font-bold text-gray-800">
+              <strong>Job Description</strong>
+            </h2>
+            <div className="prose max-w-none">
+              <div
+                className="rich-text"
+                dangerouslySetInnerHTML={{ __html: jobData.description }}
+              />
+            </div>
+            <button className="mt-10 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all">
+              Apply Now
+            </button>
           </div>
-          <button className="mt-10 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all">
-            Apply Now
-          </button>
+          {/* Right section more jobs */}
+          <div className="lg:w-1/3">
+            <h2 className="font-semibold text-2xl m-2">
+              More jobs from {jobData.companyId.name}
+            </h2>
+
+            {jobs
+              .filter(
+                (job) =>
+                  job._id !== jobData._id &&
+                  job.companyId._id === jobData.companyId._id
+              )
+              .filter((job) => true)
+              .slice(0, 4)
+              .map((job, index) => (
+                <div className="my-5" key={index}>
+                  <JobCard job={job} />
+                </div>
+              ))}
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   ) : (
     <div>

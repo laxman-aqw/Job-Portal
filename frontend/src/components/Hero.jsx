@@ -21,93 +21,82 @@ const Hero = () => {
 
   return (
     <>
-      <div className="mx-10 md:mx-20 lg:mx-30 mt-10 rounded-2xl bg-gradient-to-r from-gray-100 to-gray-300">
-        <div className="container mx-auto px-4 py-4 ">
-          <div className=" text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-              Find Your <span className="text-sky-700">Dream Job</span> Today
+      {/* Hero Section */}
+      <div className="mx-4 md:mx-8 lg:mx-16 mt-8 md:mt-12 rounded-3xl bg-gradient-to-br from-sky-50 to-blue-50 shadow-lg">
+        <div className="container mx-auto px-4 py-8 md:py-12">
+          <div className="text-center space-y-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight">
+              Find Your{" "}
+              <span className="bg-gradient-to-r from-sky-500 to-sky-700 bg-clip-text text-transparent">
+                Dream Job
+              </span>
             </h1>
-            <p className="mt-4 text-gray-600 text-lg">
-              Explore thousands of job listings from top companies worldwide.
-              Take the next step in your career journey.
+            <p className="mt-4 text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              Discover your next career move with 10000+ jobs opportunities from
+              leading companies worldwide.
             </p>
-            <div className="mt-6 flex flex-row justify-center ">
-              <div className="relative flex items-center">
-                <FaSearch className="absolute left-3 text-gray-400 text-xl " />
+
+            {/* Search Bar */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center max-w-4xl mx-auto">
+              <div className="relative flex-1">
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
                 <input
                   type="text"
-                  className="w-full sm:w-auto px-10 py-3 rounded-l-lg border border-gray-300 focus:outline-none bg-white"
-                  placeholder="Search for jobs "
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-sky-300  focus:border-sky-300 focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
+                  placeholder="Job title or keywords"
                   ref={titleRef}
                 />
               </div>
-              <div className="relative flex items-center -ml-2">
-                <IoLocation className="absolute left-3 text-gray-400 text-xl md:text-2xl" />
+
+              <div className="relative flex-1">
+                <IoLocation className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
                 <input
                   type="text"
-                  className="w-full sm:w-auto px-10 py-3 border border-gray-300 focus:outline-none bg-white"
-                  placeholder="Enter location"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200  focus:outline-sky-300 focus:border-sky-300 focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
+                  placeholder="Location"
                   ref={locationRef}
                 />
               </div>
+
               <button
                 onClick={onSearch}
-                className="w-10 md:w-auto hover:bg-sky-600 active:bg-sky-500 cursor-pointer px-2 py-3 md:px-6 bg-sky-700 text-white font-medium rounded-r-lg shadow border-none"
+                className="sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 justify-center cursor-pointer"
               >
-                <FaSearch className="text-2xl font-bold" />
+                <FaSearch className="text-lg" />
+                <span>Search Jobs</span>
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div className="mx-10 rounded-2xl md:mx-32 border my-5 shadow-md border-gray-300 py-3">
-        <div className="container mx-auto text-center">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-            Trusted by Leading Companies
-          </h2>
-          <div className="flex flex-wrap justify-center items-center gap-6">
-            <div className="w-25 h-15 flex items-center justify-center bg-white rounded-lg shadow-md">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Esewa_logo.webp/1100px-Esewa_logo.webp.png"
-                alt="Company 1"
-                style={{ width: "90px", height: "auto" }}
-              />
-            </div>
 
-            {/* Company Logo 2 */}
-            <div className="w-25 h-15 flex items-center justify-center bg-white rounded-lg shadow-md">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUj5QLHVwPKjiAh0x4-NfqsmpfaCNFYi6HIQ&s/100x50"
-                alt="Company 2"
-                className="h-auto max-h-full"
-                style={{ width: "90px", height: "auto" }}
-              />
-            </div>
+      {/* Trusted Companies Section */}
+      <div className="mx-4 md:mx-8 lg:mx-16 my-8 md:my-12 bg-white rounded-3xl shadow-lg">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center space-y-6">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 tracking-tight">
+              Trusted by innovative teams at
+            </h2>
 
-            <div className="w-25 h-15 flex items-center justify-center bg-white rounded-lg shadow-md">
-              <img
-                src="https://s3.amazonaws.com/resumator/customer_20191108174918_T3HDEM7NCAYEC2DB/logos/20191108184722_fusemachines_logo_jpg.jpg"
-                alt="Company 3"
-                className="h-auto max-h-full"
-                style={{ width: "90px", height: "auto" }}
-              />
-            </div>
-
-            <div className="w-25 h-15 flex items-center justify-center bg-white rounded-lg shadow-md">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Daraz_Logo.png"
-                alt="Company 4"
-                className="h-auto max-h-full"
-                style={{ width: "90px", height: "auto" }}
-              />
-            </div>
-
-            <div className="w-25 h-15 flex items-center justify-center bg-white rounded-lg shadow-md">
-              <img
-                src="https://media.licdn.com/dms/image/v2/C4E1BAQEsCT5sQW2grg/company-background_10000/company-background_10000/0/1584083622781/cotiviti_nepal__cover?e=2147483647&v=beta&t=MPhFvKGR3g14bICPWA3-o3XsCLlLRY5VKnOWHqqxFqA"
-                alt="Company 5"
-                className="h-auto max-h-full"
-              />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 items-center justify-center">
+              {[
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Esewa_logo.webp/1100px-Esewa_logo.webp.png",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUj5QLHVwPKjiAh0x4-NfqsmpfaCNFYi6HIQ&s/100x50",
+                "https://s3.amazonaws.com/resumator/customer_20191108174918_T3HDEM7NCAYEC2DB/logos/20191108184722_fusemachines_logo_jpg.jpg",
+                "https://upload.wikimedia.org/wikipedia/commons/5/5b/Daraz_Logo.png",
+                "https://media.licdn.com/dms/image/v2/C4E1BAQEsCT5sQW2grg/company-background_10000/company-background_10000/0/1584083622781/cotiviti_nepal__cover?e=2147483647&v=beta&t=MPhFvKGR3g14bICPWA3-o3XsCLlLRY5VKnOWHqqxFqA",
+              ].map((logo, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-xl hover:bg-white hover:shadow-md transition-all duration-300"
+                >
+                  <img
+                    src={logo}
+                    alt={`Company ${index + 1}`}
+                    className="h-12 w-auto mx-auto object-contain grayscale hover:grayscale-0 transition-all"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

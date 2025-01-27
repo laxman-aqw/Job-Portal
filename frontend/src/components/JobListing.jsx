@@ -123,20 +123,29 @@ const JobListing = () => {
           <ul className="space-y-4 pt-4">
             {JobCategories.map((category, index) => (
               <li
-                className="flex hover:scale-105 items-center gap-3 p-2 rounded transition hover:bg-gray-50 cursor-pointer"
+                className="group hover:scale-105 transition-transform"
                 key={index}
               >
-                <input
-                  className="scale-125 accent-sky-700 cursor-pointer"
-                  type="checkbox"
-                  onChange={() => handleCategoryChange(category)}
-                  checked={selectedCategories.includes(category)}
-                />
                 <label
                   htmlFor={`category-${index}`}
-                  className="text-gray-700 cursor-pointer"
+                  className={`flex items-center gap-3 p-2 rounded cursor-pointer w-full transition-all
+             hover:scale-[1.02] active:scale-100
+             ${
+               selectedCategories.includes(category)
+                 ? "bg-sky-50 border border-sky-200" // Selected state
+                 : "hover:bg-gray-50" // Default hover state
+             }`}
                 >
-                  {category}
+                  <input
+                    id={`category-${index}`}
+                    className="scale-125 accent-sky-700 cursor-pointer"
+                    type="checkbox"
+                    onChange={() => handleCategoryChange(category)}
+                    checked={selectedCategories.includes(category)}
+                  />
+                  <span className="text-gray-700 group-hover:text-sky-700 transition-colors">
+                    {category}
+                  </span>
                 </label>
               </li>
             ))}
@@ -148,21 +157,27 @@ const JobListing = () => {
           </h4>
           <ul className="space-y-4 pt-4">
             {JobLocations.map((location, index) => (
-              <li
-                className="flex hover:scale-105 items-center gap-3 p-2 rounded transition hover:bg-gray-50 cursor-pointer"
-                key={index}
-              >
-                <input
-                  className="scale-125 accent-green-600 cursor-pointer"
-                  type="checkbox"
-                  onChange={() => handleLocationChange(location)}
-                  checked={selectedLocations.includes(location)}
-                />
+              <li className="group transition-colors" key={index}>
                 <label
                   htmlFor={`location-${index}`}
-                  className="text-gray-700 cursor-pointer"
+                  className={`flex items-center gap-3 p-2 rounded cursor-pointer w-full
+             transition-all hover:scale-[1.02] active:scale-100
+             ${
+               selectedLocations.includes(location)
+                 ? "bg-green-50 border border-green-200"
+                 : "hover:bg-gray-50"
+             }`}
                 >
-                  {location}
+                  <input
+                    id={`location-${index}`}
+                    className="scale-125 accent-green-600 cursor-pointer"
+                    type="checkbox"
+                    onChange={() => handleLocationChange(location)}
+                    checked={selectedLocations.includes(location)}
+                  />
+                  <span className="text-gray-700 group-hover:text-green-700 flex-1">
+                    {location}
+                  </span>
                 </label>
               </li>
             ))}

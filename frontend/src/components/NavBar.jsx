@@ -20,7 +20,7 @@ const NavBar = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/applications"
-              className="px-4 py-2 bg-sky-700 text-white rounded-full hover:bg-sky-600 active:bg-sky-800 transition duration-300"
+              className="px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500 text-white rounded-full active:bg-sky-800 transition duration-300"
             >
               Applied Jobs
             </Link>

@@ -23,10 +23,10 @@ const Footer = () => {
         {/* Adjusted back-to-top button position */}
         <button
           onClick={scrollToTop}
-          className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-sky-700 hover:bg-sky-800 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
+          className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white p-3 rounded-full shadow-lg hover:scale-110 z-50"
           aria-label="Back to top"
         >
-          <FaArrowUp className="w-5 h-5" />
+          <FaArrowUp className=" cursor-pointer w-5 h-5" />
         </button>
 
         {/* Rest of the footer content remains the same */}
@@ -37,10 +37,10 @@ const Footer = () => {
             {/* Added margin-top */}
             <div className="flex flex-col items-center lg:items-start">
               <h2 className="text-3xl font-bold mb-4 transition-colors group">
-                <span className="text-sky-700 group-hover:text-white transition-colors">
+                <span className="text-white group-hover:text-sky-700 transition-colors">
                   Rojgar
                 </span>
-                <span className="text-white group-hover:text-sky-700 transition-colors">
+                <span className=" text-sky-700 group-hover:text-white transition-colors">
                   Chowk
                 </span>
               </h2>
@@ -131,7 +131,7 @@ const Footer = () => {
                 placeholder="Enter your email"
                 className="w-full px-4 py-2 text-sm rounded-lg border border-gray-700 bg-gray-800 focus:outline-none focus:border-sky-700"
               />
-              <button className="px-4 py-2 text-sm bg-sky-700 hover:bg-sky-600 text-white rounded-lg transition-colors">
+              <button className="px-4 py-2 text-sm bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white rounded-lg cursor-pointer">
                 Subscribe
               </button>
             </div>

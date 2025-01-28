@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../context/appContext";
 
 const NavBar = () => {
   const { openSignIn } = useClerk();
   const { user } = useUser();
+  const { setShowRecruiterLogin } = useContext(AppContext);
 
   return (
     <nav className="shadow-md py-4 mx-2 rounded-xl bg-white">
@@ -12,7 +14,9 @@ const NavBar = () => {
         {/* Logo */}
         <Link className="flex items-center cursor-pointer" to="/">
           <span className="text-2xl font-bold text-gray-800">Rojgar</span>
-          <span className="text-2xl font-bold text-sky-700">Chowk</span>
+          <span className="text-2xl font-bold bg-gradient-to-r from-sky-500 to-sky-700 bg-clip-text text-transparent">
+            Chowk
+          </span>
         </Link>
 
         {/* Right Section */}
@@ -20,7 +24,7 @@ const NavBar = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/applications"
-              className="px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500 text-white rounded-full active:bg-sky-800 transition duration-300"
+              className="px-4 py-2 text-white rounded-lg bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
             >
               Applied Jobs
             </Link>
@@ -31,12 +35,15 @@ const NavBar = () => {
           </div>
         ) : (
           <div className="flex items-center gap-4">
-            <button className="text-gray-600 hover:text-gray-900 transition duration-300">
+            <button
+              onClick={(e) => setShowRecruiterLogin(true)}
+              className="   cursor-pointer border-2  px-5 py-2 rounded-full border-sky-500 text-sky-700 hover:text-white hover:bg-gradient-to-r from-sky-500 to-sky-700 transition duration-300"
+            >
               Recruiter Login
             </button>
             <button
               onClick={openSignIn}
-              className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-500 active:bg-blue-700 transition duration-300"
+              className=" text-white px-5 py-2 rounded-full  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
             >
               Login
             </button>

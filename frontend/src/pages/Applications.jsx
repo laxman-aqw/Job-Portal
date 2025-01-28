@@ -89,7 +89,6 @@ const Applications = () => {
           )}
         </div>
 
-        {/* deepseek */}
         <div className=" w-full">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Jobs Applied

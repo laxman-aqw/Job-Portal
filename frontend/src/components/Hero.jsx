@@ -60,7 +60,7 @@ const Hero = () => {
 
               <button
                 onClick={onSearch}
-                className="sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 justify-center cursor-pointer"
+                className="sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl  flex items-center gap-2 justify-center cursor-pointer"
               >
                 <FaSearch className="text-lg" />
                 <span>Search Jobs</span>

@@ -48,7 +48,7 @@ const JobCard = ({ job }) => {
             navigate(`/apply-job/${job._id}`);
             scrollTo(0, 0);
           }}
-          className="bg-sky-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-sky-700 transition-all duration-300"
+          className="bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white font-medium px-6 py-2 rounded-lg shadow-md cursor-pointer"
         >
           Apply Now
         </button>

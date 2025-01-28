@@ -75,7 +75,7 @@ const ApplyJob = () => {
 
             {/* Apply and Date */}
             <div className=" md:mt-0 text-center md:text-right">
-              <button className="px-6 py-3 bg-sky-700 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-all">
+              <button className="px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
                 Apply Now
               </button>
               {/* posted date */}
@@ -107,7 +107,7 @@ const ApplyJob = () => {
                 dangerouslySetInnerHTML={{ __html: jobData.description }}
               />
             </div>
-            <button className="mt-10 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all">
+            <button className="mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
               Apply Now
             </button>
           </div>

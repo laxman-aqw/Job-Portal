@@ -9,7 +9,7 @@ const NavBar = () => {
   const { setShowRecruiterLogin } = useContext(AppContext);
 
   return (
-    <nav className="shadow-md py-4 mx-2 rounded-xl bg-white">
+    <nav className="shadow-md py-4 mx-2 rounded-xl bg-white sticky z-10 top-0">
       <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link className="flex items-center cursor-pointer" to="/">

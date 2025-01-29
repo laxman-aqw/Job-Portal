@@ -1,0 +1,83 @@
+/* src/styles/custom.css */
+
+/* Custom Styling for Job Description */
+.job-description-container h1,
+.job-description-container h2,
+.job-description-container h3,
+.job-description-container h4,
+.job-description-container h5,
+.job-description-container h6 {
+  font-size: 1.5rem; /* Ensuring all headings have the same size */
+  font-weight: 400;
+  color: #2d3748; /* Dark Gray */
+  margin-top: 1.5rem;
+  text-align: center;
+  line-height: 1.6; /* Consistent line height */
+}
+
+.job-description-container .rich-text {
+  font-size: 1.125rem; /* Slightly larger font for better legibility */
+  color: #4a5568; /* Medium Gray */
+  line-height: 1.75;
+  font-weight: 400; /* Regular weight for better readability */
+}
+
+.job-description-container .rich-text p {
+  margin-bottom: 1.5rem; /* Increased space between paragraphs */
+}
+
+.job-description-container .rich-text ol,
+.job-description-container .rich-text ul {
+  margin-left: 2.5rem; /* Slightly larger margin for clarity */
+}
+
+.job-description-container .rich-text li {
+  margin-bottom: 0.5rem; /* Space between list items */
+  font-size: 1.125rem; /* Consistent font size with body text */
+  color: #4a5568;
+}
+
+.job-description-container .rich-text ul {
+  list-style-type: disc; /* Default bullet style */
+}
+
+.job-description-container .rich-text ol {
+  list-style-type: decimal; /* Numbered list style */
+}
+
+/* Bullet and List Item Style */
+.job-description-container .rich-text ul li::before {
+  content: "•"; /* Custom bullet character */
+  color: #2b6cb0; /* Matching bullet color with button */
+  font-size: 1.5rem; /* Larger bullet size for visibility */
+  margin-right: 0.75rem; /* Space between bullet and text */
+  line-height: 1.5; /* Align bullet and text properly */
+}
+
+.job-description-container .rich-text ol li::marker {
+  color: #2b6cb0; /* Matching color for numbers */
+}
+
+.job-description-container button {
+  background-color: #2b6cb0;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.375rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow for the button */
+}
+
+.job-description-container button:hover {
+  background-color: #3182ce;
+  transform: translateY(-3px); /* Slightly more pronounced hover effect */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Increased shadow on hover */
+}
+
+.job-description-container button:active {
+  transform: translateY(1px); /* Subtle pressed effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Reset shadow when active */
+}

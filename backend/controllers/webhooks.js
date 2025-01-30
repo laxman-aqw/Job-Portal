@@ -29,7 +29,7 @@ const clerkWebHook = async (req, res) => {
           resume: "",
         };
         await User.create(userData);
-        res.json({});
+        res.status(201).json({ message: "User created successfully!" });
         break;
       }
       case "user.updated": {
@@ -39,12 +39,12 @@ const clerkWebHook = async (req, res) => {
           image: data.image_url,
         };
         await User.findByIdAndUpdate(data.id, userData);
-        res.json({});
+        res.status(200).json({ message: "User updated successfully" });
         break;
       }
       case "user.deleted": {
         await User.findByIdAndDelete(data.id);
-        res.json({});
+        res.status(200).json({ message: "User deleted successfully" });
         break;
       }
       default:

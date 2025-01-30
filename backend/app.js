@@ -5,7 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const Sentry = require("@sentry/node");
 const { clerkWebHook } = require("./controllers/webhooks");
-const companyRoutes = require("./routes/company-routes");
+// const companyRoutes = require("./routes/company-routes");
 require("./config/instrument");
 require("dotenv").config();
 app.use(cors());
@@ -21,7 +21,7 @@ app.get("/debug-sentry", function mainHandler(req, res) {
 
 app.post("/webhooks", clerkWebHook);
 
-app.use("/api/company", companyRoutes);
+// app.use("/api/company", companyRoutes);
 
 Sentry.setupExpressErrorHandler(app);
 

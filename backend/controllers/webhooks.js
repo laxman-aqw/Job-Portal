@@ -38,7 +38,7 @@ const clerkWebHook = async (req, res) => {
           name: data.first_name + " " + data.last_name,
           image: data.image_url,
         };
-        await User.findByIdAndUpdate(data.id, userData); // Corrected to use `data.id`
+        await User.findByIdAndUpdate(data.id, userData);
         res.json({});
         break;
       }

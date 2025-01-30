@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 
 //api controller function to manage clerk user with database
-export const clerkWebHook = async (req, res) => {
+const clerkWebHook = async (req, res) => {
   try {
     //create a svix indtance with clerk webhook secret
     const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
@@ -57,3 +57,5 @@ export const clerkWebHook = async (req, res) => {
     res.json({ success: false, message: "Web hooks error" });
   }
 };
+
+module.exports = { clerkWebHook };

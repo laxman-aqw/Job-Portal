@@ -6,6 +6,7 @@ const companyRoutes = require("./routes/company-routes");
 const { clerkWebHook } = require("./controllers/webhooks");
 const connectCloudinary = require("./config/cloudinary");
 require("dotenv").config();
+const jobRoutes = require("./routes/job-routes");
 
 const port = process.env.PORT;
 app.use(cors());
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 
 app.post("/webhooks", clerkWebHook);
 app.use("/api/company", companyRoutes);
+app.use("/api/job", jobRoutes);
 
 const startServer = async () => {
   try {

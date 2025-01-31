@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const companyControllers = require("../controllers/company-controller");
 const upload = require("../config/multer");
+const { protectCompany } = require("../middlewares/auth.middleware");
 
 router.post(
   "/register",
@@ -11,16 +12,32 @@ router.post(
 
 router.post("/login", companyControllers.loginCompany);
 
-router.get("/company", companyControllers.getCompanyData);
+router.get("/company", protectCompany, companyControllers.getCompanyData);
 
-router.post("/post-job", companyControllers.postJob);
+router.post("/post-job", protectCompany, companyControllers.postJob);
 
-router.get("/applicants", companyControllers.getCompanyJobApplicants);
+router.get(
+  "/applicants",
+  protectCompany,
+  companyControllers.getCompanyJobApplicants
+);
 
-router.get("/list-jobs", companyControllers.getCompanyPostedJobs);
+router.get(
+  "/list-jobs",
+  protectCompany,
+  companyControllers.getCompanyPostedJobs
+);
 
-router.post("/change-status", companyControllers.changeJobApplicationStatus);
+router.post(
+  "/change-status",
+  protectCompany,
+  companyControllers.changeJobApplicationStatus
+);
 
-router.post("/change-visibility", companyControllers.changeVisibility);
+router.post(
+  "/change-visibility",
+  protectCompany,
+  companyControllers.changeVisibility
+);
 
 module.exports = router;

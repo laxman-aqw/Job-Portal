@@ -8,19 +8,44 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
+import {
+  validateEmail,
+  validatePassword,
+  validateName,
+} from "../helper/validation";
 const RecruiterLogin = () => {
   const navigate = useNavigate();
   const { setShowRecruiterLogin, backendUrl, setCompanyToken, setCompany } =
     useContext(AppContext);
   const [state, setState] = useState("Login");
   const [name, setName] = useState();
-  const [password, setPassword] = useState("");
-
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [image, setImage] = useState(false);
   let [isNextDataSubmitted, setIsNextDataSubmitted] = useState(false);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    const nameError = validateName(name);
+
+    if (emailError) {
+      console.log("Email error here");
+      toast.error(emailError);
+      return;
+    }
+
+    if (passwordError) {
+      console.log("password error here");
+      toast.error(passwordError);
+      return;
+    }
+
+    if (state === "Sign Up" && nameError) {
+      toast.error(nameError);
+      return;
+    }
+
     if (state === "Sign Up" && !isNextDataSubmitted) {
       setIsNextDataSubmitted(true);
     }
@@ -31,6 +56,7 @@ const RecruiterLogin = () => {
           password,
         });
         if (data.success) {
+          toast.success("Logged in successfully!");
           console.log("data succeed");
           setCompany(data.company);
           setCompanyToken(data.token);
@@ -40,13 +66,11 @@ const RecruiterLogin = () => {
         }
       }
     } catch (error) {
-      console.log(error); // This will still log the error in the console
+      console.log(error);
 
       if (error.response && error.response.status === 401) {
-        // Handle incorrect credentials
-        toast.error("Incorrect password or email!");
+        toast.error("Invalid email or password!");
       } else {
-        // Handle other errors like network issues or server errors
         toast.error(
           error.response?.data?.message ||
             "An error occurred. Please try again."
@@ -119,7 +143,6 @@ const RecruiterLogin = () => {
                   value={email}
                   type="text"
                   placeholder="Email address"
-                  required
                 />
               </div>
               <div className="border px-4 py-2 flex items-center gap-2 rounded-full mt-5">
@@ -130,7 +153,6 @@ const RecruiterLogin = () => {
                   value={password}
                   type="text"
                   placeholder="Password"
-                  required
                 />
               </div>
             </>

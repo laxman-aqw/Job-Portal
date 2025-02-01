@@ -4,10 +4,14 @@ import { IoPersonOutline } from "react-icons/io5";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
 import { IoCloseOutline } from "react-icons/io5";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
 const RecruiterLogin = () => {
-  const { setShowRecruiterLogin } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { setShowRecruiterLogin, backendUrl, setCompanyToken, setCompany } =
+    useContext(AppContext);
   const [state, setState] = useState("Login");
   const [name, setName] = useState();
   const [password, setPassword] = useState("");
@@ -19,6 +23,35 @@ const RecruiterLogin = () => {
     e.preventDefault();
     if (state === "Sign Up" && !isNextDataSubmitted) {
       setIsNextDataSubmitted(true);
+    }
+    try {
+      if (state === "Login") {
+        const { data } = await axios.post(backendUrl + "/api/company/login", {
+          email,
+          password,
+        });
+        if (data.success) {
+          console.log("data succeed");
+          setCompany(data.company);
+          setCompanyToken(data.token);
+          localStorage.setItem("companyToken", data.token);
+          setShowRecruiterLogin(false);
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      console.log(error); // This will still log the error in the console
+
+      if (error.response && error.response.status === 401) {
+        // Handle incorrect credentials
+        toast.error("Incorrect password or email!");
+      } else {
+        // Handle other errors like network issues or server errors
+        toast.error(
+          error.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
+      }
     }
   };
 

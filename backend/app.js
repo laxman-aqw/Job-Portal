@@ -7,11 +7,13 @@ const { clerkWebHook } = require("./controllers/webhooks");
 const connectCloudinary = require("./config/cloudinary");
 require("dotenv").config();
 const jobRoutes = require("./routes/job-routes");
+const userRoutes = require("./routes/user-routes");
+const { clerkMiddleware } = require("@clerk/express");
 
 const port = process.env.PORT;
 app.use(cors());
+app.use(clerkMiddleware());
 app.use(express.json());
-
 app.get("/", (req, res) => {
   res.send("Hello World from laxman");
 });
@@ -19,6 +21,7 @@ app.get("/", (req, res) => {
 app.post("/webhooks", clerkWebHook);
 app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
+app.use("/api/user", userRoutes);
 
 const startServer = async () => {
   try {

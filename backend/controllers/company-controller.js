@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const generateToken = require("../utils/generateToken");
 const Company = require("../models/Company");
 const Job = require("../models/Job");
+const mongoose = require("mongoose");
 //create a company
 exports.registerCompany = async (req, res) => {
   const { name, email, password } = req.body;
@@ -100,7 +101,29 @@ exports.loginCompany = async (req, res) => {
   }
 };
 
-exports.getCompanyData = async (req, res) => {};
+exports.getCompanyData = async (req, res) => {
+  try {
+    if (!req.company) {
+      return res.status(404).json({
+        success: false,
+        message: "Company data not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Company data fetched successfully",
+      company: req.company,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching company data",
+      error: error.message,
+    });
+  }
+};
+
 exports.postJob = async (req, res) => {
   const { title, description, level, deadline, location, salary, category } =
     req.body;
@@ -145,8 +168,59 @@ exports.postJob = async (req, res) => {
 
 exports.getCompanyJobApplicants = async (req, res) => {};
 
-exports.getCompanyPostedJobs = async (req, res) => {};
+exports.getCompanyPostedJobs = async (req, res) => {
+  const companyId = req.company._id;
+  try {
+    const jobs = await Job.find({ companyId });
+    res
+      .status(200)
+      .json({ success: true, message: "Jobs fetched successfully", jobs });
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 exports.changeJobApplicationStatus = async (req, res) => {};
 
-exports.changeVisibility = async (req, res) => {};
+exports.changeVisibility = async (req, res) => {
+  const { id } = req.body;
+  const companyId = req.company._id;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID",
+      });
+    }
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    if (job.companyId.toString() !== companyId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized: You do not own this job",
+      });
+    }
+
+    job.visible = !job.visible;
+
+    await job.save();
+    res
+      .status(200)
+      .json({ success: true, message: "Job visibility updated", job });
+  } catch (error) {
+    console.error("Error changing job visibility:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};

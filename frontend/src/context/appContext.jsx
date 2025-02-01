@@ -15,6 +15,13 @@ export const AppContextProvider = (props) => {
 
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const [companyToken, setCompanyToken] = useState(null);
+
+  //for company data
+  const [company, setCompany] = useState(null);
+
   const value = {
     searchFilter,
     setSearchFilter,
@@ -24,6 +31,11 @@ export const AppContextProvider = (props) => {
     setJobs,
     showRecruiterLogin,
     setShowRecruiterLogin,
+    companyToken,
+    setCompanyToken,
+    company,
+    setCompany,
+    backendUrl,
   };
 
   //function to fetch data

@@ -9,7 +9,8 @@ import RecruiterLogin from "./components/RecruiterLogin";
 import AddJob from "./pages/AddJob";
 import { AppContext } from "./context/appContext";
 import "quill/dist/quill.snow.css";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import AddJob from "./pages/addJob";
 import Dashboard from "./pages/Dashboard";
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
           />
         </Route>
       </Routes>
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };

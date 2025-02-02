@@ -10,6 +10,8 @@ router.post(
   companyControllers.registerCompany
 );
 
+router.post("/check-email", companyControllers.validateEmail);
+
 router.post("/login", companyControllers.loginCompany);
 
 router.get("/company", protectCompany, companyControllers.getCompanyData);

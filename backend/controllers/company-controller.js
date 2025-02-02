@@ -224,3 +224,17 @@ exports.changeVisibility = async (req, res) => {
     });
   }
 };
+
+exports.validateEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const company = await Company.findOne({ email });
+    if (company) {
+      return res.status(200).json({ success: false, exists: true });
+    }
+    res.status(200).json({ success: true, exists: false });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

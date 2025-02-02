@@ -82,12 +82,14 @@ const RecruiterLogin = () => {
           email,
           password,
         });
+        console.log(data);
         if (data.success) {
           toast.success("Logged in successfully!");
           console.log("data succeed");
           setCompany(data.company);
           setCompanyToken(data.token);
           localStorage.setItem("companyToken", data.token);
+          console.log(localStorage.getItem("companyToken"));
           setShowRecruiterLogin(false);
           navigate("/dashboard");
         }
@@ -136,7 +138,7 @@ const RecruiterLogin = () => {
     };
   }, []);
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center">
+    <div className="fixed top-0 left-0 z-50 right-0 bottom-0  backdrop-blur-sm bg-black/30 flex justify-center items-center">
       <form
         onSubmit={onSubmitHandler}
         className="relative bg-white p-10 rounded-xl text-slate-500"

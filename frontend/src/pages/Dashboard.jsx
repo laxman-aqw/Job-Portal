@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { FaBars } from "react-icons/fa";
@@ -9,22 +9,23 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import { AppContext } from "../context/appContext";
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { company } = useContext(AppContext);
+  const { company, setCompany, setCompanyToken } = useContext(AppContext);
+
+  // function to logout for the company
+  const logout = () => {
+    setCompanyToken(null);
+    localStorage.removeItem("lastRoute");
+    localStorage.removeItem("companyToken");
+    setCompany(null);
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4 flex justify-center items-center relative z-40 sticky top-0">
-        {/* Sidebar Toggle Button
-
-        <button
-          className="text-2xl hover:scale-110 p-2 text-gray-700"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
-          <FaBars />
-        </button> */}
-
-        {/* Logo */}
         <Link
           className="flex items-center text-center cursor-pointer ml-4"
           to="/"
@@ -129,6 +130,7 @@ const Dashboard = () => {
 
           {/* Logout Button */}
           <button
+            onClick={logout}
             className={`mt-auto bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
             ${isSidebarOpen ? "w-full" : "w-12"}
             `}

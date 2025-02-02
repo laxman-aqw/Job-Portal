@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 export const validateEmail = (email) => {
   if (!email) return "Email is required!";
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
@@ -30,4 +32,26 @@ export const validatePasswordRequirement = (password) => {
 export const validateName = (name) => {
   if (!name) return "Company name is required!";
   return null; // No error
+};
+
+export const validateJobTitle = (title) => {
+  if (!title) {
+    return "Title is required!";
+  } else if (title.length < 4) {
+    return "Title must be at least 4 characters long.";
+  }
+  return null;
+};
+
+export const validateJobDescription = (description) => {
+  if (!description) {
+    return "Description is required!";
+  }
+  return null;
+};
+export const validateJobSalary = (salary) => {
+  if (!salary) {
+    return "Salary is required";
+  }
+  return null;
 };

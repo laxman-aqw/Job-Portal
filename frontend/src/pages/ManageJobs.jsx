@@ -6,13 +6,45 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import "../custom/custom.css";
 const ManageJobs = () => {
   const navigate = useNavigate();
 
   const [jobs, setJobs] = useState([]);
   const { backendUrl, companyToken } = useContext(AppContext);
   // function to fetch jobs list
+
+  //change visibility
+  const changeJobVisibility = async (id, currentVisibility) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/company/change-visibility",
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${companyToken}`,
+          },
+        }
+      );
+      console.log(data);
+      if (data.success) {
+        const newVisibility = !currentVisibility;
+        const message = newVisibility
+          ? "This job listing is now open to all applicants."
+          : "The visibility of the job has been restricted to you only.";
+
+        newVisibility ? toast.success(message) : toast.error(message);
+        setJobs((prevJobs) =>
+          prevJobs.map((job) =>
+            job._id === id ? { ...job, visible: !job.visible } : job
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
 
   const fetchCompanyJobs = async () => {
     try {
@@ -68,8 +100,10 @@ const ManageJobs = () => {
                 <td className="px-4 py-2 text-gray-600">{job.applicants}</td>
                 <td className="px-4 py-2">
                   <input
+                    onChange={() => changeJobVisibility(job._id, job.visible)}
                     type="checkbox"
-                    className="active:scale-120 w-4 h-4  "
+                    className="active:scale-120 w-4 h-4"
+                    checked={job.visible}
                   />
                 </td>
               </tr>

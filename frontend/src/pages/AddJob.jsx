@@ -5,6 +5,11 @@ import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {
+  validateJobTitle,
+  validateJobDescription,
+  validateJobSalary,
+} from "../helper/validation";
 
 const AddJob = () => {
   const navigate = useNavigate();
@@ -13,9 +18,9 @@ const AddJob = () => {
   const [location, setLocation] = useState("Kathmandu");
   const [category, setCategory] = useState("IT");
   const [level, setLevel] = useState("Beginner");
-  const [salary, setSalary] = useState(0);
+  const [salary, setSalary] = useState();
   const [deadline, setDeadline] = useState(0);
-
+  const [loading, setLoading] = useState(false);
   const { backendUrl, companyToken } = useContext(AppContext);
 
   const editorRef = useRef(null); // Ref for Quill editor
@@ -23,6 +28,25 @@ const AddJob = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    const titleError = validateJobTitle(title);
+    const descriptionError = validateJobDescription(title);
+    const salaryError = validateJobSalary(salary);
+    if (titleError) {
+      toast.error(titleError);
+      return;
+    }
+
+    if (descriptionError) {
+      toast.error(descriptionError);
+      return;
+    }
+    if (salaryError) {
+      toast.error(salaryError);
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const description = quillRef.current.root.innerHTML;
       const { data } = await axios.post(
@@ -42,6 +66,7 @@ const AddJob = () => {
         }
       );
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         setTitle("");
         setSalary(0);
@@ -85,7 +110,6 @@ const AddJob = () => {
           placeholder="Enter job title"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
-          required
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
@@ -183,9 +207,9 @@ const AddJob = () => {
       <div className="text-center">
         <button
           type="submit"
-          className="text-white px-5 cursor-pointer py-2 rounded-md hover:scale-105  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+          className="text-white px-5 font-semibold cursor-pointer py-2 rounded-md hover:scale-105  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
         >
-          Add Job
+          {loading ? "Adding Job..." : "Add Job"}
         </button>
       </div>
     </form>

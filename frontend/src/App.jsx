@@ -14,7 +14,8 @@ import "react-toastify/dist/ReactToastify.css";
 // import AddJob from "./pages/addJob";
 import Dashboard from "./pages/Dashboard";
 const App = () => {
-  const { showRecruiterLogin, setShowRecruiterLogin } = useContext(AppContext);
+  const { showRecruiterLogin, companyToken } = useContext(AppContext);
+
   return (
     <div>
       {showRecruiterLogin && <RecruiterLogin></RecruiterLogin>}
@@ -22,14 +23,25 @@ const App = () => {
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />
         <Route path="/applications" element={<Applications></Applications>} />
-        <Route path="/dashboard" element={<Dashboard></Dashboard>}>
-          <Route index element={<Navigate to="manage-jobs" />} />
-          <Route index path="add-job" element={<AddJob></AddJob>} />
-          <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
-          <Route
-            path="view-applications"
-            element={<ViewApplication></ViewApplication>}
-          />
+        <Route
+          path="/dashboard"
+          element={
+            companyToken ? (
+              <Dashboard></Dashboard>
+            ) : (
+              <Navigate to="/"></Navigate>
+            )
+          }
+        >
+          <>
+            <Route index element={<Navigate to="manage-jobs" />} />
+            <Route path="add-job" element={<AddJob></AddJob>} />
+            <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
+            <Route
+              path="view-applications"
+              element={<ViewApplication></ViewApplication>}
+            />
+          </>
         </Route>
       </Routes>
       <ToastContainer autoClose={3000} />

@@ -1,17 +1,61 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
+import { AppContext } from "../context/appContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddJob = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState(""); // Added state to capture description
   const [location, setLocation] = useState("Kathmandu");
   const [category, setCategory] = useState("IT");
   const [level, setLevel] = useState("Beginner");
   const [salary, setSalary] = useState(0);
+  const [deadline, setDeadline] = useState(0);
+
+  const { backendUrl, companyToken } = useContext(AppContext);
 
   const editorRef = useRef(null); // Ref for Quill editor
   const quillRef = useRef(null); // Ref to hold the Quill instance
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const description = quillRef.current.root.innerHTML;
+      const { data } = await axios.post(
+        backendUrl + "/api/company/post-job",
+        {
+          title,
+          description,
+          salary,
+          category,
+          level,
+          location,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${companyToken}`,
+          },
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        setTitle("");
+        setSalary(0);
+        quillRef.current.setContents([]);
+        navigate("/dashboard/manage-jobs");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while adding the job");
+      if (error.response && error.response.data.message) {
+        toast.error(error.response.data.message);
+      }
+    }
+  };
 
   useEffect(() => {
     // Initialize Quill editor only once
@@ -19,31 +63,13 @@ const AddJob = () => {
       quillRef.current = new Quill(editorRef.current, {
         theme: "snow",
       });
-
-      // Set up an event listener to update the description state on text change
-      quillRef.current.on("text-change", () => {
-        setDescription(quillRef.current.root.innerHTML); // Sync content with the state
-      });
     }
   }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Do something with the data (e.g., send it to an API)
-    console.log({
-      title,
-      description, // This will contain the HTML content of the editor
-      location,
-      category,
-      level,
-      salary,
-    });
-  };
 
   return (
     <form
       className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg"
-      onSubmit={handleSubmit}
+      onSubmit={onSubmitHandler}
     >
       <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">
         Add New Job

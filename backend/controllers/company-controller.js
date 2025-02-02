@@ -6,6 +6,7 @@ const generateToken = require("../utils/generateToken");
 const Company = require("../models/Company");
 const Job = require("../models/Job");
 const mongoose = require("mongoose");
+const Application = require("../models/Application");
 //create a company
 exports.registerCompany = async (req, res) => {
   const { name, email, password } = req.body;
@@ -128,15 +129,7 @@ exports.postJob = async (req, res) => {
   const { title, description, level, deadline, location, salary, category } =
     req.body;
 
-  if (
-    !title ||
-    !level ||
-    !description ||
-    !deadline ||
-    !location ||
-    !salary ||
-    !category
-  ) {
+  if (!title || !level || !description || !location || !salary || !category) {
     return res.status(400).json({
       success: false,
       message: "All fields are required",
@@ -172,9 +165,17 @@ exports.getCompanyPostedJobs = async (req, res) => {
   const companyId = req.company._id;
   try {
     const jobs = await Job.find({ companyId });
+
+    const jobsData = await Promise.all(
+      jobs.map(async (job) => {
+        const applicants = await Application.find({ jobId: job.jobId });
+        return { ...job.toObject(), applicants: applicants.length };
+      })
+    );
+
     res
       .status(200)
-      .json({ success: true, message: "Jobs fetched successfully", jobs });
+      .json({ success: true, message: "Jobs fetched successfully", jobsData });
   } catch (error) {
     console.error("Error fetching jobs:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

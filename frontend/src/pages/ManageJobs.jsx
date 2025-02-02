@@ -1,11 +1,41 @@
-import React from "react";
-import { assets, manageJobsData } from "../assets/assets";
+import React, { useContext, useEffect, useState } from "react";
+// import { assets, manageJobsData } from "../assets/assets";
 import moment from "moment";
 
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/appContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ManageJobs = () => {
   const navigate = useNavigate();
+
+  const [jobs, setJobs] = useState([]);
+  const { backendUrl, companyToken } = useContext(AppContext);
+  // function to fetch jobs list
+
+  const fetchCompanyJobs = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/company/list-jobs", {
+        headers: {
+          Authorization: `Bearer ${companyToken}`,
+        },
+      });
+      if (data.success) {
+        setJobs(data.jobsData);
+        console.log(data.jobsData);
+      }
+    } catch (error) {
+      console.log("Error fetching jobs:", error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (companyToken) {
+      fetchCompanyJobs();
+    }
+  }, [companyToken]);
 
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -27,7 +57,7 @@ const ManageJobs = () => {
             </tr>
           </thead>
           <tbody>
-            {manageJobsData.map((job, index) => (
+            {jobs.map((job, index) => (
               <tr key={index} className="border-t text-center hover:bg-gray-50">
                 <td className="px-4 py-2 text-gray-600">{index + 1}</td>
                 <td className="px-4 py-2 text-gray-600">{job.title}</td>

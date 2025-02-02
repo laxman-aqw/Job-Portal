@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
@@ -7,9 +7,10 @@ import { CgAddR } from "react-icons/cg";
 import { SiNginxproxymanager } from "react-icons/si";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
+import { AppContext } from "../context/appContext";
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const { company } = useContext(AppContext);
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
@@ -51,18 +52,20 @@ const Dashboard = () => {
           </button>
 
           {/* Profile Section */}
-          <div className="flex flex-col items-center border-b border-gray-700 pb-4">
-            <img
-              src={assets.company_icon}
-              alt="Company Icon"
-              className="w-10 h-10 rounded-full border-2 border-gray-500"
-            />
-            {isSidebarOpen && (
-              <p className="mt-2 font-semibold text-gray-700 text-center">
-                Welcome, RojgarChowk
-              </p>
-            )}
-          </div>
+          {company && (
+            <div className="flex flex-col items-center border-b border-gray-700 pb-4">
+              <img
+                src={company.image}
+                alt="Company Icon"
+                className="w-10 h-10 rounded-full border-2 border-gray-500"
+              />
+              {isSidebarOpen && (
+                <p className="mt-2 font-semibold text-gray-700 text-center">
+                  Welcome, {company.name}
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Navigation */}
           <nav className="mt-5 flex flex-col space-y-3">

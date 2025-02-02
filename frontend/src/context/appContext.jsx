@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { jobsData } from "../assets/assets";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const AppContext = createContext();
 
@@ -43,9 +45,40 @@ export const AppContextProvider = (props) => {
     setJobs(jobsData);
   };
 
+  //function to fetch company data
+  const fetchCompanyData = async () => {
+    // fetch company data from backend using companyToken
+    try {
+      const { data } = await axios.get(backendUrl + "/api/company/company", {
+        headers: {
+          Authorization: `Bearer ${companyToken}`,
+        },
+      });
+      if (data.success) {
+        setCompany(data.company);
+        console.log(data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
-  }, []);
+
+    const storedCompanyToken = localStorage.getItem("companyToken");
+    if (storedCompanyToken) {
+      setCompanyToken(storedCompanyToken);
+    }
+  }, [companyToken]);
+
+  useEffect(() => {
+    if (companyToken) {
+      fetchCompanyData();
+    }
+  }, [companyToken]);
 
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>

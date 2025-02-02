@@ -169,6 +169,7 @@ const RecruiterLogin = () => {
                   id="image"
                   type="file"
                   hidden
+                  accept="image/png, image/jpeg"
                 />
               </label>
               <p>Upload company logo</p>

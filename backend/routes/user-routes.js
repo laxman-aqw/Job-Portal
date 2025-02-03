@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer");
 const userController = require("../controllers/user-controller");
-router.get("/user", userController.getUserData);
+const { requireAuth } = require("@clerk/express");
+router.get("/user", requireAuth(), userController.getUserData);
 router.post("/apply-job", userController.applyJob);
 router.get("/applications", userController.getUserAppliedJobs);
 router.put(

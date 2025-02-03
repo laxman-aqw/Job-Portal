@@ -4,11 +4,12 @@ const Application = require("../models/Application");
 const Job = require("../models/Job");
 const cloudinary = require("cloudinary").v2;
 exports.getUserData = async (req, res) => {
-  const userId = req.auth?.userId;
+  const userId = req.auth.userId;
+  console.log("User id is", userId);
   if (!userId) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized: User ID is missing",
+      message: "Unauthorized from getUserdata : User ID is missing",
     });
   }
   try {

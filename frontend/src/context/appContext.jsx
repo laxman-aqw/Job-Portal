@@ -50,14 +50,17 @@ export const AppContextProvider = (props) => {
   const fetchUserData = async () => {
     try {
       const token = await getToken();
+      // console.log("The token is  " + token);
       const { data } = await axios.get(backendUrl + "/api/user/user", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}}`,
         },
       });
+      console.log(data);
       if (data.success) {
         setUserData(data.user);
       } else {
+        console.log("Error occured");
         toast.error(data.message);
       }
     } catch (error) {
@@ -90,16 +93,15 @@ export const AppContextProvider = (props) => {
 
   //function to fetch company data
   const fetchCompanyData = async () => {
-    // fetch company data from backend using companyToken
     try {
       const { data } = await axios.get(backendUrl + "/api/company/company", {
         headers: {
           Authorization: `Bearer ${companyToken}`,
         },
       });
+      // console.log(data);
       if (data.success) {
         setCompany(data.company);
-        // console.log(data);
       } else {
         toast.error(data.message);
       }

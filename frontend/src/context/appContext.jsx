@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { jobsData } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export const AppContext = createContext();
 
@@ -19,10 +19,17 @@ export const AppContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+  const { user } = useUser();
+  const { getToken } = useAuth();
+
   const [companyToken, setCompanyToken] = useState(null);
 
   //for company data
   const [company, setCompany] = useState(null);
+
+  //for user data
+  const [userData, setUserData] = useState(null);
+  const [userApplications, setUserApplications] = useState(null);
 
   const value = {
     searchFilter,
@@ -40,9 +47,45 @@ export const AppContextProvider = (props) => {
     backendUrl,
   };
 
-  //function to fetch data
+  const fetchUserData = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.get(backendUrl + "/api/user/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (data.success) {
+        setUserData(data.user);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log("Error fetching user data:", error);
+
+      // Improve error handling
+      if (error.response) {
+        toast.error(error.response.data?.message || "Server Error");
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  //function to fetch job data
   const fetchJobs = async () => {
-    setJobs(jobsData);
+    try {
+      const { data } = await axios.get(backendUrl + "/api/job");
+      if (data.success) {
+        // console.log(data);
+        setJobs(data.jobs);
+      }
+    } catch (error) {
+      console.log("Error fetching jobs:", error);
+      toast.error(error.message);
+    }
   };
 
   //function to fetch company data
@@ -56,7 +99,7 @@ export const AppContextProvider = (props) => {
       });
       if (data.success) {
         setCompany(data.company);
-        console.log(data);
+        // console.log(data);
       } else {
         toast.error(data.message);
       }
@@ -79,6 +122,12 @@ export const AppContextProvider = (props) => {
       fetchCompanyData();
     }
   }, [companyToken]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
 
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>

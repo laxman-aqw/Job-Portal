@@ -23,10 +23,10 @@ import Dashboard from "./pages/Dashboard";
 const App = () => {
   const navigate = useNavigate();
   const { showRecruiterLogin, companyToken } = useContext(AppContext);
-  console.log("companyToken:", companyToken);
+  // console.log("companyToken:", companyToken);
   const tokenValid =
     companyToken || localStorage.getItem("companyToken") ? true : false;
-  console.log(tokenValid);
+  // console.log(tokenValid);
   return (
     <div>
       {showRecruiterLogin && <RecruiterLogin />}

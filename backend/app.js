@@ -12,16 +12,16 @@ const { clerkMiddleware } = require("@clerk/express");
 
 const port = process.env.PORT;
 app.use(cors());
-app.use(clerkMiddleware());
 app.use(express.json());
+app.use(clerkMiddleware());
 app.get("/", (req, res) => {
   res.send("Hello World from laxman");
 });
 
+app.use("/api/user", userRoutes);
 app.post("/webhooks", clerkWebHook);
 app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
-app.use("/api/user", userRoutes);
 
 const startServer = async () => {
   try {

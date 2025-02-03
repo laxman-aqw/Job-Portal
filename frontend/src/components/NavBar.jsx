@@ -43,7 +43,7 @@ const NavBar = () => {
             </button>
             <button
               onClick={openSignIn}
-              className=" text-white px-5 py-2 rounded-full  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              className=" text-white px-5 py-2 rounded-full cursor-pointer bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
             >
               Login
             </button>

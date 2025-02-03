@@ -85,11 +85,11 @@ const RecruiterLogin = () => {
         console.log(data);
         if (data.success) {
           toast.success("Logged in successfully!");
-          console.log("data succeed");
+          // console.log("data succeed");
           setCompany(data.company);
           setCompanyToken(data.token);
           localStorage.setItem("companyToken", data.token);
-          console.log(localStorage.getItem("companyToken"));
+          // console.log(localStorage.getItem("companyToken"));
           setShowRecruiterLogin(false);
           navigate("/dashboard");
         }

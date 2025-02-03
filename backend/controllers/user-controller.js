@@ -4,11 +4,11 @@ const Application = require("../models/Application");
 const Job = require("../models/Job");
 const cloudinary = require("cloudinary").v2;
 exports.getUserData = async (req, res) => {
-  const userId = req.auth.userId;
+  const userId = req.auth?.userId;
   if (!userId) {
-    return res.status(400).json({
+    return res.status(401).json({
       success: false,
-      message: "User ID is missing in the request",
+      message: "Unauthorized: User ID is missing",
     });
   }
   try {
@@ -22,7 +22,7 @@ exports.getUserData = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User data fetched successfully",
-      user, // You can return any user data here
+      user,
     });
   } catch (error) {
     console.error("Error fetching user data:", error);

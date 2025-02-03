@@ -1,6 +1,5 @@
 import { FaDotCircle } from "react-icons/fa";
 import React from "react";
-import { assets } from "../assets/assets";
 import { CiLocationOn } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,7 @@ const JobCard = ({ job }) => {
       {/* Company Logo */}
       <div className="flex justify-center mb-6">
         <img
-          src={assets.company_icon}
+          src={job.companyId.image}
           alt="Company Logo"
           className="w-20 h-20 object-contain"
         />

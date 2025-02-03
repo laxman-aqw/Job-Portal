@@ -53,7 +53,7 @@ export const AppContextProvider = (props) => {
       // console.log("The token is  " + token);
       const { data } = await axios.get(backendUrl + "/api/user/user", {
         headers: {
-          Authorization: `Bearer ${token}}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log(data);

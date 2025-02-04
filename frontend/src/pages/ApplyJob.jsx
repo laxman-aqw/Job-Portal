@@ -80,7 +80,7 @@ const ApplyJob = () => {
 
             {/* Apply and Date */}
             <div className=" md:mt-0 text-center md:text-right">
-              <button className="px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
+              <button className="hover:-translate-y-1 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
                 Apply Now
               </button>
               {/* posted date */}

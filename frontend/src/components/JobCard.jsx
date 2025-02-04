@@ -13,7 +13,7 @@ const JobCard = ({ job }) => {
         <img
           src={job.companyId.image}
           alt="Company Logo"
-          className="w-20 h-20 object-contain"
+          className="w-20 h-20 rounded-full object-contain"
         />
       </div>
 
@@ -47,7 +47,7 @@ const JobCard = ({ job }) => {
             navigate(`/apply-job/${job._id}`);
             scrollTo(0, 0);
           }}
-          className="bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white font-medium px-6 py-2 rounded-lg shadow-md cursor-pointer"
+          className="hover:-translate-y-1 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white font-medium px-6 py-2 rounded-lg shadow-md cursor-pointer"
         >
           Apply Now
         </button>
@@ -56,7 +56,7 @@ const JobCard = ({ job }) => {
             navigate(`/apply-job/${job._id}`);
             scrollTo(0, 0);
           }}
-          className="border border-gray-300 text-gray-800 font-medium px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 transition-all duration-300"
+          className="hover:-translate-y-1 border border-gray-300 text-gray-800 font-medium px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 transition-all duration-300"
         >
           Learn More
         </button>

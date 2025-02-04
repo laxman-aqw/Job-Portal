@@ -8,6 +8,9 @@ import { SiNginxproxymanager } from "react-icons/si";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import { AppContext } from "../context/appContext";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "../custom/custom.css";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,11 +18,13 @@ const Dashboard = () => {
 
   // function to logout for the company
   const logout = () => {
+    NProgress.start();
     setCompanyToken(null);
     localStorage.removeItem("lastRoute");
     localStorage.removeItem("companyToken");
     setCompany(null);
     navigate("/");
+    NProgress.done();
   };
 
   return (

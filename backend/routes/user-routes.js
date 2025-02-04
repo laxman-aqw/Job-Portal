@@ -3,13 +3,19 @@ const router = express.Router();
 const upload = require("../config/multer");
 const userController = require("../controllers/user-controller");
 const { requireAuth } = require("@clerk/express");
-router.get("/user", requireAuth(), userController.getUserData);
+const { protectUser } = require("../middlewares/auth.middleware");
 router.post("/apply-job", userController.applyJob);
 router.get("/applications", userController.getUserAppliedJobs);
+
+router.post("/register", upload.single("image"), userController.registerUser);
 router.put(
   "/update-resume",
   upload.single("resume"),
   userController.updateUserResume
 );
 
+router.post("/check-email", userController.validateEmail);
+router.post("/login", userController.loginUser);
+
+router.get("/user", protectUser, userController.getUserData);
 module.exports = router;

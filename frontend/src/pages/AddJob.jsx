@@ -5,6 +5,9 @@ import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "../custom/custom.css";
 import {
   validateJobTitle,
   validateJobDescription,
@@ -49,6 +52,7 @@ const AddJob = () => {
 
     try {
       const description = quillRef.current.root.innerHTML;
+      NProgress.start();
       const { data } = await axios.post(
         backendUrl + "/api/company/post-job",
         {
@@ -79,6 +83,8 @@ const AddJob = () => {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
       }
+    } finally {
+      NProgress.done();
     }
   };
 

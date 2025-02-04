@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
-import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+// import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 
+import axios from "axios";
+import ProfileDropdown from "./ProfileDropDown";
+
 const NavBar = () => {
-  const { openSignIn } = useClerk();
-  const { user } = useUser();
-  const { setShowRecruiterLogin } = useContext(AppContext);
+  const { setShowRecruiterLogin, setShowUserLogin, user } =
+    useContext(AppContext);
 
   return (
-    <nav className="shadow-md py-4 mx-2 rounded-xl bg-white sticky z-10 top-0">
+    <nav className="shadow-md py-4 mx-2 mb-2 rounded-xl bg-white sticky z-10 top-0">
       <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link className="flex items-center cursor-pointer" to="/">
@@ -24,26 +26,27 @@ const NavBar = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/applications"
-              className="px-4 py-2 text-white rounded-lg bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              className="px-4 py-2 hover:-translate-y-1 text-white rounded-lg bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
             >
               Applied Jobs
             </Link>
             <p className="hidden md:block text-gray-600">
-              Hi, <span className="font-medium">{user.firstName}</span>
+              Hi, <span className="font-medium">{user.name}</span>
             </p>
-            <UserButton />
+
+            <ProfileDropdown className="hover:shadow-2xl"></ProfileDropdown>
           </div>
         ) : (
           <div className="flex items-center gap-4">
             <button
-              onClick={(e) => setShowRecruiterLogin(true)}
-              className="   cursor-pointer border-2  px-5 py-2 rounded-full border-sky-500 text-sky-700 hover:text-white hover:bg-gradient-to-r from-sky-500 to-sky-700 transition duration-300"
+              onClick={() => setShowRecruiterLogin(true)}
+              className="  hover:-translate-y-1 cursor-pointer border-2  px-5 py-2 rounded-full border-sky-500 text-sky-700 hover:text-white hover:bg-gradient-to-r from-sky-500 to-sky-700 transition duration-300"
             >
               Recruiter Login
             </button>
             <button
-              onClick={openSignIn}
-              className=" text-white px-5 py-2 rounded-full cursor-pointer bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              onClick={() => setShowUserLogin(true)}
+              className=" text-white px-5 py-2 rounded-full cursor-pointer bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95  hover:-translate-y-1 transition duration-300"
             >
               Login
             </button>

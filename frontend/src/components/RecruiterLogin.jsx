@@ -8,6 +8,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "../custom/custom.css";
 import {
   validateEmail,
   validatePassword,
@@ -78,6 +81,7 @@ const RecruiterLogin = () => {
     }
     try {
       if (state === "Login") {
+        NProgress.start();
         const { data } = await axios.post(backendUrl + "/api/company/login", {
           email,
           password,
@@ -99,6 +103,7 @@ const RecruiterLogin = () => {
         formData.append("email", email);
         formData.append("password", password);
         formData.append("image", image);
+        NProgress.start();
         const { data } = await axios.post(
           backendUrl + "/api/company/register",
           formData
@@ -127,6 +132,7 @@ const RecruiterLogin = () => {
         );
       }
     } finally {
+      NProgress.done();
       setLoading(false);
     }
   };
@@ -144,7 +150,7 @@ const RecruiterLogin = () => {
         className="relative bg-white p-10 rounded-xl text-slate-500"
       >
         <h1
-          className="text-center text-2xl text-neutral-700 font-medium
+          className="text-center mb-1 text-2xl text-neutral-700 font-medium
          "
         >
           Recruiter {state}

@@ -33,6 +33,14 @@ export const validateName = (name) => {
   if (!name) return "Company name is required!";
   return null; // No error
 };
+export const validateFirstName = (name) => {
+  if (!name) return "First name is required!";
+  return null; // No error
+};
+export const validateLastName = (name) => {
+  if (!name) return "Last name is required!";
+  return null; // No error
+};
 
 export const validateJobTitle = (title) => {
   if (!title) {

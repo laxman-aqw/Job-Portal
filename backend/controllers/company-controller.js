@@ -1,6 +1,5 @@
 //register new company
 const bcrypt = require("bcrypt");
-const CompanyModel = require("../models/Company");
 const cloudinary = require("cloudinary").v2;
 const generateToken = require("../utils/generateToken");
 const Company = require("../models/Company");
@@ -19,7 +18,7 @@ exports.registerCompany = async (req, res) => {
   }
 
   try {
-    const existingCompany = await CompanyModel.findOne({ email: email });
+    const existingCompany = await Company.findOne({ email: email });
     if (existingCompany) {
       return res
         .status(409)
@@ -60,6 +59,7 @@ exports.registerCompany = async (req, res) => {
   }
 };
 
+//login
 exports.loginCompany = async (req, res) => {
   const { email, password } = req.body;
 
@@ -102,6 +102,20 @@ exports.loginCompany = async (req, res) => {
   }
 };
 
+//validate email
+exports.validateEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const company = await Company.findOne({ email });
+    if (company) {
+      return res.status(200).json({ success: false, exists: true });
+    }
+    res.status(200).json({ success: true, exists: false });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 exports.getCompanyData = async (req, res) => {
   try {
     if (!req.company) {
@@ -223,19 +237,5 @@ exports.changeVisibility = async (req, res) => {
       message: "Internal Server Error",
       error: error.message,
     });
-  }
-};
-
-exports.validateEmail = async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    const company = await Company.findOne({ email });
-    if (company) {
-      return res.status(200).json({ success: false, exists: true });
-    }
-    res.status(200).json({ success: true, exists: false });
-  } catch (err) {
-    res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -3,33 +3,147 @@ const User = require("../models/User");
 const Application = require("../models/Application");
 const Job = require("../models/Job");
 const cloudinary = require("cloudinary").v2;
-exports.getUserData = async (req, res) => {
-  const userId = req.auth.userId;
-  console.log("User id is", userId);
-  if (!userId) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized from getUserdata : User ID is missing",
-    });
+const generateToken = require("../utils/generateToken");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
+
+//register user
+exports.registerUser = async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+
+  const imageFile = req.file;
+  if (!firstName || !lastName || !email || !password || !imageFile) {
+    return res
+      .status(404)
+      .json({ success: false, message: "fields are missing" });
   }
+
   try {
-    const user = await User.findById(userId);
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Email already exists" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+
+    const newUser = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      image: imageUpload.secure_url,
+    });
+
+    const payload = {
+      id: newUser._id,
+      email: newUser.email,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      image: newUser.image,
+    };
+
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully!",
+      company: {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        image: newUser.image,
+      },
+      token: generateToken(payload),
+    });
+  } catch (error) {
+    console.error("Error checking existing company:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// validate email
+exports.validateEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(200).json({ success: false, exists: true });
+    }
+    res.status(200).json({ success: true, exists: false });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//user login
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
     if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found" });
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    const payload = {
+      id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      image: user.image,
+    };
+
+    if (isPasswordValid) {
+      const token = generateToken(payload);
+      console.log(token);
+      res.status(200).json({
+        success: true,
+        message: "login succesful",
+        company: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          image: user.image,
+        },
+        token,
+      });
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+exports.getUserData = async (req, res) => {
+  try {
+    if (!req.user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User data not found with token",
       });
     }
+
     res.status(200).json({
       success: true,
       message: "User data fetched successfully",
-      user,
+      user: req.user,
     });
   } catch (error) {
-    console.error("Error fetching user data:", error);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "An error occurred while fetching user data",
+      error: error.message,
     });
   }
 };

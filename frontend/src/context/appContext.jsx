@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useAuth, useUser } from "@clerk/clerk-react";
 
 export const AppContext = createContext();
 
@@ -16,19 +15,22 @@ export const AppContextProvider = (props) => {
   const [jobs, setJobs] = useState([]);
 
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
+  const [showUserLogin, setShowUserLogin] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const { user } = useUser();
-  const { getToken } = useAuth();
+  // const { user } = useUser();
+  // const { getToken } = useAuth();
 
   const [companyToken, setCompanyToken] = useState(null);
+  const [userToken, setUserToken] = useState(null);
 
   //for company data
   const [company, setCompany] = useState(null);
+  const [user, setUser] = useState(null);
 
   //for user data
-  const [userData, setUserData] = useState(null);
+
   const [userApplications, setUserApplications] = useState(null);
 
   const value = {
@@ -40,41 +42,17 @@ export const AppContextProvider = (props) => {
     setJobs,
     showRecruiterLogin,
     setShowRecruiterLogin,
+    showUserLogin,
+    setShowUserLogin,
+    setUserToken,
+    setUser,
+    userToken,
     companyToken,
     setCompanyToken,
     company,
     setCompany,
     backendUrl,
-  };
-
-  const fetchUserData = async () => {
-    try {
-      const token = await getToken();
-      // console.log("The token is  " + token);
-      const { data } = await axios.get(backendUrl + "/api/user/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(data);
-      if (data.success) {
-        setUserData(data.user);
-      } else {
-        console.log("Error occured");
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.log("Error fetching user data:", error);
-
-      // Improve error handling
-      if (error.response) {
-        toast.error(error.response.data?.message || "Server Error");
-      } else if (error.request) {
-        toast.error("No response from server");
-      } else {
-        toast.error(error.message);
-      }
-    }
+    user,
   };
 
   //function to fetch job data
@@ -109,10 +87,27 @@ export const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+  const fetchUserData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/users/user", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (data.success) {
+        console.log(data);
+        setUser(data.user);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchJobs();
-
     const storedCompanyToken = localStorage.getItem("companyToken");
     if (storedCompanyToken) {
       setCompanyToken(storedCompanyToken);
@@ -120,16 +115,24 @@ export const AppContextProvider = (props) => {
   }, [companyToken]);
 
   useEffect(() => {
+    fetchJobs();
+    const storedUserToken = localStorage.getItem("userToken");
+    if (storedUserToken) {
+      setUserToken(storedUserToken);
+    }
+  }, [userToken]);
+
+  useEffect(() => {
+    if (userToken) {
+      fetchUserData();
+    }
+  }, [userToken]);
+
+  useEffect(() => {
     if (companyToken) {
       fetchCompanyData();
     }
   }, [companyToken]);
-
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
 
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>

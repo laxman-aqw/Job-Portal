@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 import "../custom/custom.css";
 const ManageJobs = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const ManageJobs = () => {
   //change visibility
   const changeJobVisibility = async (id, currentVisibility) => {
     try {
+      NProgress.start();
       const { data } = await axios.post(
         backendUrl + "/api/company/change-visibility",
         { id },
@@ -43,6 +46,8 @@ const ManageJobs = () => {
     } catch (error) {
       console.log(error.message);
       toast.error(error.message);
+    } finally {
+      NProgress.done();
     }
   };
 

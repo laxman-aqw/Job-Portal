@@ -68,7 +68,7 @@ const Applications = () => {
               {/* Resume Link */}
               <a
                 href="#"
-                className="px-6 py-2 bg-sky-200 border border-sky-300 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-sky-100 transition-all flex gap-2 items-center justify-center"
+                className="px-6 py-2 hover:-translate-y-1 bg-sky-200 border border-sky-300 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-sky-100 transition-all flex gap-2 items-center justify-center"
               >
                 {" "}
                 <span>
@@ -80,7 +80,7 @@ const Applications = () => {
               {/* Edit Button */}
               <button
                 onClick={() => setIsEdit(true)}
-                className="px-6 py-2 bg-gray-200 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all flex  justify-center items-center gap-2"
+                className="hover:-translate-y-1 px-6 py-2 bg-gray-200 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all flex  justify-center items-center gap-2"
               >
                 <CiEdit />
                 Edit
@@ -119,7 +119,7 @@ const Applications = () => {
                 {jobsApplied.map((job, index) => (
                   <tr
                     key={index}
-                    className={`${
+                    className={`hover:-translate-y-1 ${
                       index % 2 === 0 ? "bg-white" : "bg-gray-50"
                     } hover:bg-gray-100 transition`}
                   >

@@ -19,18 +19,26 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import AddJob from "./pages/addJob";
 import Dashboard from "./pages/Dashboard";
+import UserLogin from "./components/UserLogin";
+import axios from "axios";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css"; // Import default NProgress styles
+import "./custom/custom.css";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
-  const navigate = useNavigate();
-  const { showRecruiterLogin, companyToken } = useContext(AppContext);
+  const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
+    useContext(AppContext);
   // console.log("companyToken:", companyToken);
   const tokenValid =
     companyToken || localStorage.getItem("companyToken") ? true : false;
-  // console.log(tokenValid);
+
   return (
     <div>
       {showRecruiterLogin && <RecruiterLogin />}
+      {showUserLogin && <UserLogin />}
       <Routes>
+        <Route path="/profile" element={<ProfilePage></ProfilePage>} />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />
         <Route path="/applications" element={<Applications></Applications>} />

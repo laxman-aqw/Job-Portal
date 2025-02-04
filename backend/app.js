@@ -3,28 +3,22 @@ const app = express();
 const cors = require("cors");
 const connectDB = require("./config/db");
 const companyRoutes = require("./routes/company-routes");
-const { clerkWebHook } = require("./controllers/webhooks");
+
 const connectCloudinary = require("./config/cloudinary");
 require("dotenv").config();
 const jobRoutes = require("./routes/job-routes");
 const userRoutes = require("./routes/user-routes");
-const { clerkMiddleware } = require("@clerk/express");
 
 const port = process.env.PORT;
 app.use(
   cors({
-    origin: "http://localhost:3000", // or your frontend URL
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
 app.use(express.json());
-app.use(clerkMiddleware());
-app.get("/", (req, res) => {
-  res.send("Hello World from laxman");
-});
 
-app.use("/api/user", userRoutes);
-app.post("/webhooks", clerkWebHook);
+app.use("/api/users", userRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
 
@@ -42,3 +36,6 @@ const startServer = async () => {
 };
 
 startServer();
+app.get("/", async (req, res) => {
+  res.send("hello");
+});

@@ -23,10 +23,10 @@ const Footer = () => {
         {/* Adjusted back-to-top button position */}
         <button
           onClick={scrollToTop}
-          className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white p-3 rounded-full shadow-lg hover:scale-110 z-5"
+          className="cursor-pointer absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white p-3 rounded-full shadow-lg hover:scale-110 z-5"
           aria-label="Back to top"
         >
-          <FaArrowUp className=" cursor-pointer w-5 h-5" />
+          <FaArrowUp className="  w-5 h-5" />
         </button>
 
         {/* Rest of the footer content remains the same */}

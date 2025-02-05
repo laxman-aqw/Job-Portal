@@ -19,41 +19,13 @@ export const AppContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // const { user } = useUser();
-  // const { getToken } = useAuth();
-
   const [companyToken, setCompanyToken] = useState(null);
   const [userToken, setUserToken] = useState(null);
 
   //for company data
   const [company, setCompany] = useState(null);
   const [user, setUser] = useState(null);
-
-  //for user data
-
-  const [userApplications, setUserApplications] = useState(null);
-
-  const value = {
-    searchFilter,
-    setSearchFilter,
-    isSearched,
-    setIsSearched,
-    jobs,
-    setJobs,
-    showRecruiterLogin,
-    setShowRecruiterLogin,
-    showUserLogin,
-    setShowUserLogin,
-    setUserToken,
-    setUser,
-    userToken,
-    companyToken,
-    setCompanyToken,
-    company,
-    setCompany,
-    backendUrl,
-    user,
-  };
+  const [userApplications, setUserApplications] = useState([]);
 
   //function to fetch job data
   const fetchJobs = async () => {
@@ -87,6 +59,8 @@ export const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+  //fetchUserData
   const fetchUserData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/users/user", {
@@ -106,6 +80,31 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  const value = {
+    userApplications,
+    setUserApplications,
+    searchFilter,
+    setSearchFilter,
+    isSearched,
+    setIsSearched,
+    jobs,
+    setJobs,
+    showRecruiterLogin,
+    setShowRecruiterLogin,
+    showUserLogin,
+    setShowUserLogin,
+    setUserToken,
+    setUser,
+    userToken,
+    companyToken,
+    setCompanyToken,
+    company,
+    setCompany,
+    backendUrl,
+    user,
+    fetchUserData,
+  };
+
   useEffect(() => {
     fetchJobs();
     const storedCompanyToken = localStorage.getItem("companyToken");
@@ -115,18 +114,28 @@ export const AppContextProvider = (props) => {
   }, [companyToken]);
 
   useEffect(() => {
-    fetchJobs();
     const storedUserToken = localStorage.getItem("userToken");
+
     if (storedUserToken) {
       setUserToken(storedUserToken);
     }
-  }, [userToken]);
+  }, []);
+
+  // useEffect(() => {
+  //   fetchUserData();
+  // }, [userToken]);
 
   useEffect(() => {
     if (userToken) {
       fetchUserData();
     }
   }, [userToken]);
+
+  useEffect(() => {
+    if (user) {
+      console.log("The user is", user);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (companyToken) {

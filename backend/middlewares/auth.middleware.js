@@ -54,7 +54,7 @@ exports.protectUser = async (req, res, next) => {
       message: "No token provided, authorization denied",
     });
   } else {
-    console.log("auth header found", authHeader);
+    // console.log("auth header found", authHeader);
   }
 
   const tokenParts = authHeader.split(" ");

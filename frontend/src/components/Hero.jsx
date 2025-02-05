@@ -42,7 +42,7 @@ const Hero = () => {
                 <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
                 <input
                   type="text"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-sky-300  focus:border-sky-300 focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 outline-sky-300 focus:outline-sky-300  focus:border-sky-300  focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
                   placeholder="Job title or keywords"
                   ref={titleRef}
                 />
@@ -52,12 +52,11 @@ const Hero = () => {
                 <IoLocation className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
                 <input
                   type="text"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200  focus:outline-sky-300 focus:border-sky-300 focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 outline-sky-300  focus:outline-sky-300 focus:border-sky-300 focus:ring-2 focus:ring-sky-100 bg-white text-gray-700 placeholder-gray-400 transition-all"
                   placeholder="Location"
                   ref={locationRef}
                 />
               </div>
-
               <button
                 onClick={onSearch}
                 className="sm:w-auto px-8 py-4 hover:-translate-y-1 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl  flex items-center gap-2 justify-center cursor-pointer"

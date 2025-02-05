@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 // import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../context/appContext";
@@ -31,7 +31,7 @@ const NavBar = () => {
               Applied Jobs
             </Link>
             <p className="hidden md:block text-gray-600">
-              Hi, <span className="font-medium">{user.name}</span>
+              Hi, <span className="font-medium">{user.firstName}</span>
             </p>
 
             <ProfileDropdown className="hover:shadow-2xl"></ProfileDropdown>

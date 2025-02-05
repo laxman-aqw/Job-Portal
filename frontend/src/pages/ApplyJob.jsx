@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import { AppContext } from "../context/appContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import { PiSuitcaseSimple } from "react-icons/pi";
 import { CiLocationOn } from "react-icons/ci";
@@ -15,9 +15,11 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import { toast } from "react-toastify";
 const ApplyJob = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [jobData, setJobData] = useState(null);
-  const { jobs, backendUrl } = useContext(AppContext);
+  const { jobs, backendUrl, user, userApplications, userToken } =
+    useContext(AppContext);
 
   const fetchJob = async () => {
     try {
@@ -32,9 +34,22 @@ const ApplyJob = () => {
     }
   };
 
+  const applyHandlers = async () => {
+    try {
+      if (!user) {
+        return toast.error("Login required");
+      }
+      if (!user.resume) {
+        navigate("/applications");
+        return toast.error("Upload your resume before applying");
+      }
+      console.log(userToken);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     fetchJob();
-  }, []);
+  }, [id]);
 
   return jobData ? (
     <div>
@@ -80,7 +95,10 @@ const ApplyJob = () => {
 
             {/* Apply and Date */}
             <div className=" md:mt-0 text-center md:text-right">
-              <button className="hover:-translate-y-1 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
+              <button
+                onClick={applyHandlers}
+                className=" cursor-pointer hover:-translate-y-1 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              >
                 Apply Now
               </button>
               {/* posted date */}
@@ -112,7 +130,10 @@ const ApplyJob = () => {
                 dangerouslySetInnerHTML={{ __html: jobData.description }}
               />
             </div>
-            <button className="mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300">
+            <button
+              onClick={applyHandlers}
+              className="mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+            >
               Apply Now
             </button>
           </div>

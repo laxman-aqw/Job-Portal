@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const Company = require("../models/Company");
 const Application = require("../models/Application");
 const Job = require("../models/Job");
 const cloudinary = require("cloudinary").v2;
@@ -21,7 +22,8 @@ exports.registerUser = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email: email });
-    if (existingUser) {
+    const existingCompany = await Company.findOne({ email: email });
+    if (existingUser || existingCompany) {
       return res
         .status(409)
         .json({ success: false, message: "Email already exists" });
@@ -102,7 +104,7 @@ exports.loginUser = async (req, res) => {
 
     if (isPasswordValid) {
       const token = generateToken(payload);
-      console.log(token);
+      // console.log(token);
       res.status(200).json({
         success: true,
         message: "login succesful",
@@ -133,6 +135,7 @@ exports.getUserData = async (req, res) => {
         message: "User data not found with token",
       });
     }
+    // console.log(req.user);
 
     res.status(200).json({
       success: true,
@@ -150,7 +153,7 @@ exports.getUserData = async (req, res) => {
 
 exports.applyJob = async (req, res) => {
   const { jobId } = req.body;
-  const { userId } = req.auth;
+  const userId = req.user.id;
 
   try {
     const isApplied = await Application.findOne({ jobId, userId });
@@ -190,7 +193,7 @@ exports.applyJob = async (req, res) => {
 };
 
 exports.getUserAppliedJobs = async (req, res) => {
-  const { userId } = req.auth;
+  const userId = req.user.id;
   try {
     const applications = await Application.find({ userId })
       .populate("companyId", "name email image")
@@ -214,9 +217,11 @@ exports.getUserAppliedJobs = async (req, res) => {
 
 exports.updateUserResume = async (req, res) => {
   // Update user's resume
-  const { userId } = req.auth;
+  const userId = req.user.id;
+  console.log("the user id is: ", userId);
   try {
-    const resumeFile = req.resumeFile;
+    const resumeFile = req.file;
+    console.log(resumeFile);
 
     const user = await User.findById(userId);
     if (!user) {

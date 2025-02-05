@@ -1,14 +1,47 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import NavBar from "../components/NavBar";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { CiEdit } from "react-icons/ci";
+import { MdFileUpload } from "react-icons/md";
 import { assets, jobsApplied } from "../assets/assets";
 import moment from "moment";
 import Footer from "../components/Footer";
+import { AppContext } from "../context/appContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Applications = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [resume, setResume] = useState(null);
+  const { backendUrl, user, userApplications, fetchUserData, userToken } =
+    useContext(AppContext);
+  // console.log("token from application", userToken);
+  const updateResume = async () => {
+    try {
+      console.log(resume);
+      const formData = new FormData();
+      formData.append("resume", resume);
+      const { data } = await axios.put(
+        backendUrl + "/api/users/update-resume",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        await fetchUserData();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log("Error updating resume:", error);
+      toast.error(error.message);
+    }
+    setIsEdit(false);
+    setResume(null);
+  };
 
   return (
     <>
@@ -21,7 +54,7 @@ const Applications = () => {
 
         {/* Resume Section */}
         <div className="flex gap-4 mb-6 mt-3">
-          {isEdit ? (
+          {isEdit || (user && user.resume === "") ? (
             <>
               <div className="max-w-md mx-auto my-8 p-8 text-center">
                 {/* Upload Card */}
@@ -45,7 +78,7 @@ const Applications = () => {
                   {/* Text Content */}
                   <div className="space-y-2">
                     <p className="text-lg font-semibold text-gray-800">
-                      Select Resume
+                      {resume ? resume.name : "Select Resume"}
                     </p>
                     <p className="text-sm text-gray-500">
                       PDF format only (max. 5MB)
@@ -55,9 +88,9 @@ const Applications = () => {
 
                 {/* Save Button */}
                 <button
-                  onClick={(e) => setIsEdit(false)}
+                  onClick={updateResume}
                   type="button"
-                  className="mt-6 w-full bg-blue-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95"
+                  className="mt-6 w-full bg-blue-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95 cursor-pointer"
                 >
                   Save Changes
                 </button>
@@ -67,8 +100,10 @@ const Applications = () => {
             <div className="flex items-center gap-4">
               {/* Resume Link */}
               <a
-                href="#"
-                className="px-6 py-2 hover:-translate-y-1 bg-sky-200 border border-sky-300 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-sky-100 transition-all flex gap-2 items-center justify-center"
+                href={user?.resume}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="px-6 py-2 hover:-translate-y-1 bg-sky-200 border border-sky-300 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-sky-100 transition-all flex gap-2 items-center justify-center cursor-pointer"
               >
                 {" "}
                 <span>
@@ -80,10 +115,10 @@ const Applications = () => {
               {/* Edit Button */}
               <button
                 onClick={() => setIsEdit(true)}
-                className="hover:-translate-y-1 px-6 py-2 bg-gray-200 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all flex  justify-center items-center gap-2"
+                className="hover:-translate-y-1 px-6 py-2 bg-gray-200 text-sky-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all flex  justify-center items-center gap-2 cursor-pointer"
               >
-                <CiEdit />
-                Edit
+                <MdFileUpload />
+                {user && user.resume === "" ? "Upload" : "Update"}
               </button>
             </div>
           )}

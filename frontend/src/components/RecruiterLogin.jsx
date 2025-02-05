@@ -64,6 +64,7 @@ const RecruiterLogin = () => {
 
     if (state === "Sign Up" && !isNextDataSubmitted) {
       try {
+        NProgress.start();
         const { data } = await axios.post(
           backendUrl + "/api/company/check-email",
           { email }
@@ -77,6 +78,9 @@ const RecruiterLogin = () => {
       } catch (error) {
         toast.error("An error occurred while checking email.");
         console.log(error);
+      } finally {
+        NProgress.done();
+        setLoading(false);
       }
     }
     try {

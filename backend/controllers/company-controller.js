@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
 const generateToken = require("../utils/generateToken");
 const Company = require("../models/Company");
+const User = require("../models/User");
 const Job = require("../models/Job");
 const mongoose = require("mongoose");
 const Application = require("../models/Application");
@@ -19,17 +20,18 @@ exports.registerCompany = async (req, res) => {
 
   try {
     const existingCompany = await Company.findOne({ email: email });
-    if (existingCompany) {
+    const existingUser = await User.findOne({ email: email });
+    if (existingCompany || existingUser) {
       return res
         .status(409)
-        .json({ success: false, message: "email already exists" });
+        .json({ success: false, message: "Email already exists" });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const imageUpload = await cloudinary.uploader.upload(imageFile.path);
 
-    const newCompany = await CompanyModel.create({
+    const newCompany = await Company.create({
       name,
       email,
       password: hashedPassword,

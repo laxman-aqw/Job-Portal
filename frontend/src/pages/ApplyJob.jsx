@@ -14,12 +14,23 @@ import JobCard from "../components/JobCard";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { toast } from "react-toastify";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "../custom/custom.css";
+
 const ApplyJob = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [jobData, setJobData] = useState(null);
-  const { jobs, backendUrl, user, userApplications, userToken } =
-    useContext(AppContext);
+  const [isAlreadyApplied, setIsAlreadyApplied] = useState(true);
+  const {
+    jobs,
+    backendUrl,
+    user,
+    userApplications,
+    fetchUserApplications,
+    userToken,
+  } = useContext(AppContext);
 
   const fetchJob = async () => {
     try {
@@ -43,9 +54,47 @@ const ApplyJob = () => {
         navigate("/applications");
         return toast.error("Upload your resume before applying");
       }
-      console.log(userToken);
-    } catch (error) {}
+      NProgress.start();
+      const { data } = await axios.post(
+        backendUrl + "/api/users/apply-job",
+        { jobId: jobData._id },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      if (data.success) {
+        fetchUserApplications();
+        toast.success("Application submitted successfully");
+      }
+    } catch (error) {
+      if (error.response) {
+        // Show the server's error message if available
+        toast.error(
+          error.response.data.message || "An error occurred while applying."
+        );
+      } else {
+        // Handle network errors or unexpected issues
+        toast.error("Network error. Please check your connection.");
+      }
+    } finally {
+      NProgress.done();
+    }
   };
+
+  const checkedAlreadyApplied = () => {
+    const hasApplied = userApplications.some(
+      (item) => item?.jobId?._id === jobData?._id
+    );
+    setIsAlreadyApplied(hasApplied);
+  };
+
+  useEffect(() => {
+    if (userApplications.length > 0 && jobData) {
+      checkedAlreadyApplied();
+    }
+  }, [jobData, userApplications, , id]);
 
   useEffect(() => {
     fetchJob();
@@ -94,19 +143,23 @@ const ApplyJob = () => {
             </div>
 
             {/* Apply and Date */}
-            <div className=" md:mt-0 text-center md:text-right">
+            <div className=" md:mt-0 text-left ">
               <button
                 onClick={applyHandlers}
-                className=" cursor-pointer hover:-translate-y-1 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+                className={`px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 ${
+                  isAlreadyApplied
+                    ? "opacity-50 cursor-not-allowed "
+                    : "cursor-pointer hover:-translate-y-1"
+                }`}
               >
-                Apply Now
+                {isAlreadyApplied ? "Applied" : "Apply Now"}
               </button>
               {/* posted date */}
               <p className="mt-4 font-medium text-gray-500 text-sm">
                 Posted {moment(jobData.date).fromNow()}
               </p>
               {/* deadline date */}
-              <p className="mt-2 font-medium text-center text-sm text-red-600">
+              <p className="mt-2 font-medium text-left text-sm text-red-600">
                 Deadline:{" "}
                 {moment(jobData.deadline).isBefore(moment()) ? (
                   <span>Expired</span>
@@ -132,9 +185,14 @@ const ApplyJob = () => {
             </div>
             <button
               onClick={applyHandlers}
-              className="mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              style={{ textTransform: "none" }}
+              className={`mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-transform-none ${
+                isAlreadyApplied
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
             >
-              Apply Now
+              {isAlreadyApplied ? "Applied" : "Apply Now"}
             </button>
           </div>
           {/* Right section more jobs */}

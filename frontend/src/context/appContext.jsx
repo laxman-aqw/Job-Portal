@@ -80,6 +80,21 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  //function to fetch user applied applicationdatas
+  const fetchUserApplications = async () => {
+    try {
+      console.log("token from fetchUserApplications", userToken);
+      const { data } = await axios.get(backendUrl + "/api/users/applications", {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+      if (data.success) {
+        setUserApplications(data.applications);
+        console.log("The user application data is", data.applications);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   const value = {
     userApplications,
     setUserApplications,
@@ -103,6 +118,7 @@ export const AppContextProvider = (props) => {
     backendUrl,
     user,
     fetchUserData,
+    fetchUserApplications,
   };
 
   useEffect(() => {
@@ -128,6 +144,7 @@ export const AppContextProvider = (props) => {
   useEffect(() => {
     if (userToken) {
       fetchUserData();
+      fetchUserApplications();
     }
   }, [userToken]);
 

@@ -8,7 +8,9 @@ import Footer from "../components/Footer";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import "../custom/custom.css";
 const Applications = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [resume, setResume] = useState(null);
@@ -20,6 +22,7 @@ const Applications = () => {
       console.log(resume);
       const formData = new FormData();
       formData.append("resume", resume);
+      NProgress.start();
       const { data } = await axios.put(
         backendUrl + "/api/users/update-resume",
         formData,
@@ -38,6 +41,8 @@ const Applications = () => {
     } catch (error) {
       console.log("Error updating resume:", error);
       toast.error(error.message);
+    } finally {
+      NProgress.done();
     }
     setIsEdit(false);
     setResume(null);
@@ -151,7 +156,7 @@ const Applications = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {jobsApplied.map((job, index) => (
+                {userApplications.map((job, index) => (
                   <tr
                     key={index}
                     className={`hover:-translate-y-1 ${
@@ -161,20 +166,20 @@ const Applications = () => {
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <img
-                          src={job.logo}
+                          src={job.companyId.image}
                           alt={job.company}
                           className="w-8 h-8 rounded-full object-cover mr-3"
                         />
                         <span className="font-medium text-gray-900">
-                          {job.company}
+                          {job.companyId.name}
                         </span>
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-gray-900">
-                      {job.title}
+                      {job.jobId.title}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                      {job.location}
+                      {job.jobId.location}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-gray-500">
                       {moment(job.date).format("ll")}

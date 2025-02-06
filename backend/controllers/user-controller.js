@@ -153,7 +153,7 @@ exports.getUserData = async (req, res) => {
 
 exports.applyJob = async (req, res) => {
   const { jobId } = req.body;
-  const userId = req.user.id;
+  const userId = req.user._id;
 
   try {
     const isApplied = await Application.findOne({ jobId, userId });
@@ -193,7 +193,7 @@ exports.applyJob = async (req, res) => {
 };
 
 exports.getUserAppliedJobs = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   try {
     const applications = await Application.find({ userId })
       .populate("companyId", "name email image")
@@ -217,7 +217,7 @@ exports.getUserAppliedJobs = async (req, res) => {
 
 exports.updateUserResume = async (req, res) => {
   // Update user's resume
-  const userId = req.user.id;
+  const userId = req.user._id;
   console.log("the user id is: ", userId);
   try {
     const resumeFile = req.file;

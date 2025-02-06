@@ -28,18 +28,18 @@ exports.protectCompany = async (req, res, next) => {
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
     // console.log(decoded);
     req.company = await Company.findById(decoded.id).select("-password");
-    // console.log(req.company);
 
     if (!req.company) {
+      console.log("No company found");
       return res.status(401).json({
         success: false,
         message: "Company not found, authorization denied",
       });
     }
 
-    // console.log(req.company);
     next();
   } catch (error) {
+    console.error("Login error:", error);
     return res
       .status(403)
       .json({ success: false, message: "Not authorized : invalid token" });

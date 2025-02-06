@@ -11,7 +11,9 @@ import { toast } from "react-toastify";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
+import { useNavigate } from "react-router-dom";
 const Applications = () => {
+  const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [resume, setResume] = useState(null);
   const { backendUrl, user, userApplications, fetchUserData, userToken } =
@@ -158,10 +160,14 @@ const Applications = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {userApplications.map((job, index) => (
                   <tr
+                    onClick={() => {
+                      navigate(`/apply-job/${job.jobId._id}`);
+                      scrollTo(0, 0);
+                    }}
                     key={index}
-                    className={`hover:-translate-y-1 ${
+                    className={`hover:-translate-y-1 cursor-pointer ${
                       index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    } hover:bg-gray-100 transition`}
+                    } hover:bg-blue-100 transition  `}
                   >
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="flex items-center">

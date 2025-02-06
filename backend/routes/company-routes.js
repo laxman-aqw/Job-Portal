@@ -30,7 +30,7 @@ router.get(
   companyControllers.getCompanyPostedJobs
 );
 
-router.post(
+router.put(
   "/change-status",
   protectCompany,
   companyControllers.changeJobApplicationStatus

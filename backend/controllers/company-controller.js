@@ -153,7 +153,6 @@ exports.postJob = async (req, res) => {
   }
 
   const companyId = req.company._id;
-  // console.log(companyId, title, description, deadline, location, salary);
 
   try {
     const newJob = await Job.create({
@@ -175,7 +174,25 @@ exports.postJob = async (req, res) => {
   }
 };
 
-exports.getCompanyJobApplicants = async (req, res) => {};
+exports.getCompanyJobApplicants = async (req, res) => {
+  const companyId = req.company._id.toString();
+
+  try {
+    const applications = await Application.find({ companyId })
+      .populate("userId", "firstName lastName image resume")
+      .populate("jobId", "location title category level salary")
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      applications: applications,
+      message: "Job Applicants fetched succesfully",
+    });
+  } catch (error) {
+    console.error("Error fetching job applications:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 exports.getCompanyPostedJobs = async (req, res) => {
   const companyId = req.company._id;
@@ -198,7 +215,36 @@ exports.getCompanyPostedJobs = async (req, res) => {
   }
 };
 
-exports.changeJobApplicationStatus = async (req, res) => {};
+exports.changeJobApplicationStatus = async (req, res) => {
+  const { id, status } = req.body;
+  const companyId = req.company._id.toString();
+  try {
+    const application = await Application.findOneAndUpdate(
+      { _id: id },
+      { status },
+      { new: true }
+    );
+    if (!application) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Application not found" });
+    }
+    if (application.companyId.toString() !== companyId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized: You do not own this application",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Application status changed successfully",
+      application,
+    });
+  } catch (error) {
+    console.error("Error changing application status:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 exports.changeVisibility = async (req, res) => {
   const { id } = req.body;

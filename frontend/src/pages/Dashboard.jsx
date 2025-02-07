@@ -140,7 +140,14 @@ const Dashboard = () => {
             ${isSidebarOpen ? "w-full" : "w-12"}
             `}
           >
-            {isSidebarOpen ? "Logout" : <LuLogOut className="text-2xl" />}
+            {isSidebarOpen ? (
+              <>
+                <LuLogOut className="text-2xl" />
+                <span> Logout</span>
+              </>
+            ) : (
+              <LuLogOut className="text-2xl" />
+            )}
           </button>
         </aside>
 

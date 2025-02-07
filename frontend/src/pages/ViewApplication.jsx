@@ -8,6 +8,8 @@ import Loading from "../components/Loading";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
+import { MdOutlineDone } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
 const ViewApplication = () => {
   const { backendUrl, companyToken } = useContext(AppContext);
   // console.log("The token is", companyToken);
@@ -96,7 +98,7 @@ const ViewApplication = () => {
       </h2>
       {applicants ? (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <table className="min-w-full mb-10 bg-white border border-gray-300 rounded-lg shadow-md">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-4 text-center text-gray-700 font-semibold">
@@ -154,11 +156,11 @@ const ViewApplication = () => {
                   </td>
                   <td className="px-6 py-4 border-b ">
                     {applicant.status === "Pending" ? (
-                      <div className="relative iinline-block text-left group">
-                        <button className="text-gray-500 action-button">
+                      <div className="relative inline-block text-left group">
+                        <button className="text-gray-500 action-button text-2xl">
                           ...
                         </button>
-                        <div className="z-7 hidden absolute right-0 md:left-0 top-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow group-hover:block">
+                        <div className="z-7 hidden absolute top-0 left-0 md:left-0  mt-2 w-32 bg-white border border-gray-200 rounded shadow group-hover:block ">
                           <button
                             onClick={() =>
                               updateApplicationStatus(applicant._id, "Accepted")
@@ -179,16 +181,15 @@ const ViewApplication = () => {
                       </div>
                     ) : (
                       <span
-                        className={`inline-flex items-center px-4 py-2 rounded-full  text-xs font-medium 
-                ${
-                  applicant.status === "Accepted"
-                    ? "bg-green-100 text-green-800"
-                    : applicant.status === "Rejected"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-blue-100 text-blue-800"
-                }`}
+                        className={`inline-flex justify-center items-center px-2  rounded-full  text-2xl font-bold 
+                `}
                       >
-                        {applicant.status}
+                        {applicant.status === "Accepted" && (
+                          <MdOutlineDone className=" text-green-800" />
+                        )}
+                        {applicant.status === "Rejected" && (
+                          <AiOutlineClose className="text-red-800" />
+                        )}
                       </span>
                     )}
                   </td>

@@ -25,7 +25,7 @@ export const AppContextProvider = (props) => {
   //for company data
   const [company, setCompany] = useState(null);
   const [user, setUser] = useState(null);
-  const [userApplications, setUserApplications] = useState([]);
+  const [userApplications, setUserApplications] = useState(false);
 
   //function to fetch job data
   const fetchJobs = async () => {

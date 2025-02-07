@@ -12,6 +12,8 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
+
 const Applications = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
@@ -135,80 +137,87 @@ const Applications = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Jobs Applied
           </h2>
-
-          <div className="overflow-x-auto rounded-lg border border-gray-200">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Company
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Job Title
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Location
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {userApplications.map((job, index) => (
-                  <tr
-                    onClick={() => {
-                      navigate(`/apply-job/${job.jobId._id}`);
-                      scrollTo(0, 0);
-                    }}
-                    key={index}
-                    className={`hover:-translate-y-1 cursor-pointer ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    } hover:bg-blue-100 transition  `}
-                  >
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <img
-                          src={job.companyId.image}
-                          alt={job.company}
-                          className="w-8 h-8 rounded-full object-cover mr-3"
-                        />
-                        <span className="font-medium text-gray-900">
-                          {job.companyId.name}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-gray-900">
-                      {job.jobId.title}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                      {job.jobId.location}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                      {moment(job.date).format("ll")}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center px-4 py-2 rounded-full  text-xs font-medium 
+          {userApplications ? (
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Company
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Job Title
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Location
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {userApplications.map((job, index) => (
+                    <tr
+                      onClick={() => {
+                        navigate(`/apply-job/${job.jobId._id}`);
+                        scrollTo(0, 0);
+                      }}
+                      key={index}
+                      className={`hover:-translate-y-1 cursor-pointer ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      } hover:bg-blue-100 transition  `}
+                    >
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <img
+                            src={job.companyId.image}
+                            alt={job.company}
+                            className="w-8 h-8 rounded-full object-cover mr-3"
+                          />
+                          <span className="font-medium text-gray-900">
+                            {job.companyId.name}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-gray-900">
+                        {job.jobId.title}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-gray-500">
+                        {job.jobId.location}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-gray-500">
+                        {moment(job.date).format("ll")}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center px-4 py-2 rounded-full  text-xs font-medium 
                 ${
                   job.status === "Accepted"
                     ? "bg-green-100 text-green-800"
                     : job.status === "Rejected"
                     ? "bg-red-100 text-red-800"
-                    : "bg-blue-100 text-blue-800"
+                    : "bg-amber-100 text-blue-800"
                 }`}
-                      >
-                        {job.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        >
+                          {job.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="relative w-full h-screen">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loading />
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer></Footer>

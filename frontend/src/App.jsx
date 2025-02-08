@@ -60,10 +60,7 @@ const App = () => {
             <>
               <Route index element={<Navigate to="manage-jobs" />} />
               <Route path="add-job" element={<AddJob></AddJob>} />
-              <Route
-                path="manage-jobs/edit-job"
-                element={<EditJob></EditJob>}
-              />
+              <Route path="edit-job/:id" element={<EditJob></EditJob>} />
               <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
               <Route
                 path="view-applications"

@@ -91,7 +91,12 @@ const ManageJobs = () => {
                   <th className="px-4 py-2 font-medium text-gray-700">
                     Job Title
                   </th>
-                  <th className="px-4 py-2 font-medium text-gray-700">Date</th>
+                  <th className="px-4 py-2 font-medium text-gray-700">
+                    Posted Date
+                  </th>
+                  <th className="px-4 py-2 font-medium text-gray-700">
+                    Deadline
+                  </th>
                   <th className="px-4 py-2 font-medium text-gray-700">
                     Location
                   </th>
@@ -117,6 +122,9 @@ const ManageJobs = () => {
                     <td className="px-4 py-2 text-gray-600">
                       {moment(job.date).format("ll")}
                     </td>
+                    <td className="px-4 py-2 text-gray-600">
+                      {moment(job.deadline).format("ll")}
+                    </td>
                     <td className="px-4 py-2 text-gray-600">{job.location}</td>
                     <td className="px-4 py-2 text-gray-600">
                       {job.applicants}
@@ -136,7 +144,13 @@ const ManageJobs = () => {
                     </td>
 
                     <td className="px-4 py-2">
-                      <button className="cursor-pointer hover:scale-110 text-blue-600">
+                      <button
+                        onClick={() => {
+                          navigate(`/dashboard/edit-job/${job._id}`);
+                          scrollTo(0, 0);
+                        }}
+                        className="cursor-pointer hover:scale-110 text-blue-600"
+                      >
                         <FaEdit />
                       </button>
                     </td>

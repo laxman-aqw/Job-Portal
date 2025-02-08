@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   validateJobTitle,
   validateJobDescription,
@@ -25,9 +29,6 @@ const AddJob = () => {
   const [deadline, setDeadline] = useState(0);
   const [loading, setLoading] = useState(false);
   const { backendUrl, companyToken } = useContext(AppContext);
-
-  const editorRef = useRef(null); // Ref for Quill editor
-  const quillRef = useRef(null); // Ref to hold the Quill instance
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -51,7 +52,6 @@ const AddJob = () => {
     setLoading(true);
 
     try {
-      const description = quillRef.current.root.innerHTML;
       NProgress.start();
       const { data } = await axios.post(
         backendUrl + "/api/company/post-job",
@@ -62,6 +62,7 @@ const AddJob = () => {
           category,
           level,
           location,
+          deadline,
         },
         {
           headers: {
@@ -74,7 +75,6 @@ const AddJob = () => {
         toast.success(data.message);
         setTitle("");
         setSalary(0);
-        quillRef.current.setContents([]);
         navigate("/dashboard/manage-jobs");
       }
     } catch (error) {
@@ -88,14 +88,12 @@ const AddJob = () => {
     }
   };
 
-  useEffect(() => {
-    // Initialize Quill editor only once
-    if (editorRef.current && !quillRef.current) {
-      quillRef.current = new Quill(editorRef.current, {
-        theme: "snow",
-      });
-    }
-  }, []);
+  const handleDateChange = (date) => {
+    let isoDate = date.toISOString();
+    setDeadline(isoDate);
+  };
+
+  useEffect(() => {}, [deadline]);
 
   return (
     <form
@@ -127,10 +125,11 @@ const AddJob = () => {
         >
           Job Description
         </label>
-        <div
-          ref={editorRef}
-          className="h-48 border border-gray-300 rounded-md"
-        ></div>
+        <ReactQuill
+          value={description}
+          onChange={setDescription}
+          className="h-auto border border-gray-300 rounded-md"
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
@@ -177,37 +176,57 @@ const AddJob = () => {
         </div>
       </div>
 
-      <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-2" htmlFor="level">
-          Job Level
-        </label>
-        <select
-          id="level"
-          onChange={(e) => setLevel(e.target.value)}
-          value={level}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
-        >
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Senior">Senior</option>
-        </select>
-      </div>
-
-      <div className="mb-6">
-        <label
-          className="block text-gray-600 font-medium mb-2"
-          htmlFor="salary"
-        >
-          Job Salary
-        </label>
-        <input
-          id="salary"
-          type="number"
-          placeholder="Enter salary"
-          onChange={(e) => setSalary(e.target.value)}
-          value={salary}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+        <div>
+          <label
+            className="block text-gray-600 font-medium mb-2"
+            htmlFor="level"
+          >
+            Job Level
+          </label>
+          <select
+            id="level"
+            onChange={(e) => setLevel(e.target.value)}
+            value={level}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+          >
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Senior">Senior</option>
+          </select>
+        </div>
+        <div className="w-full">
+          <label
+            className="block text-gray-600 font-medium mb-2"
+            htmlFor="deadline"
+          >
+            Deadline
+          </label>
+          <DatePicker
+            placeholder="YYYY-MM-DD"
+            selected={deadline}
+            onChange={handleDateChange}
+            minDate={new Date()}
+            dateFormat="yyyy-MM-dd"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-600 font-medium mb-2"
+            htmlFor="salary"
+          >
+            Job Salary
+          </label>
+          <input
+            id="salary"
+            type="number"
+            placeholder="Enter salary"
+            onChange={(e) => setSalary(e.target.value)}
+            value={salary}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+        </div>
       </div>
 
       <div className="text-center">

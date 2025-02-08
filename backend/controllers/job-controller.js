@@ -37,3 +37,67 @@ exports.getJob = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+exports.updateJob = async (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  console.log(id);
+  const companyId = req.company._id;
+  const { title, description, level, deadline, location, salary, category } =
+    req.body;
+
+  if (!title || !level || !description || !location || !salary || !category) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required",
+    });
+  }
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID",
+      });
+    }
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    if (job.companyId.toString() !== companyId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized: You do not own this job",
+      });
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          title,
+          description,
+          level,
+          location,
+          deadline,
+          salary,
+          category,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      updatedJob,
+    });
+  } catch (error) {
+    console.error("Error updating job:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

@@ -6,8 +6,6 @@ In this project, we will build a Full Stack Job Portal using MongoDB, Express, R
 - Apply for jobs online
 - Upload their resume to their profile
 
-The user authentication system for job seekers will be implemented using Clerk.
-
 Additionally, we will create a Recruiter Dashboard where recruiters can:
 
 - Post new job openings

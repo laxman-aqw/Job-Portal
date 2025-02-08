@@ -4,7 +4,7 @@ import { assets, JobCategories, JobLocations } from "../assets/assets";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
@@ -18,22 +18,37 @@ import {
   validateJobSalary,
 } from "../helper/validation";
 
-const AddJob = () => {
+const EditJob = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState(""); // Added state to capture description
+  const [description, setDescription] = useState("");
   const [location, setLocation] = useState("Kathmandu");
-  const [category, setCategory] = useState("Information Technology");
+  const [category, setCategory] = useState("IT");
   const [level, setLevel] = useState("Beginner");
   const [salary, setSalary] = useState();
   const [deadline, setDeadline] = useState(0);
   const [loading, setLoading] = useState(false);
   const { backendUrl, companyToken } = useContext(AppContext);
+  const [jobData, setJobData] = useState(null);
+
+  const fetchJob = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + `/api/job/${id}`);
+      if (data.success) {
+        console.log(data);
+        setJobData(data.job);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const titleError = validateJobTitle(title);
-    const descriptionError = validateJobDescription(description);
+    const descriptionError = validateJobDescription(title);
     const salaryError = validateJobSalary(salary);
     if (titleError) {
       toast.error(titleError);
@@ -53,8 +68,8 @@ const AddJob = () => {
 
     try {
       NProgress.start();
-      const { data } = await axios.post(
-        backendUrl + "/api/company/post-job",
+      const { data } = await axios.put(
+        backendUrl + `/api/job/update-job/${id}`,
         {
           title,
           description,
@@ -62,7 +77,6 @@ const AddJob = () => {
           category,
           level,
           location,
-          deadline,
         },
         {
           headers: {
@@ -79,7 +93,7 @@ const AddJob = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while adding the job");
+      toast.error("An error occurred while updating the job");
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
       }
@@ -91,9 +105,36 @@ const AddJob = () => {
   const handleDateChange = (date) => {
     let isoDate = date.toISOString();
     setDeadline(isoDate);
+    console.log(deadline);
   };
 
-  useEffect(() => {}, [deadline]);
+  useEffect(() => {
+    fetchJob();
+  }, [id]);
+
+  useEffect(() => {
+    if (jobData?.title) {
+      setTitle(jobData.title);
+    }
+    if (jobData?.category) {
+      setCategory(jobData.category);
+    }
+    if (jobData?.location) {
+      setLocation(jobData.location);
+    }
+    if (jobData?.level) {
+      setLevel(jobData.level);
+    }
+    if (jobData?.deadline) {
+      setDeadline(jobData.deadline);
+    }
+    if (jobData?.salary) {
+      setSalary(jobData.salary);
+    }
+    if (jobData?.description) {
+      setDescription(jobData.description);
+    }
+  }, [jobData]);
 
   return (
     <form
@@ -101,7 +142,7 @@ const AddJob = () => {
       onSubmit={onSubmitHandler}
     >
       <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">
-        Add New Job
+        Edit Job
       </h2>
 
       <div className="mb-6">
@@ -204,11 +245,7 @@ const AddJob = () => {
           </label>
           <DatePicker
             placeholder="YYYY-MM-DD"
-            selected={
-              deadline
-                ? deadline
-                : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-            }
+            selected={deadline}
             onChange={handleDateChange}
             minDate={new Date()}
             dateFormat="yyyy-MM-dd"
@@ -238,11 +275,11 @@ const AddJob = () => {
           type="submit"
           className="text-white px-5 font-semibold cursor-pointer py-2 rounded-md hover:scale-105  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
         >
-          {loading ? "Adding Job..." : "Add Job"}
+          {loading ? "Updating.." : "Update"}
         </button>
       </div>
     </form>
   );
 };
 
-export default AddJob;
+export default EditJob;

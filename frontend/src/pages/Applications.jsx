@@ -152,7 +152,7 @@ const Applications = () => {
                       Location
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
+                      Applied Date
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
@@ -190,7 +190,7 @@ const Applications = () => {
                         {job.jobId.location}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                        {moment(job.date).format("ll")}
+                        {moment(job.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <span

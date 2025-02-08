@@ -176,7 +176,7 @@ const ApplyJob = () => {
                 </button>
                 {/* posted date */}
                 <p className="mt-4 font-medium text-gray-500 text-sm">
-                  Posted {moment(jobData.date).fromNow()}
+                  Posted {moment(jobData.createdAt).format("YYYY-MM-DD")}
                 </p>
                 {/* deadline date */}
                 <p className="mt-2 font-medium text-left text-sm text-red-600">

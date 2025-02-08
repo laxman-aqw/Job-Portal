@@ -10,6 +10,7 @@ import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import { MdOutlineDone } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
+import moment from "moment";
 const ViewApplication = () => {
   const { backendUrl, companyToken } = useContext(AppContext);
   // console.log("The token is", companyToken);
@@ -114,6 +115,9 @@ const ViewApplication = () => {
                   Location
                 </th>
                 <th className="px-6 py-4 text-left text-gray-700 font-semibold">
+                  Date
+                </th>
+                <th className="px-6 py-4 text-left text-gray-700 font-semibold">
                   Resume
                 </th>
                 <th className="px-6 py-4 text-left text-gray-700 font-semibold">
@@ -143,6 +147,10 @@ const ViewApplication = () => {
                   <td className="px-6 py-4 text-gray-700">
                     {applicant.jobId.location}
                   </td>
+                  <td className="px-6 py-4 text-gray-700">
+                    {moment(applicant.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                  </td>
+
                   <td className="px-6 py-4 text-gray-700">
                     <a
                       href={applicant.userId.resume}

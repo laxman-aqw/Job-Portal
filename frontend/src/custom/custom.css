@@ -1,0 +1,17 @@
+#nprogress .bar {
+  background: #2688f8 !important; /* Custom color */
+  height: 3px !important; /* Force the bar thickness */
+  box-shadow: 0 0 2px #2688f8, 0 0 10px #2688f8 !important; /* Glow effect */
+  border-radius: 4px !important; /* Rounded corners */
+}
+
+/* Customize the spinner (if enabled) */
+#nprogress .spinner-icon {
+  display: none;
+}
+
+/* Customize the background of the spinner */
+#nprogress .spinner {
+  top: 12px; /* Adjust position if needed */
+  right: 15px;
+}

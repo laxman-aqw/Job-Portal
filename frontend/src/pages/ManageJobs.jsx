@@ -10,7 +10,9 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import Loading from "../components/Loading";
-
+import { FaEdit } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 const ManageJobs = () => {
   const navigate = useNavigate();
 
@@ -99,6 +101,9 @@ const ManageJobs = () => {
                   <th className="px-4 py-2 font-medium text-gray-700">
                     Visibility
                   </th>
+                  <th className="px-4 py-2 font-medium text-gray-700">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -116,15 +121,24 @@ const ManageJobs = () => {
                     <td className="px-4 py-2 text-gray-600">
                       {job.applicants}
                     </td>
+                    <td className="px-4 py-2 cursor-pointer text-center ">
+                      {job.visible ? (
+                        <FaEye
+                          className="text-green-500 hover:text-green-700 transition-all inline-block hover:scale-110"
+                          onClick={() => changeJobVisibility(job._id, true)}
+                        />
+                      ) : (
+                        <FaEyeSlash
+                          className="text-red-500 hover:text-gray-700 transition-all inline-block"
+                          onClick={() => changeJobVisibility(job._id, false)}
+                        />
+                      )}
+                    </td>
+
                     <td className="px-4 py-2">
-                      <input
-                        onChange={() =>
-                          changeJobVisibility(job._id, job.visible)
-                        }
-                        type="checkbox"
-                        className="active:scale-120 w-4 h-4"
-                        checked={job.visible}
-                      />
+                      <button className="cursor-pointer hover:scale-110 text-blue-600">
+                        <FaEdit />
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -143,7 +143,7 @@ const Dashboard = () => {
             {isSidebarOpen ? (
               <>
                 <LuLogOut className="text-2xl" />
-                <span> Logout</span>
+                <span>Logout</span>
               </>
             ) : (
               <LuLogOut className="text-2xl" />

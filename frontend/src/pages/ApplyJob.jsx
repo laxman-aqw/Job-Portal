@@ -22,7 +22,7 @@ const ApplyJob = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [jobData, setJobData] = useState(null);
-  const [isAlreadyApplied, setIsAlreadyApplied] = useState(true);
+  const [isAlreadyApplied, setIsAlreadyApplied] = useState(false);
   const {
     jobs,
     backendUrl,
@@ -84,6 +84,10 @@ const ApplyJob = () => {
   };
 
   const checkedAlreadyApplied = () => {
+    if (!user) {
+      setIsAlreadyApplied(false); // Reset when the user logs out
+      return;
+    }
     const hasApplied = userApplications.some(
       (item) => item?.jobId?._id === jobData?._id
     );
@@ -97,6 +101,7 @@ const ApplyJob = () => {
         job?.companyId._id === jobData?.companyId._id
     )
     .filter((job) => {
+      if (!userApplications) return true;
       const appliedJobIds = new Set(
         userApplications.map((app) => app.jobId._id)
       );
@@ -108,7 +113,7 @@ const ApplyJob = () => {
     if (userApplications.length > 0 && jobData) {
       checkedAlreadyApplied();
     }
-  }, [jobData, userApplications, , id]);
+  }, [jobData, userApplications, id]);
 
   useEffect(() => {
     fetchJob();

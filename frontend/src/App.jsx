@@ -25,28 +25,45 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css"; // Import default NProgress styles
 import "./custom/custom.css";
 import ProfilePage from "./pages/ProfilePage";
-
+import EditJob from "./pages/EditJob";
 const App = () => {
   const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
     useContext(AppContext);
   // console.log("companyToken:", companyToken);
-  const tokenValid =
-    companyToken || localStorage.getItem("companyToken") ? true : false;
+  const companyValidToken =
+    companyToken || localStorage.getItem("companyToken");
+  const userValidToken = userToken || localStorage.getItem("userToken");
 
   return (
     <div>
       {showRecruiterLogin && <RecruiterLogin />}
       {showUserLogin && <UserLogin />}
       <Routes>
-        <Route path="/profile" element={<ProfilePage></ProfilePage>} />
+        <Route
+          path="/"
+          element={companyValidToken ? <Navigate to="/dashboard" /> : <Home />}
+        />
+        <Route
+          path="/profile"
+          element={userValidToken ? <ProfilePage></ProfilePage> : <Home></Home>}
+        />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />
-        <Route path="/applications" element={<Applications></Applications>} />
-        {tokenValid ? (
+        <Route
+          path="/applications"
+          element={
+            userValidToken ? <Applications></Applications> : <Home></Home>
+          }
+        />
+        {companyValidToken ? (
           <Route path="/dashboard" element={<Dashboard></Dashboard>}>
             <>
               <Route index element={<Navigate to="manage-jobs" />} />
               <Route path="add-job" element={<AddJob></AddJob>} />
+              <Route
+                path="manage-jobs/edit-job"
+                element={<EditJob></EditJob>}
+              />
               <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
               <Route
                 path="view-applications"

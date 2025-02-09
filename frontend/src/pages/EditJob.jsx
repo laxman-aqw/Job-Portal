@@ -141,10 +141,13 @@ const EditJob = () => {
       className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg"
       onSubmit={onSubmitHandler}
     >
-      <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">
-        Edit Job
+      <h2 className="text-3xl  font-bold text-gray-700 text-center mb-6">
+        Edit Job Details
       </h2>
-
+      <p className="text-md text-center text-gray-600 mb-6">
+        Make the necessary changes to your job listing below. Ensure that all
+        details are up-to-date and accurate.
+      </p>
       <div className="mb-6">
         <label className="block text-gray-600 font-medium mb-2" htmlFor="title">
           Job Title

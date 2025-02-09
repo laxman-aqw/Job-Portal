@@ -5,6 +5,12 @@ const companySchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   image: { type: String, required: true },
   password: { type: String, required: true },
+  description: { type: String, required: false },
+  jobs: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Job",
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Company", companySchema);

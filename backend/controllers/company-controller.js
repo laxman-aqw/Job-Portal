@@ -165,6 +165,13 @@ exports.postJob = async (req, res) => {
       category,
       companyId,
     });
+
+    await Company.findByIdAndUpdate(
+      companyId,
+      { $push: { jobs: newJob._id } },
+      { new: true }
+    );
+
     res
       .status(201)
       .json({ success: true, message: "Job created successfully", newJob });
@@ -285,5 +292,35 @@ exports.changeVisibility = async (req, res) => {
       message: "Internal Server Error",
       error: error.message,
     });
+  }
+};
+
+exports.getCompanyDataById = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid company ID" });
+  }
+  try {
+    const company = await Company.findById(id)
+      .populate({
+        path: "jobs",
+        populate: { path: "companyId" },
+      })
+      .select("-password");
+    if (!company) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Company data fetched by id succesfully",
+      company,
+    });
+  } catch (error) {
+    console.error("Error fetching company data:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

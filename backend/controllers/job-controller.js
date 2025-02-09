@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Job = require("../models/Job");
-
+const Company = require("../models/Company");
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({

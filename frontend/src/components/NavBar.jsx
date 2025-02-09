@@ -34,7 +34,10 @@ const NavBar = () => {
               Hi, <span className="font-medium">{user.firstName}</span>
             </p>
 
-            <ProfileDropdown className="hover:shadow-2xl"></ProfileDropdown>
+            <ProfileDropdown
+              user={user}
+              className="hover:shadow-2xl"
+            ></ProfileDropdown>
           </div>
         ) : (
           <div className="flex items-center gap-4">

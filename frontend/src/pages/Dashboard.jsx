@@ -11,6 +11,8 @@ import { AppContext } from "../context/appContext";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
+
+import { IoPersonCircleOutline } from "react-icons/io5";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,7 +32,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
-      <nav className="bg-white shadow-md p-4 flex justify-center items-center relative z-40 sticky top-0">
+      <nav className="bg-white shadow-md p-4 flex justify-center gap-5 items-center relative z-40 sticky top-0">
         <Link
           className="flex items-center text-center cursor-pointer ml-4"
           to="/"
@@ -51,7 +53,7 @@ const Dashboard = () => {
         >
           {/* Sidebar Toggle Button (Inside Sidebar) */}
           <button
-            className="text-2xl hover:scale-110 p-2 text-gray-700 self-start"
+            className="text-2xl hover:scale-110 p-2 cursor-pointer text-gray-700 self-start"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <FaBars />
@@ -75,11 +77,28 @@ const Dashboard = () => {
 
           {/* Navigation */}
           <nav className="mt-5 flex flex-col space-y-3">
+            <NavLink to={`/dashboard/company-profile/${company?._id}`}>
+              {({ isActive }) => (
+                <div
+                  className={`flex items-center gap-2 px-1 py-3 rounded hover:scale-110 cursor-pointer
+                  ${
+                    isActive
+                      ? "bg-blue-200 text-black border-r-4 border-blue-400"
+                      : "hover:bg-blue-100 text-black"
+                  }
+                  ${isSidebarOpen ? "justify-start" : "justify-center"}
+                  `}
+                >
+                  <IoPersonCircleOutline className="text-2xl" />
+                  {isSidebarOpen && <span>Profile</span>}
+                </div>
+              )}
+            </NavLink>
             {/* Add Job */}
             <NavLink to="/dashboard/add-job">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -98,7 +117,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/manage-jobs">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -117,7 +136,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/view-applications">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -136,7 +155,7 @@ const Dashboard = () => {
           {/* Logout Button */}
           <button
             onClick={logout}
-            className={`mt-auto bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
+            className={`mt-auto hover:bg-blue-100 gap-3 bg-white hover:scale-105 text-gray-700 font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
             ${isSidebarOpen ? "w-full" : "w-12"}
             `}
           >

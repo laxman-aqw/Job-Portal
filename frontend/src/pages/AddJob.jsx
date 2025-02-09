@@ -103,7 +103,11 @@ const AddJob = () => {
       <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">
         Add New Job
       </h2>
-
+      <p className="text-md text-center text-gray-600 mb-6">
+        Fill in the details below to create a new job listing. Make sure to
+        include accurate information for a better experience for potential
+        candidates.
+      </p>
       <div className="mb-6">
         <label className="block text-gray-600 font-medium mb-2" htmlFor="title">
           Job Title

@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ user }) => {
+  console.log("The user is: ", user);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
-  const { user, setUser, setUserToken } = useContext(AppContext);
+  const { setUser, setUserToken } = useContext(AppContext);
   const logoutHandler = () => {
     NProgress.start();
     setUserToken(null);

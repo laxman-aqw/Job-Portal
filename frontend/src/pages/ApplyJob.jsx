@@ -176,7 +176,7 @@ const ApplyJob = () => {
                 </button>
                 {/* posted date */}
                 <p className="mt-4 font-medium text-gray-500 text-sm">
-                  Posted {moment(jobData.createdAt).format("YYYY-MM-DD")}
+                  Posted: {moment(jobData.createdAt).format("YYYY-MM-DD")}
                 </p>
                 {/* deadline date */}
                 <p className="mt-2 font-medium text-left text-sm text-red-600">
@@ -215,6 +215,7 @@ const ApplyJob = () => {
                 {isAlreadyApplied ? "Applied" : "Apply Now"}
               </button>
             </div>
+
             {/* Right section more jobs */}
             <div className="lg:w-1/3">
               <h2 className="font-semibold text-2xl m-2">

@@ -9,7 +9,7 @@ const JobListing = () => {
   const { isSearched, searchFilter, setSearchFilter, jobs } =
     useContext(AppContext);
 
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -106,7 +106,7 @@ const JobListing = () => {
         {/* Filter toggle button */}
         <button
           onClick={() => setShowFilter((prev) => !prev)}
-          className="w-full lg:hidden px-6 py-2 rounded border border-gray-300 text-gray-800 hover:bg-gray-100 transition"
+          className="cursor-pointer w-full  px-6 py-2 rounded border border-gray-300 text-gray-800 hover:bg-gray-100 transition"
         >
           {showFilter ? "Close Filters" : "Open Filters"}
         </button>
@@ -114,13 +114,13 @@ const JobListing = () => {
         {/* Category filter */}
         <div
           className={`bg-white p-6 shadow-lg rounded-md ${
-            showFilter ? "" : "max-lg:hidden"
+            showFilter ? "" : "hidden"
           }`}
         >
-          <h4 className="font-semibold text-lg py-4 text-gray-800 border-b border-gray-200">
+          <h4 className="font-semibold text-lg py-2 text-gray-800 border-b border-gray-200">
             Search by Categories
           </h4>
-          <ul className="space-y-4 pt-4">
+          <ul className="pt-1">
             {JobCategories.map((category, index) => (
               <li
                 className="group hover:scale-105 transition-transform"
@@ -128,7 +128,7 @@ const JobListing = () => {
               >
                 <label
                   htmlFor={`category-${index}`}
-                  className={`flex items-center gap-3 p-2 rounded cursor-pointer w-full transition-all
+                  className={`flex items-center gap-3 py-1 px-2 rounded cursor-pointer w-full transition-all
              hover:scale-[1.02] active:scale-100
              ${
                selectedCategories.includes(category)
@@ -143,7 +143,7 @@ const JobListing = () => {
                     onChange={() => handleCategoryChange(category)}
                     checked={selectedCategories.includes(category)}
                   />
-                  <span className="text-gray-700 group-hover:text-sky-700 transition-colors">
+                  <span className="text-gray-700 text-sm group-hover:text-sky-700 transition-colors">
                     {category}
                   </span>
                 </label>
@@ -152,15 +152,15 @@ const JobListing = () => {
           </ul>
 
           {/* Location Filter */}
-          <h4 className="font-semibold text-lg py-4 mt-8 text-gray-800 border-b border-gray-200">
+          <h4 className="font-semibold text-lg py-2 mt-4 text-gray-800 border-b border-gray-200">
             Search by Location
           </h4>
-          <ul className="space-y-4 pt-4">
+          <ul className="pt-1">
             {JobLocations.map((location, index) => (
               <li className="group transition-colors" key={index}>
                 <label
                   htmlFor={`location-${index}`}
-                  className={`flex items-center gap-3 p-2 rounded cursor-pointer w-full
+                  className={`flex items-center gap-3 px-2 py-1 rounded cursor-pointer w-full
              transition-all hover:scale-[1.02] active:scale-100
              ${
                selectedLocations.includes(location)
@@ -175,7 +175,7 @@ const JobListing = () => {
                     onChange={() => handleLocationChange(location)}
                     checked={selectedLocations.includes(location)}
                   />
-                  <span className="text-gray-700 group-hover:text-green-700 flex-1">
+                  <span className="text-gray-700 text-sm group-hover:text-green-700 flex-1">
                     {location}
                   </span>
                 </label>
@@ -193,7 +193,7 @@ const JobListing = () => {
         <p className="mb-8">Get your desired job from </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredJobs
-            .slice((currentPage - 1) * 6, currentPage * 6)
+            .slice((currentPage - 1) * 12, currentPage * 12)
             .map((job, index) => (
               <JobCard key={index} job={job}></JobCard>
             ))}
@@ -204,20 +204,24 @@ const JobListing = () => {
           <div className="flex items-center justify-center space-x-2 mt-6">
             {/* Previous Button */}
             <button
-              onClick={() =>
-                setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))
-              }
+              onClick={() => {
+                setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+                window.scrollTo(0, 0);
+              }}
               className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
             >
               <FaAngleLeft />
             </button>
 
             {/* Page Numbers */}
-            {Array.from({ length: Math.ceil(filteredJobs.length / 6) }).map(
+            {Array.from({ length: Math.ceil(filteredJobs.length / 12) }).map(
               (_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentPage(index + 1)}
+                  onClick={() => {
+                    setCurrentPage(index + 1);
+                    window.scrollTo(0, 0);
+                  }}
                   className={`flex hover:scale-120 items-center justify-center w-8 h-8 rounded-full transition ${
                     currentPage === index + 1
                       ? "bg-blue-100 text-sky-700"
@@ -231,11 +235,12 @@ const JobListing = () => {
 
             {/* Next Button */}
             <button
-              onClick={() =>
+              onClick={() => {
                 setCurrentPage((prev) =>
-                  prev < Math.ceil(filteredJobs.length / 6) ? prev + 1 : prev
-                )
-              }
+                  prev < Math.ceil(filteredJobs.length / 12) ? prev + 1 : prev
+                );
+                window.scrollTo(0, 0);
+              }}
               className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
             >
               <FaAngleRight />

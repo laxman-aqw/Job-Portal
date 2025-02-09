@@ -42,4 +42,6 @@ router.post(
   companyControllers.changeVisibility
 );
 
+router.get("/company-profile/:id", companyControllers.getCompanyDataById);
+
 module.exports = router;

@@ -26,6 +26,7 @@ import "nprogress/nprogress.css"; // Import default NProgress styles
 import "./custom/custom.css";
 import ProfilePage from "./pages/ProfilePage";
 import EditJob from "./pages/EditJob";
+import CompanyProfile from "./pages/CompanyProfile";
 const App = () => {
   const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
     useContext(AppContext);
@@ -60,6 +61,10 @@ const App = () => {
             <>
               <Route index element={<Navigate to="manage-jobs" />} />
               <Route path="add-job" element={<AddJob></AddJob>} />
+              <Route
+                path="company-profile/:id"
+                element={<CompanyProfile></CompanyProfile>}
+              />
               <Route path="edit-job/:id" element={<EditJob></EditJob>} />
               <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
               <Route

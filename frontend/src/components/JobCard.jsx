@@ -36,7 +36,7 @@ const JobCard = ({ job }) => {
 
       {/* Job Description */}
       <p
-        className="text-gray-600 text-center mb-6"
+        className="text-gray-600 text-center mb-6 break-words"
         dangerouslySetInnerHTML={{ __html: job.description.slice(0, 150) }}
       ></p>
 
@@ -56,7 +56,7 @@ const JobCard = ({ job }) => {
             navigate(`/apply-job/${job._id}`);
             scrollTo(0, 0);
           }}
-          className="hover:-translate-y-1 border border-gray-300 text-gray-800 font-medium px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 transition-all duration-300"
+          className="hover:-translate-y-1 cursor-pointer border border-gray-300 text-gray-800 font-medium px-6 py-2 rounded-lg shadow-md hover:bg-gray-100 transition-all duration-300"
         >
           Learn More
         </button>
@@ -64,5 +64,4 @@ const JobCard = ({ job }) => {
     </div>
   );
 };
-
 export default JobCard;

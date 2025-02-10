@@ -17,6 +17,12 @@ router.post("/login", companyControllers.loginCompany);
 router.get("/company", protectCompany, companyControllers.getCompanyData);
 
 router.post("/post-job", protectCompany, companyControllers.postJob);
+router.put(
+  "/update-company",
+  protectCompany,
+  upload.single("image"),
+  companyControllers.updateCompanyData
+);
 
 router.get(
   "/applicants",

@@ -324,3 +324,48 @@ exports.getCompanyDataById = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+exports.updateCompanyData = async (req, res) => {
+  const companyId = req.company._id;
+  const { name, description } = req.body;
+  console.log(name, description);
+  const imageFile = req.file;
+  if (!name) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Name is required" });
+  }
+  if (!description) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Description is required" });
+  }
+  try {
+    const company = await Company.findById(companyId);
+    if (!company) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
+    }
+
+    let imageUrl = company.image; // Keep old image if no new one is uploaded
+    if (imageFile) {
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+      imageUrl = imageUpload.secure_url;
+    }
+
+    const updatedCompany = await Company.findByIdAndUpdate(
+      companyId,
+      { $set: { name, description, image: imageUrl } },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Company data updated successfully",
+      updatedCompany,
+    });
+  } catch (error) {
+    console.error("Error updating company data:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

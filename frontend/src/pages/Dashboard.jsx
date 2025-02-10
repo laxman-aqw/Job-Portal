@@ -53,7 +53,7 @@ const Dashboard = () => {
         >
           {/* Sidebar Toggle Button (Inside Sidebar) */}
           <button
-            className="text-2xl hover:scale-110 p-2 cursor-pointer text-gray-700 self-start"
+            className="text-2xl hover:scale-110 p-2 cursor-pointer text-gray-700 self-start transition-all"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <FaBars />
@@ -76,11 +76,11 @@ const Dashboard = () => {
           )}
 
           {/* Navigation */}
-          <nav className="mt-5 flex flex-col space-y-3">
+          <nav className="mt-5 flex flex-col space-y-3 ">
             <NavLink to={`/dashboard/company-profile/${company?._id}`}>
               {({ isActive }) => (
                 <div
-                  className={`flex items-center gap-2 px-1 py-3 rounded hover:scale-110 cursor-pointer
+                  className={`flex items-center gap-2 px-1 py-3 rounded hover:scale-110 transition-all cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -98,7 +98,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/add-job">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 transition-all gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -117,7 +117,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/manage-jobs">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 transition-all gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -136,7 +136,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/view-applications">
               {({ isActive }) => (
                 <div
-                  className={`flex items-center hover:scale-110 gap-2 px-1 py-3 rounded cursor-pointer
+                  className={`flex items-center hover:scale-110 transition-all gap-2 px-1 py-3 rounded cursor-pointer
                   ${
                     isActive
                       ? "bg-blue-200 text-black border-r-4 border-blue-400"
@@ -155,7 +155,7 @@ const Dashboard = () => {
           {/* Logout Button */}
           <button
             onClick={logout}
-            className={`mt-auto hover:bg-blue-100 gap-3 bg-white hover:scale-105 text-gray-700 font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
+            className={`mt-auto hover:bg-blue-100 gap-3 bg-white hover:scale-105 transition-all text-gray-700 font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
             ${isSidebarOpen ? "w-full" : "w-12"}
             `}
           >

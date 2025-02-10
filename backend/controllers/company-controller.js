@@ -328,7 +328,7 @@ exports.getCompanyDataById = async (req, res) => {
 exports.updateCompanyData = async (req, res) => {
   const companyId = req.company._id;
   const { name, description } = req.body;
-  console.log(name, description);
+
   const imageFile = req.file;
   if (!name) {
     return res

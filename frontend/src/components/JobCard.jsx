@@ -7,7 +7,13 @@ const JobCard = ({ job }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300">
+    <div className="bg-white border relative border-gray-200 rounded-xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300">
+      {!job.visible && (
+        <div className="absolute top-2 right-2 px-3 py-1 text-xs font-semibold text-white bg-red-600 rounded-md shadow-md">
+          Hidden
+        </div>
+      )}
+
       {/* Company Logo */}
       <div className="flex justify-center mb-6">
         <img
@@ -16,12 +22,10 @@ const JobCard = ({ job }) => {
           className="w-20 h-20 rounded-full object-contain"
         />
       </div>
-
       {/* Job Title */}
       <h4 className="text-2xl font-bold text-gray-800 mb-3 text-center">
         {job.title}
       </h4>
-
       {/* Job Level & Location */}
       <div className="flex justify-center gap-4 mb-4">
         <span className="flex items-center text-sm font-medium text-blue-700 bg-blue-100 px-3 py-1 rounded-full border border-blue-300">
@@ -33,13 +37,11 @@ const JobCard = ({ job }) => {
           {job.location}
         </span>
       </div>
-
       {/* Job Description */}
       <p
         className="text-gray-600 text-center mb-6 break-words"
         dangerouslySetInnerHTML={{ __html: job.description.slice(0, 150) }}
       ></p>
-
       {/* Action Buttons */}
       <div className="flex justify-center gap-4">
         <button

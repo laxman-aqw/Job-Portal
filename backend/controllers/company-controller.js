@@ -190,9 +190,10 @@ exports.getCompanyJobApplicants = async (req, res) => {
       .populate("jobId", "location title category level salary")
       .exec();
 
+    console.log(applications);
     res.status(200).json({
       success: true,
-      applications: applications,
+      applications,
       message: "Job Applicants fetched succesfully",
     });
   } catch (error) {
@@ -348,7 +349,7 @@ exports.updateCompanyData = async (req, res) => {
         .json({ success: false, message: "Company not found" });
     }
 
-    let imageUrl = company.image; // Keep old image if no new one is uploaded
+    let imageUrl = company.image;
     if (imageFile) {
       const imageUpload = await cloudinary.uploader.upload(imageFile.path);
       imageUrl = imageUpload.secure_url;

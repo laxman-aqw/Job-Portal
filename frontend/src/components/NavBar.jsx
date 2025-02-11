@@ -43,13 +43,13 @@ const NavBar = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowRecruiterLogin(true)}
-              className="  hover:-translate-y-1 cursor-pointer border-2  px-5 py-2 rounded-full border-sky-500 text-sky-700 hover:text-white hover:bg-gradient-to-r from-sky-500 to-sky-700 transition duration-300"
+              className="font-semibold  hover:-translate-y-1 cursor-pointer border-2  px-5 py-2 rounded-lg border-sky-500 text-sky-700 hover:text-white hover:bg-gradient-to-r from-sky-500 to-sky-700 transition duration-300"
             >
               Recruiter Login
             </button>
             <button
               onClick={() => setShowUserLogin(true)}
-              className=" text-white px-5 py-2 rounded-full cursor-pointer bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95  hover:-translate-y-1 transition duration-300"
+              className=" text-white font-semibold px-5 py-2 rounded-lg cursor-pointer bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95  hover:-translate-y-1 transition duration-300"
             >
               Login
             </button>

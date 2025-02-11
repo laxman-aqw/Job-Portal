@@ -1,434 +1,240 @@
 import NavBar from "../components/NavBar";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../context/appContext";
-import axios from "axios";
-import { toast } from "react-toastify";
+import {
+  FaGithub,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaRegUserCircle,
+} from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { CiLinkedin } from "react-icons/ci";
+import { HiDocumentArrowDown } from "react-icons/hi2";
 
 const ProfilePage = () => {
-  const {
-    setShowRecruiterLogin,
-    setShowUserLogin,
-    backendUrl,
-    userToken,
-    setUser,
-    setUserToken,
-    user,
-  } = useContext(AppContext);
-
-  console.log("The user token is ", userToken);
-
-  // const [userData, setUser] = useState();
-  // const [user, setUser] = useState({
-  //   firstName: "John",
-  //   lastName: "Doe",
-  //   email: "john.doe@example.com",
-  //   phone: "123-456-7890",
-  //   dateOfBirth: "1990-01-01",
-  //   gender: "Male",
-  //   about:
-  //     "A passionate software engineer with 5+ years of experience building web applications using modern technologies like Node.js, React, and MongoDB. Currently seeking new opportunities to lead innovative projects.",
-  //   address: "1234 Elm Street, Springfield, IL, USA",
-  //   image: "https://example.com/images/johndoe.jpg",
-  //   experience: [
-  //     {
-  //       jobTitle: "Software Engineer",
-  //       companyName: "Tech Corp",
-  //       startDate: "2015-06-01",
-  //       endDate: "2019-06-01",
-  //       description:
-  //         "Developed and maintained web applications using Node.js and React.",
-  //     },
-  //     {
-  //       jobTitle: "Senior Software Engineer",
-  //       companyName: "Innovative Solutions",
-  //       startDate: "2019-07-01",
-  //       endDate: "Present",
-  //       description:
-  //         "Lead the backend team to build scalable microservices using MongoDB and Express.js.",
-  //     },
-  //   ],
-  //   education: [
-  //     {
-  //       institutionName: "Springfield University",
-  //       degree: "BSc Computer Science",
-  //       fieldOfStudy: "Computer Science",
-  //       startDate: "2008-09-01",
-  //       endDate: "2012-05-01",
-  //       grade: "A",
-  //     },
-  //   ],
-  //   skills: [
-  //     "JavaScript",
-  //     "Node.js",
-  //     "React",
-  //     "MongoDB",
-  //     "Express.js",
-  //     "Docker",
-  //   ],
-  // });
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  // Handle Changes in Form Inputs
-  const handleChange = (e, section, index, field) => {
-    const { name, value } = e.target;
-
-    if (section) {
-      const updatedSection = [...formData[section]];
-      updatedSection[index][field] = value;
-      setFormData({ ...formData, [section]: updatedSection });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  // Add New Experience, Education, or Skill
-  const handleAddField = (section) => {
-    const newEntry =
-      section === "experience"
-        ? {
-            jobTitle: "",
-            companyName: "",
-            startDate: "",
-            endDate: "",
-            description: "",
-          }
-        : section === "education"
-        ? {
-            institutionName: "",
-            degree: "",
-            fieldOfStudy: "",
-            startDate: "",
-            endDate: "",
-            grade: "",
-          }
-        : "";
-
-    setFormData({ ...formData, [section]: [...formData[section], newEntry] });
-  };
-
-  // Remove an item from experience, education, or skills
-  const handleRemoveField = (section, index) => {
-    const updatedSection = [...formData[section]];
-    updatedSection.splice(index, 1);
-    setFormData({ ...formData, [section]: updatedSection });
-  };
-
-  const [formData, setFormData] = useState(user);
+  const { user } = useContext(AppContext);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <NavBar />
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-200 relative">
-        {/* Edit Button */}
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="absolute top-6 right-6 px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 text-white rounded-lg hover:from-sky-700 hover:to-sky-500 hover:-translate-y-1 cursor-pointer shadow-lg transition"
-        >
-          {isEditing ? "Save Profile" : "Edit Profile"}
-        </button>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Profile Card */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          {/* Profile Header */}
+          <div className="p-8 bg-gradient-to-r from-indigo-50 to-blue-50">
+            <div className="flex flex-col md:flex-row items-start gap-8">
+              {user?.image && (
+                <div className="relative group shrink-0">
+                  <img
+                    src={user.image}
+                    alt="Profile"
+                    className="w-48 h-48 rounded-2xl object-cover ring-8 ring-white/90 shadow-2xl transition-transform duration-300 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-black/10" />
+                </div>
+              )}
 
-        {/* Profile Header */}
-        <div className="flex items-center mb-8">
-          <img
-            // src={user.image}
-            alt="Profile"
-            className="w-32 h-32 rounded-full border-4 border-sky-500 shadow-xl"
-          />
-          <div className="ml-6">
-            <h1 className="text-3xl font-bold text-gray-800">
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full text-3xl font-bold text-gray-800"
-                />
-              ) : (
-                `${user.firstName} ${user.lastName}`
-              )}
-            </h1>
-            <p className="text-gray-600 text-lg">
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full text-lg text-gray-600"
-                />
-              ) : (
-                user.email
-              )}
-            </p>
-            <p className="text-gray-500">
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full text-gray-500"
-                />
-              ) : (
-                user.phone
-              )}
-            </p>
-            <p className="text-gray-500">
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="w-full text-gray-500"
-                />
-              ) : (
-                user.address
-              )}
-            </p>
-          </div>
-        </div>
+              <div className="space-y-4 flex-1">
+                <div>
+                  <h1 className="text-5xl font-bold text-gray-900 tracking-tight">
+                    {user?.firstName} {user?.lastName}
+                  </h1>
+                  <p className="text-2xl text-indigo-600 font-medium mt-2">
+                    {user?.title}
+                  </p>
+                </div>
 
-        {/* About */}
-        <div className="text-gray-700">
-          <p className="text-lg font-semibold">About Me:</p>
-          <p className="text-gray-600 mt-2">
-            {isEditing ? (
-              <textarea
-                value={formData.about || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, about: e.target.value })
-                }
-                className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            ) : (
-              user.about
-            )}
-          </p>
-        </div>
-
-        {/* Experience */}
-        <div className="mt-10">
-          <h2 className="text-2xl font-semibold text-gray-800">Experience</h2>
-          {formData.experience.map((job, index) => (
-            <div
-              key={index}
-              className="mt-6 p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-bold text-gray-700">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="jobTitle"
-                    value={job.jobTitle}
-                    onChange={(e) =>
-                      handleChange(e, "experience", index, "jobTitle")
-                    }
-                    className="w-full text-xl font-bold text-gray-700"
-                  />
-                ) : (
-                  `${job.jobTitle} at ${job.companyName}`
-                )}
-              </h3>
-              <p className="text-gray-500">
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={job.startDate}
-                    onChange={(e) =>
-                      handleChange(e, "experience", index, "startDate")
-                    }
-                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  new Date(job.startDate).toLocaleDateString()
-                )}
-                {" - "}
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="endDate"
-                    value={job.endDate}
-                    onChange={(e) =>
-                      handleChange(e, "experience", index, "endDate")
-                    }
-                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : job.endDate === "Present" ? (
-                  "Present"
-                ) : (
-                  new Date(job.endDate).toLocaleDateString()
-                )}
-              </p>
-              <p className="mt-2 text-gray-600">
-                {isEditing ? (
-                  <textarea
-                    value={job.description}
-                    onChange={(e) =>
-                      handleChange(e, "experience", index, "description")
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  job.description
-                )}
-              </p>
-              {isEditing && (
-                <button
-                  onClick={() => handleRemoveField("experience", index)}
-                  className="mt-4 text-red-500 hover:text-red-700"
-                >
-                  Remove Experience
-                </button>
-              )}
-            </div>
-          ))}
-          {isEditing && (
-            <button
-              onClick={() => handleAddField("experience")}
-              className="mt-4 px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 text-white rounded-lg shadow-lg hover:from-sky-700 hover:to-sky-500"
-            >
-              Add Experience
-            </button>
-          )}
-        </div>
-
-        {/* Education */}
-        <div className="mt-10">
-          <h2 className="text-2xl font-semibold text-gray-800">Education</h2>
-          {formData.education.map((edu, index) => (
-            <div
-              key={index}
-              className="mt-6 p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-bold text-gray-700">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="degree"
-                    value={edu.degree}
-                    onChange={(e) =>
-                      handleChange(e, "education", index, "degree")
-                    }
-                    className="w-full text-xl font-bold text-gray-700"
-                  />
-                ) : (
-                  `${edu.degree} in ${edu.fieldOfStudy}`
-                )}
-              </h3>
-              <p className="text-gray-500">{edu.institutionName}</p>
-              <p className="text-gray-500">
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={edu.startDate}
-                    onChange={(e) =>
-                      handleChange(e, "education", index, "startDate")
-                    }
-                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  new Date(edu.startDate).toLocaleDateString()
-                )}
-                {" - "}
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="endDate"
-                    value={edu.endDate}
-                    onChange={(e) =>
-                      handleChange(e, "education", index, "endDate")
-                    }
-                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  new Date(edu.endDate).toLocaleDateString()
-                )}
-              </p>
-              <p className="mt-2 text-gray-600">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="grade"
-                    value={edu.grade}
-                    onChange={(e) =>
-                      handleChange(e, "education", index, "grade")
-                    }
-                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  edu.grade
-                )}
-              </p>
-              {isEditing && (
-                <button
-                  onClick={() => handleRemoveField("education", index)}
-                  className="mt-4 text-red-500 hover:text-red-700"
-                >
-                  Remove Education
-                </button>
-              )}
-            </div>
-          ))}
-          {isEditing && (
-            <button
-              onClick={() => handleAddField("education")}
-              className="mt-4 px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 text-white rounded-lg shadow-lg hover:from-sky-700 hover:to-sky-500"
-            >
-              Add Education
-            </button>
-          )}
-        </div>
-
-        {/* Skills */}
-        <div className="mt-10">
-          <h2 className="text-2xl font-semibold text-gray-800">Skills</h2>
-          <div className="mt-6 flex flex-wrap gap-4">
-            {formData.skills.map((skill, index) => (
-              <div className="flex items-center gap-2" key={index}>
-                <span className="text-sm bg-gray-200 text-gray-800 rounded-full px-4 py-2">
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={skill}
-                      onChange={(e) => {
-                        const updatedSkills = [...formData.skills];
-                        updatedSkills[index] = e.target.value;
-                        setFormData({ ...formData, skills: updatedSkills });
-                      }}
-                      className="w-full text-sm font-semibold text-gray-800 bg-transparent focus:outline-none"
-                    />
-                  ) : (
-                    skill
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
+                  {user?.email && (
+                    <div className="flex items-center gap-3">
+                      <FaEnvelope className="w-6 h-6 text-indigo-500 shrink-0" />
+                      <a
+                        href={`mailto:${user.email}`}
+                        className="hover:text-indigo-700 transition-colors truncate"
+                      >
+                        {user.email}
+                      </a>
+                    </div>
                   )}
-                </span>
-                {isEditing && (
-                  <button
-                    onClick={() => handleRemoveField("skills", index)}
-                    className="text-red-500 hover:text-red-700 text-xs"
-                  >
-                    Remove
-                  </button>
-                )}
+
+                  {user?.phone && (
+                    <div className="flex items-center gap-3">
+                      <FaPhoneAlt className="w-6 h-6 text-indigo-500 shrink-0" />
+                      <a
+                        href={`tel:${user.phone}`}
+                        className="hover:text-indigo-700 transition-colors"
+                      >
+                        {user.phone}
+                      </a>
+                    </div>
+                  )}
+
+                  {user?.address && (
+                    <div className="flex items-center gap-3">
+                      <FaLocationDot className="w-6 h-6 text-indigo-500 shrink-0" />
+                      <span className="truncate">{user.address}</span>
+                    </div>
+                  )}
+
+                  {user?.gender && (
+                    <div className="flex items-center gap-3">
+                      <FaRegUserCircle className="w-6 h-6 text-indigo-500 shrink-0" />
+                      <span>{user.gender}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4 pt-4">
+                  <div className="flex items-center gap-4">
+                    {user?.linkedInProfile && (
+                      <a
+                        href={user.linkedInProfile}
+                        target="_blank"
+                        className="p-2 rounded-lg bg-white hover:bg-indigo-50 transition-colors shadow-sm hover:shadow-md"
+                      >
+                        <CiLinkedin className="w-8 h-8 text-[#0A66C2]" />
+                      </a>
+                    )}
+                    {user?.githubProfile && (
+                      <a
+                        href={user.githubProfile}
+                        target="_blank"
+                        className="p-2 rounded-lg bg-white hover:bg-indigo-50 transition-colors shadow-sm hover:shadow-md"
+                      >
+                        <FaGithub className="w-7 h-7 text-gray-800" />
+                      </a>
+                    )}
+                  </div>
+
+                  {user?.resume && (
+                    <a
+                      href={user.resume}
+                      target="_blank"
+                      className="ml-2 flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <HiDocumentArrowDown className="w-6 h-6" />
+                      <span className="font-semibold">Download Resume</span>
+                    </a>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
-          {isEditing && (
-            <div className="mt-4">
-              <button
-                onClick={() => handleAddField("skills")}
-                className="px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 text-white rounded-lg shadow-lg hover:from-sky-700 hover:to-sky-500"
-              >
-                Add Skill
-              </button>
             </div>
-          )}
+          </div>
+
+          {/* Detailed Sections */}
+          <div className="p-8 space-y-12">
+            {/* Experience */}
+            {user?.experience?.length > 0 && (
+              <section>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-indigo-100">
+                  Professional Experience
+                </h2>
+                <div className="space-y-6">
+                  {user.experience.map((job, index) => (
+                    <div
+                      key={index}
+                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-800">
+                            {job.jobTitle}
+                          </h3>
+                          <p className="text-lg text-indigo-600 font-medium">
+                            {job.companyName}
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-500 whitespace-nowrap">
+                          {new Date(job.startDate).toLocaleDateString("en-US", {
+                            month: "short",
+                            year: "numeric",
+                          })}{" "}
+                          –{" "}
+                          {job.endDate === "Present" || !Date.parse(job.endDate)
+                            ? "Present"
+                            : new Date(job.endDate).toLocaleDateString(
+                                "en-US",
+                                { month: "short", year: "numeric" }
+                              )}
+                        </p>
+                      </div>
+                      <p className="mt-4 text-gray-600 leading-relaxed">
+                        {job.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Education */}
+            {user?.education?.length > 0 && (
+              <section>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-indigo-100">
+                  Education
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {user.education.map((edu, index) => (
+                    <div
+                      key={index}
+                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                    >
+                      <h3 className="text-xl font-bold text-gray-800">
+                        {edu.degree}
+                      </h3>
+                      <p className="text-lg text-indigo-600 font-medium mt-2">
+                        {edu.institutionName}
+                      </p>
+                      <div className="mt-4 space-y-2 text-gray-600">
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium">Field:</span>
+                          {edu.fieldOfStudy}
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium">Duration:</span>
+                          {new Date(edu.startDate).toLocaleDateString("en-US", {
+                            month: "short",
+                            year: "numeric",
+                          })}{" "}
+                          –{" "}
+                          {new Date(edu.endDate).toLocaleDateString("en-US", {
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <span className="font-medium">Grade:</span>
+                          {edu.grade}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Skills */}
+            {user?.skills?.length > 0 && (
+              <section>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-indigo-100">
+                  Technical Skills
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {user.skills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="px-4 py-2 bg-gradient-to-r from-indigo-50 to-blue-50 text-indigo-700 rounded-full 
+                               border border-indigo-100 text-sm font-medium hover:border-indigo-200 transition-colors"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

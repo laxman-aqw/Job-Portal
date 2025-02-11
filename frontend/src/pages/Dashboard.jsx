@@ -156,7 +156,7 @@ const Dashboard = () => {
           <button
             onClick={logout}
             className={`mt-auto hover:bg-blue-100 gap-3 bg-white hover:scale-105 transition-all text-gray-700 font-semibold py-2 rounded-md text-center flex items-center justify-center cursor-pointer
-            ${isSidebarOpen ? "w-full" : "w-12"}
+            ${isSidebarOpen ? "w-full justify-start" : "w-12"}
             `}
           >
             {isSidebarOpen ? (

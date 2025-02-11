@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { IoPersonOutline } from "react-icons/io5";
-import { TfiEmail } from "react-icons/tfi";
-import { CiLock } from "react-icons/ci";
+import { FaEnvelope } from "react-icons/fa";
+import { FaUnlockAlt } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
@@ -28,6 +29,8 @@ const RecruiterLogin = () => {
   const [image, setImage] = useState(false);
   const [loading, setLoading] = useState(false);
   let [isNextDataSubmitted, setIsNextDataSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmitHandler = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -141,6 +144,10 @@ const RecruiterLogin = () => {
     }
   };
 
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev); // toggle the visibility state
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -148,34 +155,44 @@ const RecruiterLogin = () => {
     };
   }, []);
   return (
-    <div className="fixed top-0 left-0 z-50 right-0 bottom-0  backdrop-blur-sm bg-black/30 flex justify-center items-center">
+    <div className="fixed inset-0 z-50 backdrop-blur-sm bg-black/30 flex justify-center items-center p-4">
       <form
         onSubmit={onSubmitHandler}
-        className="relative bg-white p-10 rounded-xl text-slate-500"
+        className="relative bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md"
       >
-        <h1
-          className="text-center mb-1 text-2xl text-neutral-700 font-medium
-         "
-        >
-          Recruiter {state}
-        </h1>
-        {state == "Login" ? (
-          <p className="text-sm">Welcome back! Please sign in to continue</p>
-        ) : (
-          <p className="text-sm text-center">
-            Enter Your Details to Get Started{" "}
-          </p>
-        )}
+        {/* Close Button */}
+        <IoCloseOutline
+          onClick={(e) => setShowRecruiterLogin(false)}
+          className="absolute top-6 right-6 text-2xl text-gray-500 hover:text-red-500 cursor-pointer transition-all hover:scale-110"
+        />
 
-        {state === "Sign Up" && isNextDataSubmitted ? (
-          <>
-            <div className="flex items-center gap-4 m-5">
-              <label className="cursor-pointer" htmlFor="image">
-                <img
-                  className="w-16 rounded-full"
-                  src={image ? URL.createObjectURL(image) : assets.upload_area}
-                  alt=""
-                />
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Recruiter {state}
+          </h1>
+          <p className="text-sm text-gray-500">
+            {state === "Login"
+              ? "Welcome back! Please sign in to continue"
+              : "Enter Your Details to Get Started"}
+          </p>
+        </div>
+
+        {/* Form Content */}
+        <div className="space-y-4">
+          {state === "Sign Up" && isNextDataSubmitted ? (
+            // Image Upload Section
+            <div className="flex flex-col items-center gap-4 p-4 bg-gray-50 rounded-xl">
+              <label className="cursor-pointer group">
+                <div className="w-24 h-24 rounded-full border-2 border-dashed border-gray-300 group-hover:border-sky-500 transition-colors overflow-hidden">
+                  <img
+                    className="w-full h-full object-cover"
+                    src={
+                      image ? URL.createObjectURL(image) : assets.upload_area
+                    }
+                    alt="Company Logo"
+                  />
+                </div>
                 <input
                   onChange={(e) => setImage(e.target.files[0])}
                   id="image"
@@ -184,86 +201,100 @@ const RecruiterLogin = () => {
                   accept="image/png, image/jpeg"
                 />
               </label>
-              <p>Upload company logo</p>
+              <p className="text-sm text-gray-600">Upload company logo</p>
             </div>
-          </>
-        ) : (
-          <>
+          ) : (
+            // Main Form Fields
             <>
               {state !== "Login" && (
-                <div className="border px-4 py-2 flex items-center gap-2 rounded-full mt-3 focus-within:ring-1 focus-within:ring-sky-500 focus-within:border-sky-500">
-                  <IoPersonOutline />
-                  <input
-                    className="outline-none text-sm w-full"
-                    onChange={(e) => setName(e.target.value)}
-                    value={name}
-                    type="text"
-                    placeholder="Company Name"
-                  />
+                <div className="bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-sky-500 transition-all">
+                  <div className="flex items-center gap-3">
+                    <IoPersonOutline className="text-gray-500 text-lg" />
+                    <input
+                      className="w-full bg-transparent outline-none text-sm placeholder-gray-400"
+                      onChange={(e) => setName(e.target.value)}
+                      value={name}
+                      type="text"
+                      placeholder="Company Name"
+                    />
+                  </div>
                 </div>
               )}
 
-              <div className="border px-4 py-2 flex items-center gap-2 rounded-full mt-3 focus-within:ring-1 focus-within:ring-sky-500 focus-within:border-sky-500">
-                <TfiEmail />
-                <input
-                  className="outline-none text-sm"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  type="text"
-                  placeholder="Email address"
-                />
+              <div className="bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-sky-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <FaEnvelope className="text-gray-500 text-lg" />
+                  <input
+                    className="w-full bg-transparent outline-none text-sm placeholder-gray-400"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    type="text"
+                    placeholder="Email address"
+                  />
+                </div>
               </div>
-              <div className="border px-4 py-2 flex items-center gap-2 rounded-full mt-3 focus-within:ring-1 focus-within:ring-sky-500 focus-within:border-sky-500">
-                <CiLock />
-                <input
-                  className="outline-none text-sm"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                  type="text"
-                  placeholder="Password"
-                />
+
+              <div className="bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-sky-500 transition-all">
+                <div className="flex items-center gap-3 relative">
+                  <FaUnlockAlt className="text-gray-500 text-lg" />
+                  <input
+                    className="w-full bg-transparent outline-none text-sm placeholder-gray-400"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    type={showPassword ? "text" : "password"} // toggle between text and password type
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleTogglePassword}
+                    className="absolute right-3 cursor-pointer hover:bg-gray-200 p-1 rounded-full text-gray-500"
+                  >
+                    {showPassword ? (
+                      <IoEyeOutline className="text-lg" />
+                    ) : (
+                      <IoEyeOffOutline className="text-lg" />
+                    )}
+                  </button>
+                </div>
               </div>
             </>
-          </>
-        )}
+          )}
 
-        {state === "Login" && (
-          <p className="text-sm mt-2 text-sky-700 hover:underline cursor-pointer">
-            Forgot password?
-          </p>
-        )}
-        <button
-          type="submit"
-          className=" text-white w-full px-5 hover:scale-105 py-2 rounded-full  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 cursor-pointer mt-3 "
-          disabled={loading}
-        >
-          {loading
-            ? "Signing Up..."
-            : state === "Login"
-            ? "Login"
-            : isNextDataSubmitted
-            ? "Sign Up"
-            : "Next"}
-        </button>
-        {state === "Login" ? (
-          <p
-            onClick={() => setState("Sign Up")}
-            className="text-sm text-sky-700 mt-2 hover:underline cursor-pointer"
+          {/* Forgot Password */}
+          {state === "Login" && (
+            <p className="text-right text-sm text-sky-600 hover:text-sky-700 hover:underline cursor-pointer transition-colors">
+              Forgot password?
+            </p>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium hover:from-sky-600 hover:to-sky-500 active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-sky-200 disabled:opacity-80 disabled:cursor-not-allowed cursor-pointer hover:-translate-y-1"
+            disabled={loading}
           >
-            Don't have an account? <span>Sign Up</span>
+            {loading
+              ? "Signing Up..."
+              : state === "Login"
+              ? "Login"
+              : isNextDataSubmitted
+              ? "Sign Up"
+              : "Next"}
+          </button>
+
+          {/* Toggle Between Login/Signup */}
+          <p className="text-center text-sm text-gray-500 mt-4">
+            {state === "Login"
+              ? "Don't have an account?"
+              : "Already have an account?"}{" "}
+            <span
+              onClick={() => setState(state === "Login" ? "Sign Up" : "Login")}
+              className="text-sky-600 hover:text-sky-700 cursor-pointer hover:underline"
+            >
+              {state === "Login" ? "Sign Up" : "Login"}
+            </span>
           </p>
-        ) : (
-          <p
-            onClick={() => setState("Login")}
-            className="text-sm mt-2 text-sky-700  hover:underline cursor-pointer"
-          >
-            Already have an account? <span>Login</span>
-          </p>
-        )}
-        <IoCloseOutline
-          onClick={(e) => setShowRecruiterLogin(false)}
-          className=" hover:text-red-400 hover:scale-110 absolute top-5 text-2xl right-5 cursor-pointer"
-        />
+        </div>
       </form>
     </div>
   );

@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: Date },
   gender: { type: String, enum: ["Male", "Female", "Other"] },
   address: { type: String },
+  description: { type: String },
   experience: [
     {
       jobTitle: String,

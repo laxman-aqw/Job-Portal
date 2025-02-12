@@ -190,7 +190,6 @@ exports.getCompanyJobApplicants = async (req, res) => {
       .populate("jobId", "location title category level salary")
       .exec();
 
-    console.log(applications);
     res.status(200).json({
       success: true,
       applications,

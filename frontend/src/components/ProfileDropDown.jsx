@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
+import { toast } from "react-toastify";
 const ProfileDropdown = ({ user }) => {
   console.log("The user is: ", user);
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ProfileDropdown = ({ user }) => {
     setUser(null);
     navigate("/");
     console.log("log out");
+    toast.success("You have been logged out!");
     NProgress.done();
   };
 
@@ -54,7 +56,7 @@ const ProfileDropdown = ({ user }) => {
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20">
           <div className="py-2">
             <a
-              href="/profile"
+              href={`/profile/${user._id}`}
               className="flex gap-2 items-center  px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               <IoPersonOutline className="text-xl " /> View Profile

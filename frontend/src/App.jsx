@@ -28,6 +28,7 @@ import ProfilePage from "./pages/ProfilePage";
 import EditJob from "./pages/EditJob";
 import CompanyProfile from "./pages/CompanyProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
+import EditUserProfile from "./pages/EditUserProfile";
 const App = () => {
   const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
     useContext(AppContext);
@@ -45,16 +46,19 @@ const App = () => {
           path="/"
           element={companyValidToken ? <Navigate to="/dashboard" /> : <Home />}
         />
-        <Route
-          path="/profile"
-          element={userValidToken ? <ProfilePage></ProfilePage> : <Home></Home>}
-        />
+        <Route path="/profile/:id" element={<ProfilePage></ProfilePage>} />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />
         <Route
           path="/applications"
           element={
             userValidToken ? <Applications></Applications> : <Home></Home>
+          }
+        />
+        <Route
+          path="/update-profile"
+          element={
+            userValidToken ? <EditUserProfile></EditUserProfile> : <Home></Home>
           }
         />
         {companyValidToken ? (

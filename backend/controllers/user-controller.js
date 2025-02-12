@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary").v2;
 const generateToken = require("../utils/generateToken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const e = require("express");
 require("dotenv").config();
 
 //register user
@@ -217,7 +218,7 @@ exports.getUserAppliedJobs = async (req, res) => {
 
 exports.updateUserResume = async (req, res) => {
   // Update user's resume
-  const userId = req.user._id;
+  const userId = req.user._id.toString();
   console.log("the user id is: ", userId);
   try {
     const resumeFile = req.file;
@@ -225,15 +226,34 @@ exports.updateUserResume = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) {
+      console.log("no user found");
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    if (resumeFile) {
-      const resumeUpload = await cloudinary.uploader.upload(resumeFile.path);
-      user.resume = resumeUpload.secure_url;
+    if (!resumeFile) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
     }
-    await user.save();
+    const resumeUpload = await cloudinary.uploader.upload(resumeFile.path);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          resume: resumeUpload.secure_url,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      console.log("no user found to update");
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found to update" });
+    }
     return res.status(200).json({
       success: true,
       message: "Resume updated successfully",
@@ -247,7 +267,7 @@ exports.updateUserResume = async (req, res) => {
   }
 };
 
-exports.getProfile = async () => {
+exports.getProfile = async (req, res) => {
   const id = req.params.id;
   try {
     const user = await User.findById(id).select("-password");
@@ -268,3 +288,128 @@ exports.getProfile = async () => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  const id = req.user._id.toString();
+  const {
+    firstName,
+    lastName,
+    description,
+    phone,
+    address,
+    githubProfile,
+    linkedInProfile,
+    gender,
+    displayEmail,
+  } = req.body;
+  const imageFile = req.file;
+  if (!firstName || !lastName) {
+    return res.status(400).json({
+      success: false,
+      message: "First name and last name are required",
+    });
+  }
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    let imageUrl = user.image;
+    if (imageFile) {
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+      imageUrl = imageUpload.secure_url;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          firstName,
+          lastName,
+          description,
+          phone,
+          address,
+          githubProfile,
+          linkedInProfile,
+          gender,
+          displayEmail,
+          image: imageUrl,
+        },
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "User profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// {
+//   "firstName": "Laxman",
+//   "lastName": "Rumba",
+//   "education": [
+//     {
+//       "_id": "67acb56608c6636bd8b08080",
+//       "degree": "Bachelor of Science",
+//       "fieldOfStudy": "Computer Science",
+//       "institutionName": "Stanford University",
+//       "startDate": "2016-08-15T00:00:00.000Z",
+//       "endDate": "2020-05-20T00:00:00.000Z",
+//       "grade": "3.8 GPA"
+//     },
+//     {
+//       "_id": "67acb56608c6636bd8b08081",
+//       "degree": "Master of Science",
+//       "fieldOfStudy": "Software Engineering",
+//       "institutionName": "MIT",
+//       "startDate": "2021-08-15T00:00:00.000Z",
+//       "endDate": "2023-05-20T00:00:00.000Z",
+//       "grade": "4.0 GPA"
+//     }
+//   ],
+//   "experience": [
+//     {
+//       "_id": "67acb56608c6636bd8b08082",
+//       "jobTitle": "Software Engineer",
+//       "companyName": "Tech Corp",
+//       "startDate": "2018-06-01T00:00:00.000Z",
+//       "endDate": "2021-08-15T00:00:00.000Z",
+//       "description": "Developed web applications using React, Node.js, and MongoDB."
+//     },
+//     {
+//       "_id": "67acb56608c6636bd8b08083",
+//       "jobTitle": "Senior Software Engineer",
+//       "companyName": "Innovative Solutions",
+//       "startDate": "2021-09-01T00:00:00.000Z",
+//       "description": "Designed and implemented scalable microservices architecture."
+//     }
+//   ],
+//   "skills": [
+//     "JavaScript",
+//     "React.js",
+//     "Node.js",
+//     "MongoDB",
+//     "Express.js",
+//     "Tailwind CSS",
+//     "GraphQL",
+//     ".Net",
+//     "TypeScript"
+//   ],
+//   "description": "Motivated and detail-oriented BCA student with a strong foundation in full-stack web development using the MERN stack. Passionate about building scalable applications, problem-solving, and continuously learning new technologies. Seeking an opportunity to contribute my technical and analytical skills in a professional software development role.",
+//   "phone": "9818818181",
+//   "address": "Naikap, Kathmandu",
+//   "githubProfile": "https://github.com/laxman-aqw",
+//   "linkedInProfile": "https://www.linkedin.com/in/laxman-rumba/",
+//   "gender": "Male"
+// }

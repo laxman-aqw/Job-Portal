@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../context/appContext";
 import {
   FaGithub,
@@ -10,10 +10,26 @@ import {
 import { FaLocationDot } from "react-icons/fa6";
 import { CiLinkedin } from "react-icons/ci";
 import { HiDocumentArrowDown } from "react-icons/hi2";
-
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
 const ProfilePage = () => {
-  const { user } = useContext(AppContext);
-
+  const { id } = useParams();
+  const { backendUrl, user, setUser, userToken } = useContext(AppContext);
+  // console.log(userToken);
+  const fetchUserDataById = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + `/api/users/profile/${id}`);
+      if (data.success) {
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUserDataById();
+  }, [id]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <NavBar />
@@ -21,7 +37,17 @@ const ProfilePage = () => {
         {/* Profile Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
           {/* Profile Header */}
-          <div className="p-8 bg-gradient-to-r from-indigo-50 to-blue-50">
+          <div className="p-8 bg-gradient-to-r from-indigo-50 to-blue-50 relative">
+            {/* Profile Edit button */}
+            {userToken && (
+              <a
+                href={"/update-profile"} // Adjust the link to your edit profile route
+                className="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
+              >
+                <FaEdit className="w-5 h-5" />
+                <span className="font-medium">Edit Profile</span>
+              </a>
+            )}
             <div className="flex flex-col md:flex-row items-start gap-8">
               {user?.image && (
                 <div className="relative group shrink-0">
@@ -52,7 +78,7 @@ const ProfilePage = () => {
                         href={`mailto:${user.email}`}
                         className="hover:text-indigo-700 transition-colors truncate"
                       >
-                        {user.email}
+                        {user?.displayEmail}
                       </a>
                     </div>
                   )}
@@ -113,7 +139,7 @@ const ProfilePage = () => {
                       className="ml-2 flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all"
                     >
                       <HiDocumentArrowDown className="w-6 h-6" />
-                      <span className="font-semibold">Download Resume</span>
+                      <span className="font-semibold">View Resume</span>
                     </a>
                   )}
                 </div>
@@ -122,7 +148,13 @@ const ProfilePage = () => {
           </div>
 
           {/* Detailed Sections */}
-          <div className="p-8 space-y-12">
+          <div className="p-8 space-y-8">
+            <section>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-indigo-100">
+                About
+              </h2>
+              <p>{user?.description}</p>
+            </section>
             {/* Experience */}
             {user?.experience?.length > 0 && (
               <section>

@@ -31,6 +31,7 @@ const EditCompanyProfile = () => {
       if (image && typeof image !== "string") {
         formData.append("image", image);
       }
+      console.log(formData);
       NProgress.start();
       const { data } = await axios.put(
         backendUrl + `/api/company/update-company`,

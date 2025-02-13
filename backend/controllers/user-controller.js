@@ -295,15 +295,16 @@ exports.updateProfile = async (req, res) => {
     firstName,
     lastName,
     description,
+    displayEmail,
     phone,
     address,
     githubProfile,
     linkedInProfile,
     gender,
-    displayEmail,
   } = req.body;
   const imageFile = req.file;
-  if (!firstName || !lastName) {
+  if (!description) {
+    console.log("fields are required");
     return res.status(400).json({
       success: false,
       message: "First name and last name are required",

@@ -6,7 +6,12 @@ const { requireAuth } = require("@clerk/express");
 const { protectUser } = require("../middlewares/auth.middleware");
 router.post("/apply-job", protectUser, userController.applyJob);
 router.get("/applications", protectUser, userController.getUserAppliedJobs);
-router.put("/profile-update", protectUser, userController.updateProfile);
+router.put(
+  "/profile-update",
+  protectUser,
+  upload.single("image"),
+  userController.updateProfile
+);
 
 router.post("/register", upload.single("image"), userController.registerUser);
 router.put(

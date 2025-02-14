@@ -24,5 +24,10 @@ router.put(
 router.post("/check-email", userController.validateEmail);
 router.post("/login", userController.loginUser);
 router.get("/profile/:id", userController.getProfile);
+router.get(
+  "/profile-experience/:id",
+  protectUser,
+  userController.getExperienceById
+);
 router.get("/user", protectUser, userController.getUserData);
 module.exports = router;

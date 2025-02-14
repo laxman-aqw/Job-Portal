@@ -356,6 +356,45 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+exports.getExperienceById = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id.toString();
+  // const { jobTitle, companyName, startDate, endDate, description } = req.body;
+  // if (!jobTitle || !companyName || !startDate || !description) {
+  //   console.log("fields are required");
+  //   return res.status(400).json({
+  //     success: false,
+  //     message:
+  //       "Job title, company name, start date, and description are required",
+  //   });
+  // }
+  try {
+    const user = await User.findById(userId).select("experience");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    const exps = user.experience.find((exp) => exp._id.toString() === id);
+    if (!exps) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User job experience fetched succesfully!",
+      exps,
+    });
+  } catch (error) {
+    console.error("Error fetching user's job experience:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
 // {
 //   "firstName": "Laxman",
 //   "lastName": "Rumba",

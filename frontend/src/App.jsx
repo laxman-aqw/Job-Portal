@@ -29,6 +29,7 @@ import EditJob from "./pages/EditJob";
 import CompanyProfile from "./pages/CompanyProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
 import EditUserProfile from "./pages/EditUserProfile";
+import EditExperience from "./components/EditExperience";
 const App = () => {
   const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
     useContext(AppContext);
@@ -47,6 +48,10 @@ const App = () => {
           element={companyValidToken ? <Navigate to="/dashboard" /> : <Home />}
         />
         <Route path="/profile/:id" element={<ProfilePage></ProfilePage>} />
+        <Route
+          path="/edit-experience/:id"
+          element={<EditExperience></EditExperience>}
+        />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />
         <Route

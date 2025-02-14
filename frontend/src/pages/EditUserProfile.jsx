@@ -60,6 +60,7 @@ const EditUserProfile = () => {
         toast.success(data.message);
         console.log(data);
         navigate(`/profile/${user._id}`);
+        window.scrollTo(0, 0);
       }
     } catch (err) {
       toast.error(err.message);

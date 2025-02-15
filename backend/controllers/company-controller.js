@@ -120,13 +120,13 @@ exports.validateEmail = async (req, res) => {
 };
 exports.getCompanyData = async (req, res) => {
   try {
+    //if company is logged in or not
     if (!req.company) {
       return res.status(404).json({
         success: false,
         message: "Company data not found",
       });
     }
-
     res.status(200).json({
       success: true,
       message: "Company data fetched successfully",
@@ -255,17 +255,21 @@ exports.changeJobApplicationStatus = async (req, res) => {
 
 exports.changeVisibility = async (req, res) => {
   const { id } = req.body;
+
   const companyId = req.company._id;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
+      //0.2
       return res.status(400).json({
         success: false,
         message: "Invalid job ID",
       });
     }
-    const job = await Job.findById(id);
+
+    const job = await Job.findById(id); //1sec
 
     if (!job) {
+      //0.1
       return res.status(404).json({
         success: false,
         message: "Job not found",
@@ -282,9 +286,11 @@ exports.changeVisibility = async (req, res) => {
     job.visible = !job.visible;
 
     await job.save();
-    res
-      .status(200)
-      .json({ success: true, message: "Job visibility updated", job });
+    res.status(200).json({
+      success: true,
+      message: "Job visibility updated succesfully",
+      job,
+    });
   } catch (error) {
     console.error("Error changing job visibility:", error);
     res.status(500).json({

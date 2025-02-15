@@ -39,7 +39,6 @@ exports.getJob = async (req, res) => {
 };
 
 exports.updateJob = async (req, res) => {
-  console.log(req.params);
   const { id } = req.params;
   console.log(id);
   const companyId = req.company._id;

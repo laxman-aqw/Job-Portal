@@ -33,8 +33,8 @@ const EditExperience = () => {
         }
       );
       if (data.success) {
-        console.log(data.exps);
-        setExp(data.exps);
+        console.log(data.experience);
+        setExp(data.experience);
       }
     } catch (error) {
       console.log(error);
@@ -43,60 +43,43 @@ const EditExperience = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //   updateUser();
+    updateExps();
   };
 
-  //   const updateUser = async () => {
-  //     try {
-  //       const formData = new FormData();
-  //       formData.append("jobTitle", jobTitle);
-  //       formData.append("companyName", companyName);
-  //       formData.append("description", description);
-  //       formData.append("startDate", startDate);
-  //       formData.append("endDate", endDate);
-  //       NProgress.start();
-  //       const { data } = await axios.put(
-  //         backendUrl + "/api/users/profile-update",
-  //         formData,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${userToken}`,
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-  //       if (data.success) {
-  //         toast.success(data.message);
-  //         console.log(data);
-  //         navigate(`/profile/${user._id}`);
-  //         window.scrollTo(0, 0);
-  //       }
-  //     } catch (err) {
-  //       toast.error(err.message);
-  //       console.error("Error updating profile:", err);
-  //     } finally {
-  //       NProgress.done();
-  //     }
-  //   };
+  const updateExps = async () => {
+    try {
+      const updateData = {
+        jobTitle,
+        companyName,
+        description,
+        startDate,
+        endDate,
+      };
+      NProgress.start();
 
-  //   useEffect(() => {
-  //     if (exp?.jobTitle) {
-  //       setJobTitle(exp.jobTitle);
-  //     }
-
-  //     if (exp?.companyName) {
-  //       setCompanyName(exp.companyName);
-  //     }
-  //     if (exp?.startDate) {
-  //       setStartDate(exp.startDate);
-  //     }
-  //     if (exp?.endDate) {
-  //       setEndDate(exp.endDate);
-  //     }
-  //     if (exp?.description) {
-  //       setDescription(exp.description);
-  //     }
-  //   }, [exp]);
+      const { data } = await axios.put(
+        backendUrl + `/api/users/edit-experience/${id}`,
+        updateData,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        console.log(data);
+        navigate(`/profile/${user._id}`);
+        window.scrollTo(0, 0);
+      }
+    } catch (err) {
+      toast.error(err.message);
+      console.error("Error updating profile:", err);
+    } finally {
+      NProgress.done();
+    }
+  };
 
   useEffect(() => {
     if (id && userToken) {

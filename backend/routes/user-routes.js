@@ -5,6 +5,11 @@ const userController = require("../controllers/user-controller");
 const { requireAuth } = require("@clerk/express");
 const { protectUser } = require("../middlewares/auth.middleware");
 router.post("/apply-job", protectUser, userController.applyJob);
+router.put(
+  "/edit-experience/:id",
+  protectUser,
+  userController.updateJobExperience
+);
 router.get("/applications", protectUser, userController.getUserAppliedJobs);
 router.put(
   "/profile-update",

@@ -359,15 +359,7 @@ exports.updateProfile = async (req, res) => {
 exports.getExperienceById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id.toString();
-  // const { jobTitle, companyName, startDate, endDate, description } = req.body;
-  // if (!jobTitle || !companyName || !startDate || !description) {
-  //   console.log("fields are required");
-  //   return res.status(400).json({
-  //     success: false,
-  //     message:
-  //       "Job title, company name, start date, and description are required",
-  //   });
-  // }
+
   try {
     const user = await User.findById(userId).select("experience");
     if (!user) {
@@ -384,7 +376,7 @@ exports.getExperienceById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User job experience fetched succesfully!",
-      exps,
+      experience: exps,
     });
   } catch (error) {
     console.error("Error fetching user's job experience:", error);
@@ -395,6 +387,53 @@ exports.getExperienceById = async (req, res) => {
     });
   }
 };
+
+exports.updateJobExperience = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { id } = req.params;
+  const { jobTitle, companyName, startDate, endDate, description } = req.body;
+  // if (!jobTitle || !companyName || !startDate || !description) {
+  //   console.log("fields are required");
+  //   return res.status(400).json({
+  //     success: false,
+  //     message:
+  //       "Job title, company name, start date, and description are required",
+  //   });
+  // }
+  const user = await User.findById(userId).select("experience");
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+
+  const expsIndex = user.experience.findIndex(
+    (exp) => exp._id.toString() === id
+  );
+  if (expsIndex === -1) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Experience not found" });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        [`experience.${expsIndex}.jobTitle`]: jobTitle,
+        [`experience.${expsIndex}.companyName`]: companyName,
+        [`experience.${expsIndex}.startDate`]: startDate,
+        [`experience.${expsIndex}.endDate`]: endDate,
+        [`experience.${expsIndex}.description`]: description,
+      },
+    },
+    { new: true } // Return the updated document
+  );
+  return res.status(200).json({
+    success: true,
+    message: "Experience updated successfully",
+    data: updatedUser.experience[expsIndex], // Return the updated experience
+  });
+};
+
 // {
 //   "firstName": "Laxman",
 //   "lastName": "Rumba",

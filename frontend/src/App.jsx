@@ -30,9 +30,16 @@ import CompanyProfile from "./pages/CompanyProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
 import EditUserProfile from "./pages/EditUserProfile";
 import EditExperience from "./components/EditExperience";
+import AddExperience from "./components/addExperience";
+import ConfirmModel from "./components/ConfirmationModel";
 const App = () => {
-  const { showRecruiterLogin, showUserLogin, companyToken, userToken } =
-    useContext(AppContext);
+  const {
+    showRecruiterLogin,
+    confirmModel,
+    showUserLogin,
+    companyToken,
+    userToken,
+  } = useContext(AppContext);
   // console.log("companyToken:", companyToken);
   const companyValidToken =
     companyToken || localStorage.getItem("companyToken");
@@ -42,6 +49,7 @@ const App = () => {
     <div>
       {showRecruiterLogin && <RecruiterLogin />}
       {showUserLogin && <UserLogin />}
+      {confirmModel && <ConfirmModel />}
       <Routes>
         <Route
           path="/"
@@ -51,6 +59,10 @@ const App = () => {
         <Route
           path="/edit-experience/:id"
           element={<EditExperience></EditExperience>}
+        />
+        <Route
+          path="/add-experience"
+          element={<AddExperience></AddExperience>}
         />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />

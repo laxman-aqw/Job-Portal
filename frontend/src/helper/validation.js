@@ -33,6 +33,7 @@ export const validateName = (name) => {
   if (!name) return "Company name is required!";
   return null; // No error
 };
+
 export const validateFirstName = (name) => {
   if (!name) return "First name is required!";
   return null; // No error
@@ -62,4 +63,49 @@ export const validateJobSalary = (salary) => {
     return "Salary is required";
   }
   return null;
+};
+
+export const validatePhoneNumber = (phoneNumber) => {
+  if (phoneNumber && !/^9\d{9}$/.test(phoneNumber)) {
+    return "Please enter a valid Nepali phone number!";
+  }
+  return null; // No error or phone number is not provided
+};
+
+export const validateDisplayEmail = (email) => {
+  if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+    return "Invalid email address!";
+  }
+  return null; // No error or email is not provided
+};
+
+export const validateDates = (startDate, endDate) => {
+  // Check if startDate is a valid date
+  if (!startDate || isNaN(new Date(startDate).getTime())) {
+    return "Start date must be a valid date!";
+  }
+
+  const start = new Date(startDate);
+
+  // Check if endDate is either a valid date or "Present"
+  if (endDate && endDate !== "Present") {
+    const end = new Date(endDate);
+
+    if (isNaN(end.getTime())) {
+      return "End date must be a valid date or 'Present'!";
+    }
+
+    // Ensure that start date is before end date
+    if (start >= end) {
+      return "Start date must be earlier than the end date!";
+    }
+
+    // Ensure that end date is not later than today's date, or it must be "Present"
+    const today = new Date();
+    if (end > today) {
+      return "End date cannot be a future date. It must be 'Present'!";
+    }
+  }
+
+  return null; // No error
 };

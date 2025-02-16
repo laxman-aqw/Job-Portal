@@ -9,7 +9,12 @@ import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
-
+import {
+  validateDisplayEmail,
+  validateFirstName,
+  validateLastName,
+  validatePhoneNumber,
+} from "../helper/validation";
 const EditUserProfile = () => {
   const navigate = useNavigate();
   const { userToken, user, setUser, backendUrl } = useContext(AppContext);
@@ -27,6 +32,29 @@ const EditUserProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const emailError = validateDisplayEmail(displayEmail);
+    const firstNameError = validateFirstName(firstName);
+    const lastNameError = validateLastName(lastName);
+    const phoneError = validatePhoneNumber(phone);
+
+    if (emailError) {
+      toast.error(emailError);
+      return;
+    }
+    if (firstNameError) {
+      toast.error(firstNameError);
+      return;
+    }
+    if (lastNameError) {
+      toast.error(lastNameError);
+      return;
+    }
+    if (phoneError) {
+      toast.error(phoneError);
+      return;
+    }
+
+    //call funciton
     updateUser();
   };
 
@@ -173,6 +201,7 @@ const EditUserProfile = () => {
                 Phone Number
               </label>
             </div>
+
             <div className="group w-full relative">
               <input
                 type="text"

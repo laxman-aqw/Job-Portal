@@ -10,8 +10,14 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import DatePicker from "react-datepicker";
-
+import {
+  validateJobDescription,
+  validateName,
+  validateJobTitle,
+  validateDates,
+} from "../helper/validation";
 const EditExperience = () => {
+  const today = new Date();
   const { id } = useParams();
   const navigate = useNavigate();
   const { userToken, user, setUser, backendUrl } = useContext(AppContext);
@@ -43,6 +49,27 @@ const EditExperience = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const jobDescriptionError = validateJobDescription(description);
+    const nameError = validateName(companyName);
+    const jobTitleError = validateJobTitle(jobTitle);
+    const datesError = validateDates(startDate, endDate);
+
+    if (jobTitleError) {
+      toast.error(jobTitleError);
+      return;
+    }
+    if (nameError) {
+      toast.error(nameError);
+      return;
+    }
+    if (jobDescriptionError) {
+      toast.error(jobDescriptionError);
+      return;
+    }
+    if (datesError) {
+      toast.error(datesError);
+      return;
+    }
     updateExps();
   };
 
@@ -154,7 +181,7 @@ const EditExperience = () => {
           </div>
 
           <div className="flex w-full gap-3">
-            <div className="w-full">
+            <div className="w-full flex flex-col">
               <label
                 className="block text-gray-600 font-medium mb-2"
                 htmlFor="deadline"
@@ -162,14 +189,15 @@ const EditExperience = () => {
                 Start Date
               </label>
               <DatePicker
-                placeholder="YYYY-MM-DD"
+                placeholderText="YYYY-MM-DD"
                 selected={startDate}
+                maxDate={today}
                 onChange={(date) => setStartDate(date)}
                 dateFormat="yyyy-MM-dd"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
             </div>
-            <div className="w-full">
+            <div className="w-full flex flex-col">
               <label
                 className="block text-gray-600 font-medium mb-2"
                 htmlFor="deadline"
@@ -177,20 +205,19 @@ const EditExperience = () => {
                 End Date
               </label>
               <DatePicker
-                placeholder="YYYY-MM-DD"
+                placeholderText="YYYY-MM-DD"
                 selected={endDate}
+                maxDate={today}
                 onChange={(date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
+              <span className="text-red-400">
+                Leave empty if you still work here!
+              </span>
             </div>
           </div>
 
-          {/* start date */}
-
-          {/* Image Upload */}
-
-          {/* Save Button */}
           <button
             type="submit"
             className="w-full py-4 cursor-pointer px-6 bg-gradient-to-r  from-blue-500 to-cyan-400 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 relative overflow-hidden"

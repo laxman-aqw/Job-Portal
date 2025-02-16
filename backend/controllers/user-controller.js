@@ -303,7 +303,7 @@ exports.updateProfile = async (req, res) => {
     gender,
   } = req.body;
   const imageFile = req.file;
-  if (!description) {
+  if (!firstName && !lastName) {
     console.log("fields are required");
     return res.status(400).json({
       success: false,
@@ -432,6 +432,74 @@ exports.updateJobExperience = async (req, res) => {
     message: "Experience updated successfully",
     data: updatedUser.experience[expsIndex], // Return the updated experience
   });
+};
+
+exports.addJobExperience = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { jobTitle, companyName, startDate, endDate, description } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    const newExp = {
+      jobTitle,
+      companyName,
+      startDate,
+      endDate: endDate || null,
+      description,
+    };
+    user.experience.push(newExp);
+    await user.save();
+    return res.status(201).json({
+      success: true,
+      message: "New job experience added successfully",
+      data: newExp, // Return the newly added experience
+    });
+  } catch (error) {
+    console.error("Error adding new job experience:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+exports.deleteJobExperience = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { id } = req.params;
+  try {
+    const user = await User.findById(userId).select("experience");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const expsIndex = user.experience.findIndex(
+      (exp) => exp._id.toString() === id
+    );
+    if (expsIndex === -1) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
+    }
+    await User.findByIdAndUpdate(userId, {
+      $pull: { experience: { _id: id } },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Experience deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting job experience:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
 };
 
 // {

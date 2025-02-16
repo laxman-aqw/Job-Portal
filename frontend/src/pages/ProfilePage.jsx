@@ -1,6 +1,7 @@
 import NavBar from "../components/NavBar";
 import React, { useContext, useEffect } from "react";
 import { AppContext } from "../context/appContext";
+import { MdDeleteForever } from "react-icons/md";
 import {
   FaGithub,
   FaEnvelope,
@@ -16,7 +17,8 @@ import { FaEdit } from "react-icons/fa";
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { backendUrl, user, setUser, userToken } = useContext(AppContext);
+  const { backendUrl, user, setConfirmModel, setUser, userToken } =
+    useContext(AppContext);
   // console.log(userToken);
   const fetchUserDataById = async () => {
     try {
@@ -161,7 +163,7 @@ const ProfilePage = () => {
               <section className="relative">
                 {userToken && (
                   <a
-                    href={"/update-profile"} // Adjust the link to your edit profile route
+                    href={"/add-experience"} // Adjust the link to your edit profile route
                     className="absolute right-4 flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
                   >
                     <FaEdit className="w-5 h-5" />
@@ -171,11 +173,11 @@ const ProfilePage = () => {
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-indigo-100">
                   Professional Experience
                 </h2>{" "}
-                <div className="space-y-6 relative">
+                <div className="space-y-6 ">
                   {user.experience.map((job, index) => (
                     <div
                       key={index}
-                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 relative"
                     >
                       {userToken && (
                         <button
@@ -183,9 +185,17 @@ const ProfilePage = () => {
                             navigate(`/edit-experience/${job._id}`);
                             scrollTo(0, 0);
                           }} // Adjust the link to your edit profile route
-                          className="absolute right-1 top-0 cursor-pointer flex items-center gap-2 hover:scale-105 px-4 py-2 text-indigo-600 rounded-lg transition-all"
+                          className=" absolute  right-1 top-0 cursor-pointer flex py-1 items-center gap-2 hover:scale-105 px-4 text-indigo-600 rounded-lg transition-all"
                         >
                           <FaEdit />
+                        </button>
+                      )}
+                      {userToken && (
+                        <button
+                          onClick={() => setConfirmModel(job._id)} // Adjust the link to your edit profile route
+                          className="absolute py-1 text-xl right-1 bottom-0 cursor-pointer flex items-center gap-2 hover:scale-105 px-4 text-red-600 rounded-lg transition-all"
+                        >
+                          <MdDeleteForever />
                         </button>
                       )}
                       <div className="flex justify-between items-start">

@@ -10,6 +10,12 @@ router.put(
   protectUser,
   userController.updateJobExperience
 );
+router.delete(
+  "/delete-experience/:id",
+  protectUser,
+  userController.deleteJobExperience
+);
+router.post("/add-experience", protectUser, userController.addJobExperience);
 router.get("/applications", protectUser, userController.getUserAppliedJobs);
 router.put(
   "/profile-update",

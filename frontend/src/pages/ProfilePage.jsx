@@ -235,11 +235,11 @@ const ProfilePage = () => {
               <section className="relative">
                 {userToken && (
                   <a
-                    href={"/update-profile"} // Adjust the link to your edit profile route
+                    href={"/add-education"} // Adjust the link to your edit profile route
                     className="absolute right-4 flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
                   >
                     <FaEdit className="w-5 h-5" />
-                    <span className="font-medium">Edit Education</span>
+                    <span className="font-medium">Add Education</span>
                   </a>
                 )}
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-indigo-100">
@@ -249,8 +249,27 @@ const ProfilePage = () => {
                   {user.education.map((edu, index) => (
                     <div
                       key={index}
-                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                      className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 relative"
                     >
+                      {userToken && (
+                        <button
+                          onClick={() => {
+                            navigate(`/edit-experience/${edu._id}`);
+                            scrollTo(0, 0);
+                          }} // Adjust the link to your edit profile route
+                          className=" absolute  right-1 top-0 cursor-pointer flex py-1 items-center gap-2 hover:scale-105 px-4 text-indigo-600 rounded-lg transition-all"
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
+                      {userToken && (
+                        <button
+                          onClick={() => setConfirmModel(edu._id)} // Adjust the link to your edit profile route
+                          className="absolute py-1 text-xl right-1 bottom-0 cursor-pointer flex items-center gap-2 hover:scale-105 px-4 text-red-600 rounded-lg transition-all"
+                        >
+                          <MdDeleteForever />
+                        </button>
+                      )}
                       <h3 className="text-xl font-bold text-gray-800">
                         {edu.degree}
                       </h3>
@@ -269,14 +288,18 @@ const ProfilePage = () => {
                             year: "numeric",
                           })}{" "}
                           –{" "}
+                          {new Date(edu.endDate) > new Date()
+                            ? "Expected "
+                            : ""}
                           {new Date(edu.endDate).toLocaleDateString("en-US", {
                             month: "short",
                             year: "numeric",
                           })}
                         </p>
+
                         <p className="flex items-center gap-2">
                           <span className="font-medium">Grade:</span>
-                          {edu.grade}
+                          {edu.grade} GPA
                         </p>
                       </div>
                     </div>

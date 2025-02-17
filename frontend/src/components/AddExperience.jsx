@@ -88,16 +88,6 @@ const AddExperience = () => {
     }
   };
 
-  useEffect(() => {
-    if (exp) {
-      setJobTitle(exp.jobTitle || "");
-      setCompanyName(exp.companyName || "");
-      setDescription(exp.description || "");
-      setEndDate(exp.endDate || "");
-      setStartDate(exp.startDate || "");
-    }
-  }, [exp]);
-
   return (
     <div>
       <NavBar />
@@ -115,26 +105,26 @@ const AddExperience = () => {
             <div className="group w-full relative">
               <input
                 type="text"
-                name="firstName"
+                name="jobTitle"
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
                 className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
                 placeholder=" "
               />
-              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600">
+              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
                 JobTitle
               </label>
             </div>
-            <div className="group w-full relative">
+            <div className="relative w-full group">
               <input
                 type="text"
                 name="companyName"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
+                className="peer w-full px-5 py-3.5 text-gray-900 bg-white border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-200 placeholder-transparent transition-all"
                 placeholder=" "
               />
-              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600">
+              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
                 Company Name
               </label>
             </div>
@@ -149,7 +139,7 @@ const AddExperience = () => {
               className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer min-h-[120px] resize-y"
               placeholder=" "
             />
-            <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600">
+            <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
               Description
             </label>
           </div>

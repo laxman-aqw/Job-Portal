@@ -356,6 +356,39 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+exports.addJobExperience = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { jobTitle, companyName, startDate, endDate, description } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    const newExp = {
+      jobTitle,
+      companyName,
+      startDate,
+      endDate: endDate || null,
+      description,
+    };
+    user.experience.push(newExp);
+    await user.save();
+    return res.status(201).json({
+      success: true,
+      message: "New job experience added successfully",
+      data: newExp, // Return the newly added experience
+    });
+  } catch (error) {
+    console.error("Error adding new job experience:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 exports.getExperienceById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id.toString();
@@ -434,39 +467,6 @@ exports.updateJobExperience = async (req, res) => {
   });
 };
 
-exports.addJobExperience = async (req, res) => {
-  const userId = req.user._id.toString();
-  const { jobTitle, companyName, startDate, endDate, description } = req.body;
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    const newExp = {
-      jobTitle,
-      companyName,
-      startDate,
-      endDate: endDate || null,
-      description,
-    };
-    user.experience.push(newExp);
-    await user.save();
-    return res.status(201).json({
-      success: true,
-      message: "New job experience added successfully",
-      data: newExp, // Return the newly added experience
-    });
-  } catch (error) {
-    console.error("Error adding new job experience:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
-  }
-};
-
 exports.deleteJobExperience = async (req, res) => {
   const userId = req.user._id.toString();
   const { id } = req.params;
@@ -502,9 +502,6 @@ exports.deleteJobExperience = async (req, res) => {
   }
 };
 
-// {
-//   "firstName": "Laxman",
-//   "lastName": "Rumba",
 //   "education": [
 //     {
 //       "_id": "67acb56608c6636bd8b08080",
@@ -515,48 +512,38 @@ exports.deleteJobExperience = async (req, res) => {
 //       "endDate": "2020-05-20T00:00:00.000Z",
 //       "grade": "3.8 GPA"
 //     },
-//     {
-//       "_id": "67acb56608c6636bd8b08081",
-//       "degree": "Master of Science",
-//       "fieldOfStudy": "Software Engineering",
-//       "institutionName": "MIT",
-//       "startDate": "2021-08-15T00:00:00.000Z",
-//       "endDate": "2023-05-20T00:00:00.000Z",
-//       "grade": "4.0 GPA"
-//     }
-//   ],
-//   "experience": [
-//     {
-//       "_id": "67acb56608c6636bd8b08082",
-//       "jobTitle": "Software Engineer",
-//       "companyName": "Tech Corp",
-//       "startDate": "2018-06-01T00:00:00.000Z",
-//       "endDate": "2021-08-15T00:00:00.000Z",
-//       "description": "Developed web applications using React, Node.js, and MongoDB."
-//     },
-//     {
-//       "_id": "67acb56608c6636bd8b08083",
-//       "jobTitle": "Senior Software Engineer",
-//       "companyName": "Innovative Solutions",
-//       "startDate": "2021-09-01T00:00:00.000Z",
-//       "description": "Designed and implemented scalable microservices architecture."
-//     }
-//   ],
-//   "skills": [
-//     "JavaScript",
-//     "React.js",
-//     "Node.js",
-//     "MongoDB",
-//     "Express.js",
-//     "Tailwind CSS",
-//     "GraphQL",
-//     ".Net",
-//     "TypeScript"
-//   ],
-//   "description": "Motivated and detail-oriented BCA student with a strong foundation in full-stack web development using the MERN stack. Passionate about building scalable applications, problem-solving, and continuously learning new technologies. Seeking an opportunity to contribute my technical and analytical skills in a professional software development role.",
-//   "phone": "9818818181",
-//   "address": "Naikap, Kathmandu",
-//   "githubProfile": "https://github.com/laxman-aqw",
-//   "linkedInProfile": "https://www.linkedin.com/in/laxman-rumba/",
-//   "gender": "Male"
-// }
+
+exports.addEducation = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { degree, fieldOfStudy, institutionName, startDate, endDate, grade } =
+    req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    const newEdu = {
+      degree,
+      fieldOfStudy,
+      institutionName,
+      startDate,
+      endDate: endDate || null,
+      grade,
+    };
+    user.education.push(newEdu);
+    await user.save();
+    return res.status(201).json({
+      success: true,
+      message: "New education added successfully",
+      data: newEdu, // Return the newly added experience
+    });
+  } catch (error) {
+    console.error("Error adding new Education:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};

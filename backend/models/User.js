@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
       fieldOfStudy: String,
       startDate: Date,
       endDate: Date,
-      grade: String,
+      grade: Number,
     },
   ],
   skills: [String],

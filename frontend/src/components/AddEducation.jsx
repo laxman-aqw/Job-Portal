@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../context/appContext";
 import { assets } from "../assets/assets";
-import NavBar from "../components/NavBar";
+import NavBar from "./NavBar";
 import { CiTrophy } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,82 +11,69 @@ import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import DatePicker from "react-datepicker";
 import {
-  validateJobDescription,
-  validateName,
-  validateJobTitle,
-  validateDates,
+  validateDegree,
+  validateFieldOfStudy,
+  validateInstitutionName,
+  validateGrade,
+  validateEducationDates,
 } from "../helper/validation";
-const EditExperience = () => {
+const AddEducation = () => {
   const today = new Date();
-  const { id } = useParams();
   const navigate = useNavigate();
   const { userToken, user, setUser, backendUrl } = useContext(AppContext);
-  const [jobTitle, setJobTitle] = useState("");
-  const [companyName, setCompanyName] = useState("");
+  const [degree, setDegree] = useState("");
+  const [fieldOfStudy, setFieldOfStudy] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [description, setDescription] = useState("");
-  const [exp, setExp] = useState(null);
-
-  const fetchExp = async () => {
-    try {
-      const { data } = await axios.get(
-        backendUrl + `/api/users/profile-experience/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-      if (data.success) {
-        console.log(data.experience);
-        setExp(data.experience);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [grade, setGrade] = useState("");
+  const [institutionName, setInstitutionName] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const jobDescriptionError = validateJobDescription(description);
-    const nameError = validateName(companyName);
-    const jobTitleError = validateJobTitle(jobTitle);
-    const datesError = validateDates(startDate, endDate);
+    const degreeError = validateDegree(degree);
+    const fieldOfStudyError = validateFieldOfStudy(fieldOfStudy);
+    const institutionError = validateInstitutionName(institutionName);
+    const gradeError = validateGrade(grade);
+    const datesError = validateEducationDates(startDate, endDate);
 
-    if (jobTitleError) {
-      toast.error(jobTitleError);
+    if (degreeError) {
+      toast.error(degreeError);
       return;
     }
-    if (nameError) {
-      toast.error(nameError);
+    if (fieldOfStudyError) {
+      toast.error(fieldOfStudyError);
       return;
     }
-    if (jobDescriptionError) {
-      toast.error(jobDescriptionError);
+    if (institutionError) {
+      toast.error(institutionError);
+      return;
+    }
+    if (gradeError) {
+      toast.error(gradeError);
       return;
     }
     if (datesError) {
       toast.error(datesError);
       return;
     }
-    updateExps();
+    addEdu();
   };
 
-  const updateExps = async () => {
+  const addEdu = async () => {
     try {
-      const updateData = {
-        jobTitle,
-        companyName,
-        description,
+      const newData = {
+        degree,
+        fieldOfStudy,
+        institutionName,
         startDate,
         endDate,
+        grade,
       };
       NProgress.start();
 
-      const { data } = await axios.put(
-        backendUrl + `/api/users/edit-experience/${id}`,
-        updateData,
+      const { data } = await axios.post(
+        backendUrl + `/api/users/add-education`,
+        newData,
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -102,27 +89,11 @@ const EditExperience = () => {
       }
     } catch (err) {
       toast.error(err.message);
-      console.error("Error updating profile:", err);
+      console.error("Error adding education details:", err);
     } finally {
       NProgress.done();
     }
   };
-
-  useEffect(() => {
-    if (id && userToken) {
-      fetchExp();
-    }
-  }, [id, userToken]);
-
-  useEffect(() => {
-    if (exp) {
-      setJobTitle(exp.jobTitle || "");
-      setCompanyName(exp.companyName || "");
-      setDescription(exp.description || "");
-      setEndDate(exp.endDate || "");
-      setStartDate(exp.startDate || "");
-    }
-  }, [exp]);
 
   return (
     <div>
@@ -132,7 +103,7 @@ const EditExperience = () => {
         <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
 
         <h2 className="text-3xl font-bold text-gray-900 text-center mb-8 relative">
-          Edit Job Experience
+          Add New Education
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-8 relative">
@@ -141,44 +112,60 @@ const EditExperience = () => {
             <div className="group w-full relative">
               <input
                 type="text"
-                name="jobTitle"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
+                name="degree"
+                value={degree}
+                onChange={(e) => setDegree(e.target.value)}
                 className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
                 placeholder=" "
               />
               <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
-                JobTitle
+                Degree
               </label>
             </div>
             <div className="group w-full relative">
               <input
                 type="text"
-                name="companyName"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                name="fieldOfStudy"
+                value={fieldOfStudy}
+                onChange={(e) => setFieldOfStudy(e.target.value)}
                 className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
                 placeholder=" "
               />
               <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
-                Company Name
+                Field Of Study
+              </label>
+            </div>
+          </div>
+          <div className="flex w-full gap-3 justify-around">
+            <div className="group w-full relative">
+              <input
+                type="text"
+                name="institutionName"
+                value={institutionName}
+                onChange={(e) => setInstitutionName(e.target.value)}
+                className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
+                placeholder=" "
+              />
+              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
+                Institution Name
+              </label>
+            </div>
+            <div className="group w-full relative">
+              <input
+                type="Number"
+                name="grade"
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+                className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
+                placeholder=" "
+              />
+              <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
+                Grade
               </label>
             </div>
           </div>
 
           {/* Description Input */}
-          <div className="group relative">
-            <textarea
-              name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer min-h-[120px] resize-y"
-              placeholder=" "
-            />
-            <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600 pointer-events-none">
-              Description
-            </label>
-          </div>
 
           <div className="flex w-full gap-3">
             <div className="w-full flex flex-col">
@@ -207,14 +194,10 @@ const EditExperience = () => {
               <DatePicker
                 placeholderText="YYYY-MM-DD"
                 selected={endDate}
-                maxDate={today}
                 onChange={(date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
-              <span className="text-red-400">
-                Leave empty if you still work here!
-              </span>
             </div>
           </div>
 
@@ -234,4 +217,4 @@ const EditExperience = () => {
   );
 };
 
-export default EditExperience;
+export default AddEducation;

@@ -32,6 +32,7 @@ import EditUserProfile from "./pages/EditUserProfile";
 import EditExperience from "./components/EditExperience";
 import AddExperience from "./components/addExperience";
 import ConfirmModel from "./components/ConfirmationModel";
+import AddEducation from "./components/AddEducation";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -58,11 +59,21 @@ const App = () => {
         <Route path="/profile/:id" element={<ProfilePage></ProfilePage>} />
         <Route
           path="/edit-experience/:id"
-          element={<EditExperience></EditExperience>}
+          element={
+            userValidToken ? <EditExperience></EditExperience> : <Home></Home>
+          }
         />
         <Route
           path="/add-experience"
-          element={<AddExperience></AddExperience>}
+          element={
+            userValidToken ? <AddExperience></AddExperience> : <Home></Home>
+          }
+        />
+        <Route
+          path="/add-education"
+          element={
+            userValidToken ? <AddEducation></AddEducation> : <Home></Home>
+          }
         />
         <Route path="/" element={<Home></Home>} />
         <Route path="/apply-job/:id" element={<ApplyJob></ApplyJob>} />

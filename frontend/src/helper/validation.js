@@ -33,6 +33,35 @@ export const validateName = (name) => {
   if (!name) return "Company name is required!";
   return null; // No error
 };
+export const validateDegree = (name) => {
+  if (!name) return "Degree name is required!";
+  return null; // No error
+};
+export const validateFieldOfStudy = (name) => {
+  if (!name) return "Field of study is required!";
+  return null; // No error
+};
+export const validateInstitutionName = (name) => {
+  if (!name) return "Institution name is required!";
+  return null; // No error
+};
+export const validateGrade = (grade) => {
+  if (grade === undefined || grade === null || grade === "") {
+    return "Grade is required!";
+  }
+
+  const numericGrade = Number(grade);
+
+  if (isNaN(numericGrade)) {
+    return "Grade must be a number!";
+  }
+
+  if (numericGrade < 0 || numericGrade > 4) {
+    return "Grade must be between 0 and 4!";
+  }
+
+  return null; // No error
+};
 
 export const validateFirstName = (name) => {
   if (!name) return "First name is required!";
@@ -105,6 +134,29 @@ export const validateDates = (startDate, endDate) => {
     if (end > today) {
       return "End date cannot be a future date. It must be 'Present'!";
     }
+  }
+
+  return null; // No error
+};
+
+export const validateEducationDates = (startDate, endDate) => {
+  // Convert to Date objects
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Check if startDate is a valid date
+  if (!startDate || isNaN(start.getTime())) {
+    return "Start date must be a valid date!";
+  }
+
+  // Check if endDate is a valid date
+  if (!endDate || isNaN(end.getTime())) {
+    return "End date must be a valid date!";
+  }
+
+  // Ensure endDate is not before startDate
+  if (end < start) {
+    return "End date cannot be before start date!";
   }
 
   return null; // No error

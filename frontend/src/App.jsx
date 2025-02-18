@@ -33,6 +33,8 @@ import EditExperience from "./components/EditExperience";
 import AddExperience from "./components/addExperience";
 import ConfirmModel from "./components/ConfirmationModel";
 import AddEducation from "./components/AddEducation";
+import EditEducation from "./components/EditEducation";
+import DelEduConModel from "./components/DelEduConModel";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -51,6 +53,7 @@ const App = () => {
       {showRecruiterLogin && <RecruiterLogin />}
       {showUserLogin && <UserLogin />}
       {confirmModel && <ConfirmModel />}
+      {confirmModel && <DelEduConModel />}
       <Routes>
         <Route
           path="/"
@@ -61,6 +64,12 @@ const App = () => {
           path="/edit-experience/:id"
           element={
             userValidToken ? <EditExperience></EditExperience> : <Home></Home>
+          }
+        />
+        <Route
+          path="/edit-education/:id"
+          element={
+            userValidToken ? <EditEducation></EditEducation> : <Home></Home>
           }
         />
         <Route

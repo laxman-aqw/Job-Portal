@@ -425,14 +425,14 @@ exports.updateJobExperience = async (req, res) => {
   const userId = req.user._id.toString();
   const { id } = req.params;
   const { jobTitle, companyName, startDate, endDate, description } = req.body;
-  // if (!jobTitle || !companyName || !startDate || !description) {
-  //   console.log("fields are required");
-  //   return res.status(400).json({
-  //     success: false,
-  //     message:
-  //       "Job title, company name, start date, and description are required",
-  //   });
-  // }
+  if (!jobTitle || !companyName || !startDate || !description) {
+    console.log("fields are required");
+    return res.status(400).json({
+      success: false,
+      message:
+        "Job title, company name, start date, and description are required",
+    });
+  }
   const user = await User.findById(userId).select("experience");
   if (!user) {
     return res.status(404).json({ success: false, message: "User not found" });
@@ -502,21 +502,25 @@ exports.deleteJobExperience = async (req, res) => {
   }
 };
 
-//   "education": [
-//     {
-//       "_id": "67acb56608c6636bd8b08080",
-//       "degree": "Bachelor of Science",
-//       "fieldOfStudy": "Computer Science",
-//       "institutionName": "Stanford University",
-//       "startDate": "2016-08-15T00:00:00.000Z",
-//       "endDate": "2020-05-20T00:00:00.000Z",
-//       "grade": "3.8 GPA"
-//     },
-
 exports.addEducation = async (req, res) => {
   const userId = req.user._id.toString();
   const { degree, fieldOfStudy, institutionName, startDate, endDate, grade } =
     req.body;
+  if (
+    !degree ||
+    !fieldOfStudy ||
+    !institutionName ||
+    !startDate ||
+    !endDate ||
+    !grade
+  ) {
+    console.log("fields are required");
+    return res.status(400).json({
+      success: false,
+      message:
+        "Degree, field of study, institution name, start date, end date, and grade are required",
+    });
+  }
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -541,6 +545,126 @@ exports.addEducation = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding new Education:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+exports.getEducationById = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id.toString();
+
+  try {
+    const user = await User.findById(userId).select("education");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    const edu = user.education.find((edu) => edu._id.toString() === id);
+    if (!edu) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Education not found" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User education details fetched succesfully!",
+      education: edu,
+    });
+  } catch (error) {
+    console.error("Error fetching user's education details:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+exports.updateUserEducation = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { id } = req.params;
+  const { degree, fieldOfStudy, institutionName, startDate, endDate, grade } =
+    req.body;
+  if (
+    !degree ||
+    !fieldOfStudy ||
+    !institutionName ||
+    !startDate ||
+    !endDate ||
+    !grade
+  ) {
+    console.log("fields are required");
+    return res.status(400).json({
+      success: false,
+      message:
+        "Degree, field of study, institution name, start date, end date, and grade are required",
+    });
+  }
+  const user = await User.findById(userId).select("education");
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+
+  const eduIndex = user.education.findIndex((edu) => edu._id.toString() === id);
+  if (eduIndex === -1) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Education not found" });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        [`education.${eduIndex}.degree`]: degree,
+        [`education.${eduIndex}.fieldOfStudy`]: fieldOfStudy,
+        [`education.${eduIndex}.institutionName`]: institutionName,
+        [`education.${eduIndex}.startDate`]: startDate,
+        [`education.${eduIndex}.endDate`]: endDate,
+        [`education.${eduIndex}.grade`]: grade,
+      },
+    },
+    { new: true } // Return the updated document
+  );
+  return res.status(200).json({
+    success: true,
+    message: "Education updated successfully",
+    data: updatedUser.education[eduIndex],
+  });
+};
+
+exports.deleteUserEducation = async (req, res) => {
+  const userId = req.user._id.toString();
+  const { id } = req.params;
+  try {
+    const user = await User.findById(userId).select("education");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const eduIndex = user.education.findIndex(
+      (edu) => edu._id.toString() === id
+    );
+    if (eduIndex === -1) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Education not found" });
+    }
+    await User.findByIdAndUpdate(userId, {
+      $pull: { education: { _id: id } },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Education details deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting education details:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

@@ -11,7 +11,7 @@ import { AppContext } from "../context/appContext";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
-const ConfirmModel = () => {
+const DelEduConModel = () => {
   const { confirmModel, setConfirmModel, backendUrl, user, userToken } =
     useContext(AppContext);
 
@@ -20,7 +20,7 @@ const ConfirmModel = () => {
     try {
       NProgress.start();
       const { data } = await axios.delete(
-        backendUrl + `/api/users/delete-experience/${confirmModel}`,
+        backendUrl + `/api/users/delete-education/${confirmModel}`,
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -32,7 +32,7 @@ const ConfirmModel = () => {
         window.location.reload();
       }
     } catch (error) {
-      toast.error("An error occurred while deleteing education details.");
+      toast.error("An error occurred while deleting education details.");
       console.log(error);
     } finally {
       NProgress.done();
@@ -90,4 +90,4 @@ const ConfirmModel = () => {
   );
 };
 
-export default ConfirmModel;
+export default DelEduConModel;

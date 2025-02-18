@@ -10,10 +10,20 @@ router.put(
   protectUser,
   userController.updateJobExperience
 );
+router.put(
+  "/edit-education/:id",
+  protectUser,
+  userController.updateUserEducation
+);
 router.delete(
   "/delete-experience/:id",
   protectUser,
   userController.deleteJobExperience
+);
+router.delete(
+  "/delete-education/:id",
+  protectUser,
+  userController.deleteUserEducation
 );
 router.post("/add-experience", protectUser, userController.addJobExperience);
 router.post("/add-education", protectUser, userController.addEducation);
@@ -40,6 +50,11 @@ router.get(
   "/profile-experience/:id",
   protectUser,
   userController.getExperienceById
+);
+router.get(
+  "/profile-education/:id",
+  protectUser,
+  userController.getEducationById
 );
 router.get("/user", protectUser, userController.getUserData);
 module.exports = router;

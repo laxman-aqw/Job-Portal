@@ -254,7 +254,7 @@ const ProfilePage = () => {
                       {userToken && (
                         <button
                           onClick={() => {
-                            navigate(`/edit-experience/${edu._id}`);
+                            navigate(`/edit-education/${edu._id}`);
                             scrollTo(0, 0);
                           }} // Adjust the link to your edit profile route
                           className=" absolute  right-1 top-0 cursor-pointer flex py-1 items-center gap-2 hover:scale-105 px-4 text-indigo-600 rounded-lg transition-all"

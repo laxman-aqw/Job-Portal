@@ -26,6 +26,7 @@ router.delete(
   userController.deleteUserEducation
 );
 router.post("/add-experience", protectUser, userController.addJobExperience);
+router.post("/add-skill", protectUser, userController.addSkill);
 router.post("/add-education", protectUser, userController.addEducation);
 router.get("/applications", protectUser, userController.getUserAppliedJobs);
 router.put(

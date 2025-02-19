@@ -671,3 +671,47 @@ exports.deleteUserEducation = async (req, res) => {
     });
   }
 };
+
+exports.addSkill = async (req, res) => {
+  const userId = req.user._id.toString();
+  let { skill } = req.body;
+  if (!skill) {
+    console.log("skill cannot be empty!");
+    return res.status(400).json({
+      success: false,
+      message: "Skill cannot be empty",
+    });
+  }
+
+  skill = skill.trim();
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.skills.some((s) => s.toLowerCase() === skill.toLowerCase())) {
+      return res.status(400).json({
+        success: false,
+        message: "Skill already exists",
+      });
+    }
+
+    user.skills.push(skill);
+    await user.save();
+    return res.status(201).json({
+      success: true,
+      message: "New skill added successfully",
+      data: user.skills,
+    });
+  } catch (error) {
+    console.error("Error adding new skill:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};

@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
       grade: Number,
     },
   ],
-  skills: [String],
+  skills: [{ type: String }],
   savedJobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
   notifications: [
     {

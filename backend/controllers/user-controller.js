@@ -672,43 +672,56 @@ exports.deleteUserEducation = async (req, res) => {
   }
 };
 
-exports.addSkill = async (req, res) => {
+exports.updateSkills = async (req, res) => {
   const userId = req.user._id.toString();
-  let { skill } = req.body;
-  if (!skill) {
-    console.log("skill cannot be empty!");
+  let { skills } = req.body;
+
+  if (!skills || !Array.isArray(skills) || skills.length === 0) {
+    console.log("Skills cannot be empty!");
     return res.status(400).json({
       success: false,
-      message: "Skill cannot be empty",
+      message: "Skills must be provided as a non-empty array",
     });
   }
 
-  skill = skill.trim();
+  // Trim each skill in the array
+  skills = skills.map((skill) => skill.trim()).filter((skill) => skill !== "");
 
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    if (user.skills.some((s) => s.toLowerCase() === skill.toLowerCase())) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "Skill already exists",
+        message: "User not found",
       });
     }
 
-    user.skills.push(skill);
+    // Check if the new skills are different from the existing ones
+    const existingSkills = user.skills.map((s) => s.toLowerCase());
+    const newSkillsLower = skills.map((s) => s.toLowerCase());
+
+    // Check if there are no changes
+    if (
+      existingSkills.length === newSkillsLower.length &&
+      existingSkills.every((skill) => newSkillsLower.includes(skill))
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "No changes detected in the skills",
+      });
+    }
+
+    // Update user's skills
+    user.skills = skills;
     await user.save();
-    return res.status(201).json({
+
+    return res.status(200).json({
       success: true,
-      message: "New skill added successfully",
+      message: "Skills updated successfully",
       data: user.skills,
     });
   } catch (error) {
-    console.error("Error adding new skill:", error);
+    console.error("Error updating skills:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

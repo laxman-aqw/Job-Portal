@@ -17,7 +17,7 @@ export const AppContextProvider = (props) => {
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
   const [confirmModel, setConfirmModel] = useState(null);
   const [showUserLogin, setShowUserLogin] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const [companyToken, setCompanyToken] = useState(null);
@@ -104,6 +104,8 @@ export const AppContextProvider = (props) => {
     isSearched,
     setIsSearched,
     jobs,
+    isModalOpen,
+    setIsModalOpen,
     setExperiences,
     setJobs,
     showRecruiterLogin,

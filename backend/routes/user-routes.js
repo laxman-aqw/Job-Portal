@@ -26,7 +26,7 @@ router.delete(
   userController.deleteUserEducation
 );
 router.post("/add-experience", protectUser, userController.addJobExperience);
-router.post("/add-skill", protectUser, userController.addSkill);
+router.put("/update-skills", protectUser, userController.updateSkills);
 router.post("/add-education", protectUser, userController.addEducation);
 router.get("/applications", protectUser, userController.getUserAppliedJobs);
 router.put(
@@ -47,6 +47,7 @@ router.put(
 router.post("/check-email", userController.validateEmail);
 router.post("/login", userController.loginUser);
 router.get("/profile/:id", userController.getProfile);
+// router.get("/skills", protectUser, userController.getSkills);
 router.get(
   "/profile-experience/:id",
   protectUser,

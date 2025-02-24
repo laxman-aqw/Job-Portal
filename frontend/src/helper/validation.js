@@ -102,8 +102,11 @@ export const validatePhoneNumber = (phoneNumber) => {
 };
 
 export const validateDisplayEmail = (email) => {
-  if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-    return "Invalid email address!";
+  if (
+    email &&
+    !/^[A-Z0-9._%+-]+@gmail\.com$/i.test(email) // Ensures it's a Gmail address
+  ) {
+    return "Invalid Gmail address!";
   }
   return null; // No error or email is not provided
 };

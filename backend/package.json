@@ -24,9 +24,12 @@
     "express": "^4.21.2",
     "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.2",
+    "mailgen": "^2.0.29",
     "mongoose": "^8.9.5",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
+    "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "svix": "^1.45.1"

@@ -14,7 +14,17 @@ const NavBar = () => {
     <nav className="shadow-md py-4 mx-2 mb-2 rounded-xl bg-white sticky z-10 top-0">
       <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
         {/* Logo */}
-        <Link className="flex items-center cursor-pointer" to="/">
+        <Link
+          className="flex items-center cursor-pointer"
+          to="/"
+          onClick={(e) => {
+            if (window.location.pathname === "/") {
+              e.preventDefault(); // Prevent default navigation
+
+              window.location.reload(); // Force page reload
+            }
+          }}
+        >
           <span className="text-2xl font-bold text-gray-800">Rojgar</span>
           <span className="text-2xl font-bold bg-gradient-to-r from-sky-500 to-sky-700 bg-clip-text text-transparent">
             Chowk

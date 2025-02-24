@@ -6,48 +6,13 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import { toast } from "react-toastify";
+
 const EditSkillsModal = ({ userId, onClose, onSave }) => {
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [loading, setLoading] = useState(true);
-  const { user, backendUrl, userToken, isModalOpen, setIsModalOpen } =
-    useContext(AppContext);
-
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-
-    if (skills.length === 0) {
-      toast.error("Please add at least one skill.");
-      return;
-    }
-
-    try {
-      NProgress.start();
-      setLoading(true);
-
-      const { data } = await axios.put(
-        backendUrl + "/api/users/update-skills",
-        { skills }, // Send the skills array as the body
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.success) {
-        toast.success(data.message);
-        setIsModalOpen(false);
-      }
-    } catch (error) {
-      toast.error("An error occurred while updating skills.");
-      console.log(error);
-    } finally {
-      NProgress.done();
-      setLoading(false);
-    }
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, backendUrl, userToken, setUser } = useContext(AppContext);
 
   useEffect(() => {
     if (user?.skills) {
@@ -58,21 +23,57 @@ const EditSkillsModal = ({ userId, onClose, onSave }) => {
 
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills([...skills, newSkill.trim()]);
+      setSkills((prev) => [...prev, newSkill.trim()]);
       setNewSkill("");
     }
   };
 
   const removeSkill = (skillToRemove) => {
-    setSkills(skills.filter((skill) => skill !== skillToRemove));
+    setSkills((prev) => prev.filter((skill) => skill !== skillToRemove));
   };
 
-  const saveSkills = async () => {
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    // Ensure the input field is empty before submitting
+    if (newSkill.trim()) {
+      toast.error("Please add the skill before submitting.");
+      return;
+    }
+
+    if (skills.length === 0) {
+      toast.error("Please add at least one skill.");
+      return;
+    }
+
     try {
-      await axios.put(`/api/users/${userId}/skills`, { skills });
-      onSave(skills);
+      NProgress.start();
+      setIsSubmitting(true);
+
+      const { data } = await axios.put(
+        `${backendUrl}/api/users/update-skills`,
+        { skills },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        setUser((prevUser) => ({ ...prevUser, skills })); // Update global user state
+        setNewSkill(""); // Clear input field
+        onSave(skills); // Update parent state if needed
+        onClose();
+      }
     } catch (error) {
-      console.error("Error saving skills:", error);
+      toast.error("An error occurred while updating skills.");
+      console.error(error);
+    } finally {
+      NProgress.done();
+      setIsSubmitting(false);
     }
   };
 
@@ -106,7 +107,7 @@ const EditSkillsModal = ({ userId, onClose, onSave }) => {
             placeholder="Add a skill"
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && addSkill()}
+            onKeyUp={(e) => e.key === "Enter" && addSkill()}
           />
           <button
             onClick={addSkill}
@@ -142,9 +143,14 @@ const EditSkillsModal = ({ userId, onClose, onSave }) => {
           </button>
           <button
             onClick={onSubmitHandler}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-md"
+            disabled={isSubmitting || skills.length === 0}
+            className={`px-4 py-2 rounded-lg transition shadow-md ${
+              isSubmitting || skills.length === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+            }`}
           >
-            Save Changes
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>

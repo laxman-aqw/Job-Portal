@@ -8,6 +8,8 @@ const connectCloudinary = require("./config/cloudinary");
 require("dotenv").config();
 const jobRoutes = require("./routes/job-routes");
 const userRoutes = require("./routes/user-routes");
+const mailerRoutes = require("./routes/mailer");
+const otpRoutes = require("./routes/OTP-routes");
 
 const port = process.env.PORT;
 app.use(
@@ -21,6 +23,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
+app.use("/api", mailerRoutes);
+app.use("/api/otp", otpRoutes);
 
 const startServer = async () => {
   try {

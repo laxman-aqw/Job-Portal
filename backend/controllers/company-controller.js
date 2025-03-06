@@ -7,7 +7,7 @@ const User = require("../models/User");
 const Job = require("../models/Job");
 const mongoose = require("mongoose");
 const Application = require("../models/Application");
-//create a company
+const nodemailer = require("nodemailer");
 exports.registerCompany = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -44,6 +44,24 @@ exports.registerCompany = async (req, res) => {
       name: newCompany.name,
       image: newCompany.image,
     };
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const message = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "New registration",
+      text: "You have successfully registered!",
+      html: `<p>You have successfully registered!</p>`,
+    };
+
+    await transporter.sendMail(message);
 
     res.status(201).json({
       success: true,

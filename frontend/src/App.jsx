@@ -35,6 +35,7 @@ import ConfirmModel from "./components/ConfirmationModel";
 import AddEducation from "./components/AddEducation";
 import EditEducation from "./components/EditEducation";
 import DelEduConModel from "./components/DelEduConModel";
+import VerifyOtp from "./pages/VerifyOtp";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -60,6 +61,7 @@ const App = () => {
           element={companyValidToken ? <Navigate to="/dashboard" /> : <Home />}
         />
         <Route path="/profile/:id" element={<ProfilePage></ProfilePage>} />
+        <Route path="/verifyOtp" element={<VerifyOtp></VerifyOtp>} />
         <Route
           path="/edit-experience/:id"
           element={

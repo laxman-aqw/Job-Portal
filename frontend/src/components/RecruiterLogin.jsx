@@ -111,23 +111,18 @@ const RecruiterLogin = () => {
         formData.append("password", password);
         formData.append("image", image);
         NProgress.start();
-        const { data, message } = await axios.post(
+        const { data } = await axios.post(
           backendUrl + "/api/company/register",
           formData
         );
         if (data.success) {
-          await axios.post(backendUrl + "/api/registerMail", {
-            name,
-            email,
-            text: message,
-          });
           toast.success("Company registered successfully!");
           console.log("data succeed");
           setCompany(data.company);
           setCompanyToken(data.token);
           localStorage.setItem("companyToken", data.token);
           setShowRecruiterLogin(false);
-          navigate("/dashboard");
+          navigate("/verifyOtp");
         }
       }
     } catch (error) {

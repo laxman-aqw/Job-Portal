@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const otpGenerator = require("otp-generator");
-const OTP = require("../models/OTP"); // Import the OTP model
+const OTP = require("../models/OTP");
 const nodemailer = require("nodemailer");
 
 exports.generateOTP = async (req, res) => {

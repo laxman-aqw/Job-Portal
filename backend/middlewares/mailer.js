@@ -23,76 +23,32 @@ exports.registerMail = async (req, res) => {
   try {
     const { name, email, text, subject } = req.body;
 
-    // HTML content for the email
+    // HTML content for the email using TailwindCSS
     const emailBody = `
       <html>
         <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background-color: #f4f7fc;
-              color: #333333;
-              padding: 20px;
-            }
-            .email-container {
-              background-color: #ffffff;
-              border-radius: 10px;
-              padding: 30px;
-              width: 80%;
-              max-width: 600px;
-              margin: 0 auto;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
-            .email-header {
-              text-align: center;
-              margin-bottom: 30px;
-            }
-            .email-header h1 {
-              color: #4A90E2;
-            }
-            .email-content {
-              line-height: 1.6;
-            }
-            .email-footer {
-              margin-top: 30px;
-              font-size: 14px;
-              text-align: center;
-              color: #777777;
-            }
-            .button {
-              display: inline-block;
-              padding: 15px 30px;
-              background-color: #22BC66;
-              color: white;
-              font-size: 16px;
-              text-decoration: none;
-              border-radius: 5px;
-              text-align: center;
-              margin-top: 20px;
-            }
-            .button:hover {
-              background-color: #1e9a52;
-            }
-          </style>
+          <script src="https://cdn.tailwindcss.com"></script>
         </head>
-        <body>
-          <div class="email-container">
-            <div class="email-header">
-              <h1>Welcome to RojgarChowk, ${name}!</h1>
+        <body class="bg-gray-100 text-gray-800 py-10">
+          <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6">
+            <div class="text-center mb-6">
+              <h1 class="text-2xl font-bold text-blue-600">Welcome to RojgarChowk, ${name}!</h1>
             </div>
-            <div class="email-content">
+            <div class="text-lg leading-relaxed">
               <p>${
                 text ||
                 "We are excited to have you join us. Let's get you started!"
               }</p>
-              <p>To begin, simply click the button below to get started:</p>
-              <a href="http://localhost:5173/" class="button">Get Started</a>
+              <p class="mt-4">Click the button below to get started:</p>
+              <div class="text-center mt-6">
+                <a href="http://localhost:5173/" class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-green-600">Get Started</a>
+              </div>
             </div>
-            <div class="email-footer">
-              <p>If you have any questions or need assistance, feel free to contact us at any time.</p>
-              <p>Need help? <a href="mailto:support@rojgarchowk.com">Contact us</a>.</p>
-              <p>Best regards,</p>
-              <p>The RojgarChowk Team</p>
+            <div class="mt-6 text-center text-gray-500 text-sm">
+              <p>If you have any questions or need assistance, feel free to contact us.</p>
+              <p>Need help? <a href="mailto:support@rojgarchowk.com" class="text-blue-500 hover:underline">Contact us</a>.</p>
+              <p class="mt-4">Best regards,</p>
+              <p class="font-semibold">The RojgarChowk Team</p>
             </div>
           </div>
         </body>
@@ -118,7 +74,7 @@ exports.registerMail = async (req, res) => {
     const message = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: subject || "Registration successful",
+      subject: subject || "Registration Successful",
       text: emailText,
       html: emailBody,
     };

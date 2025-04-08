@@ -162,7 +162,7 @@ const ManageJobs = () => {
           <div className="flex item-center justify-end">
             <button
               onClick={() => navigate("/dashboard/add-job")}
-              className="text-white px-5 cursor-pointer py-2 rounded-md hover:scale-105  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
+              className="text-white px-5 my-5 cursor-pointer py-2 rounded-md hover:scale-105  bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300"
             >
               Add Job
             </button>

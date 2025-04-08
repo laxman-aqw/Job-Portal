@@ -12,7 +12,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { CiLinkedin } from "react-icons/ci";
 import { HiDocumentArrowDown } from "react-icons/hi2";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import EditSkillsModal from "./EditSkills";
 

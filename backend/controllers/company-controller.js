@@ -8,7 +8,7 @@ const Job = require("../models/Job");
 const mongoose = require("mongoose");
 const Application = require("../models/Application");
 const nodemailer = require("nodemailer");
-exports.registerCompany = async (req, res) => {
+exports.registerCompany = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const imageFile = req.file;
@@ -31,48 +31,13 @@ exports.registerCompany = async (req, res) => {
 
     const imageUpload = await cloudinary.uploader.upload(imageFile.path);
 
-    const newCompany = await Company.create({
+    req.verifiedData = {
       name,
       email,
       password: hashedPassword,
       image: imageUpload.secure_url,
-    });
-
-    const payload = {
-      id: newCompany._id,
-      email: newCompany.email,
-      name: newCompany.name,
-      image: newCompany.image,
     };
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const message = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "New registration",
-      text: "You have successfully registered!",
-      html: `<p>You have successfully registered!</p>`,
-    };
-
-    await transporter.sendMail(message);
-
-    res.status(201).json({
-      success: true,
-      message: "Company registered successfully!",
-      company: {
-        name: newCompany.name,
-        email: newCompany.email,
-        image: newCompany.image,
-      },
-      token: generateToken(payload),
-    });
+    next();
   } catch (error) {
     console.error("Error checking existing company:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

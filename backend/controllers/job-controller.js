@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Job = require("../models/Job");
 const Company = require("../models/Company");
+const JobCategory = require("../models/JobCategory");
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -97,6 +98,20 @@ exports.updateJob = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating job:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+exports.addJobCategory = async (req, res) => {
+  const { category, text } = req.body;
+  try {
+    const newCategory = new JobCategory({ category, text });
+    await newCategory.save();
+    res
+      .status(201)
+      .json({ success: true, message: "New Job Category added succesfully" });
+  } catch (e) {
+    console.log(e);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

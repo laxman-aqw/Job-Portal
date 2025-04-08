@@ -7,7 +7,7 @@ const cloudinary = require("cloudinary").v2;
 const generateToken = require("../utils/generateToken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const e = require("express");
+// const e = require("express");
 require("dotenv").config();
 
 //register user

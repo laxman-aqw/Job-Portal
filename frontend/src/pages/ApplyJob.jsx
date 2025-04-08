@@ -164,16 +164,21 @@ const ApplyJob = () => {
 
               {/* Apply and Date */}
               <div className=" md:mt-0 text-left ">
-                <button
-                  onClick={applyHandlers}
-                  className={`px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 ${
-                    isAlreadyApplied
-                      ? "opacity-50 cursor-not-allowed "
-                      : "cursor-pointer hover:-translate-y-1"
-                  }`}
-                >
-                  {isAlreadyApplied ? "Applied" : "Apply Now"}
-                </button>
+                {moment(jobData.deadline).isBefore(moment()) ? (
+                  <span></span>
+                ) : (
+                  <button
+                    onClick={applyHandlers}
+                    className={`px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 ${
+                      isAlreadyApplied
+                        ? "opacity-50 cursor-not-allowed "
+                        : "cursor-pointer hover:-translate-y-1"
+                    }`}
+                  >
+                    {isAlreadyApplied ? "Applied" : "Apply Now"}
+                  </button>
+                )}
+
                 {/* posted date */}
                 <p className="mt-4 font-medium text-gray-500 text-sm">
                   Posted: {moment(jobData.createdAt).format("YYYY-MM-DD")}
@@ -203,17 +208,21 @@ const ApplyJob = () => {
                   dangerouslySetInnerHTML={{ __html: jobData.description }}
                 />
               </div>
-              <button
-                onClick={applyHandlers}
-                style={{ textTransform: "none" }}
-                className={`mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-transform-none ${
-                  isAlreadyApplied
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
-              >
-                {isAlreadyApplied ? "Applied" : "Apply Now"}
-              </button>
+              {moment(jobData.deadline).isBefore(moment()) ? (
+                <span></span>
+              ) : (
+                <button
+                  onClick={applyHandlers}
+                  style={{ textTransform: "none" }}
+                  className={`mt-10 px-6 py-3  text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-500  active:scale-95 transition duration-300 text-transform-none ${
+                    isAlreadyApplied
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                >
+                  {isAlreadyApplied ? "Applied" : "Apply Now"}
+                </button>
+              )}
             </div>
 
             {/* Right section more jobs */}

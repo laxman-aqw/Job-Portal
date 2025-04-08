@@ -116,11 +116,11 @@ const RecruiterLogin = () => {
           formData
         );
         if (data.success) {
-          toast.success("Company registered successfully!");
+          // toast.success("Company registered successfully!");
           console.log("data succeed");
-          setCompany(data.company);
-          setCompanyToken(data.token);
-          localStorage.setItem("companyToken", data.token);
+          // setCompany(data.company);
+          // setCompanyToken(data.token);
+          // localStorage.setItem("companyToken", data.token);
           setShowRecruiterLogin(false);
           navigate("/verifyOtp");
         }

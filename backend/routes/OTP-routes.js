@@ -3,7 +3,7 @@ const router = express.Router();
 const { generateOTP, verifyOTP } = require("../controllers/authController"); // Import the controller functions
 
 // Route to generate OTP
-router.post("/generateOTP/:email", generateOTP);
-router.post("/verifyOTP/:email", verifyOTP);
+// router.post("/generateOTP/:email", generateOTP);
+router.post("/verifyOTP", verifyOTP);
 
 module.exports = router;

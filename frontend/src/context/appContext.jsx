@@ -19,7 +19,6 @@ export const AppContextProvider = (props) => {
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
   const [companyToken, setCompanyToken] = useState(null);
   const [userToken, setUserToken] = useState(null);
 

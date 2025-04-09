@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Job = require("../models/Job");
 const Company = require("../models/Company");
 const JobRoleCategory = require("../models/JobRoleCategory");
+const { classifyJob } = require("../utils/naiveBayes");
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -107,14 +108,36 @@ exports.addJobRoleCategory = async (req, res) => {
   try {
     const newRoleCategory = new JobRoleCategory({ category, text });
     await newRoleCategory.save();
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "New Job Role Category added succesfully",
-      });
+    res.status(201).json({
+      success: true,
+      message: "New Job Role Category added succesfully",
+    });
   } catch (e) {
     console.log(e);
     res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+exports.recommendJobs = async (req, res) => {
+  const { text } = req.body;
+  try {
+    const scores = classifyJob(text);
+    const sortedCategories = Object.keys(scores).sort(
+      (a, b) => scores[b] - scores[a]
+    );
+    const topCategories = sortedCategories.slice(0, 3);
+
+    const recommendedJobs = await Job.find({
+      roleCategory: { $in: topCategories },
+      visible: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "recommended jobs fetched",
+      jobs: recommendedJobs,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, message: "Internal ServerError" });
   }
 };

@@ -8,6 +8,7 @@ router.get("/", jobController.getJobs);
 router.get("/:id", jobController.getJob);
 router.put("/update-job/:id", protectCompany, jobController.updateJob);
 router.post("/job-category", jobController.addJobRoleCategory);
+router.post("/recommend-jobs", jobController.recommendJobs);
 router.post("/classify-job", classifierController.classifyText);
 router.post("/train-job", classifierController.trainModel);
 module.exports = router;

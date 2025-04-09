@@ -120,6 +120,7 @@ exports.addJobRoleCategory = async (req, res) => {
 
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
+  console.log(text);
   try {
     const scores = classifyJob(text);
     const sortedCategories = Object.keys(scores).sort(

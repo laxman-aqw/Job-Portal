@@ -53,4 +53,27 @@ function classifyJob(text) {
   return scores; // Return all scores
 }
 
+// function classifyJob(text) {
+//   const words = text.toLowerCase().split(/\s+/);
+//   let maxCategory = null;
+//   let maxProbability = -Infinity;
+
+//   Object.keys(categoryCounts).forEach((category) => {
+//     let probability = Math.log(categoryCounts[category] / totalWords); // Prior probability
+
+//     words.forEach((word) => {
+//       const wordCount = categoryWordCounts[category][word] || 0;
+//       const wordProbability = Math.log((wordCount + 1) / (totalWords + 1)); // Laplace smoothing
+//       probability += wordProbability;
+//     });
+
+//     if (probability > maxProbability) {
+//       maxProbability = probability;
+//       maxCategory = category;
+//     }
+//   });
+
+//   return maxCategory;
+// }
+
 module.exports = { trainNaiveBayes, classifyJob };

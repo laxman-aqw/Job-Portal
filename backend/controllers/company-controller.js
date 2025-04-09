@@ -125,10 +125,26 @@ exports.getCompanyData = async (req, res) => {
 };
 
 exports.postJob = async (req, res) => {
-  const { title, description, level, deadline, location, salary, category } =
-    req.body;
+  const {
+    title,
+    description,
+    level,
+    deadline,
+    location,
+    salary,
+    category,
+    roleCategory,
+  } = req.body;
 
-  if (!title || !level || !description || !location || !salary || !category) {
+  if (
+    !title ||
+    !level ||
+    !description ||
+    !location ||
+    !salary ||
+    !category ||
+    !roleCategory
+  ) {
     return res.status(400).json({
       success: false,
       message: "All fields are required",
@@ -147,6 +163,7 @@ exports.postJob = async (req, res) => {
       level,
       category,
       companyId,
+      roleCategory,
     });
 
     await Company.findByIdAndUpdate(

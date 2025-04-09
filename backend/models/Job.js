@@ -3,10 +3,10 @@ const Company = require("./Company");
 const jobSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-
     description: { type: String, required: true },
     location: { type: String, required: true },
     category: { type: String, required: true },
+    roleCategory: { type: String, required: true },
     level: { type: String, required: true },
     salary: { type: Number, required: true },
     deadline: {

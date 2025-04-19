@@ -1,6 +1,5 @@
 // utils/naiveBayes.js
 const _ = require("lodash");
-
 let categoryWordCounts = {};
 let categoryCounts = {};
 let totalWords = 0;

@@ -14,6 +14,8 @@ const otpRoutes = require("./routes/OTP-routes");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT;
+const { trainNaiveBayes } = require("./utils/naiveBayes");
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -49,7 +51,8 @@ app.use("/api/otp", otpRoutes);
 const startServer = async () => {
   try {
     await connectCloudinary(); // Ensure Cloudinary is connected
-    await connectDB(); // Ensure DB is connected
+    await connectDB();
+    await trainNaiveBayes();
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });

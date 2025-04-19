@@ -129,7 +129,9 @@ exports.recommendJobs = async (req, res) => {
     const topCategories = sortedCategories.slice(0, 3);
 
     const recommendedJobs = await Job.find({
-      roleCategory: { $in: topCategories },
+      roleCategory: {
+        $in: topCategories.map((category) => new RegExp(category, "i")),
+      },
       visible: true,
     });
     res.status(200).json({

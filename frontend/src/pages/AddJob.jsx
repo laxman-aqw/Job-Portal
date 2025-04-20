@@ -27,7 +27,12 @@ const AddJob = () => {
   const [roleCategory, setRoleCategory] = useState("");
   const [level, setLevel] = useState("Beginner");
   const [salary, setSalary] = useState();
-  const [deadline, setDeadline] = useState(0);
+  const sevenDaysFromNow = () => {
+    const now = new Date();
+    now.setDate(now.getDate() + 7);
+    return now.getTime(); // returns timestamp in milliseconds
+  };
+  const [deadline, setDeadline] = useState(() => sevenDaysFromNow());
   const [loading, setLoading] = useState(false);
   const { backendUrl, companyToken } = useContext(AppContext);
 

@@ -13,6 +13,7 @@ export const AppContextProvider = (props) => {
   const [isSearched, setIsSearched] = useState(false);
 
   const [jobs, setJobs] = useState([]);
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
 
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
   const [confirmModel, setConfirmModel] = useState(null);
@@ -37,6 +38,24 @@ export const AppContextProvider = (props) => {
       }
     } catch (error) {
       console.log("Error fetching jobs:", error);
+      toast.error(error.message);
+    }
+  };
+  const fetchRecommendedJobs = async (text) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/job/recommend-jobs",
+        {
+          text,
+        }
+      );
+      if (data.success) {
+        setRecommendedJobs(data.jobs);
+      } else {
+        console.log("error fetching recommended jobs");
+      }
+    } catch (error) {
+      console.log("Error fetching recommended jobs:", error);
       toast.error(error.message);
     }
   };
@@ -125,6 +144,9 @@ export const AppContextProvider = (props) => {
     fetchUserData,
     fetchUserApplications,
     fetchCompanyData,
+    recommendedJobs,
+    setRecommendedJobs,
+    fetchRecommendedJobs,
   };
 
   useEffect(() => {
@@ -132,8 +154,15 @@ export const AppContextProvider = (props) => {
     const storedCompanyToken = localStorage.getItem("companyToken");
     if (storedCompanyToken) {
       setCompanyToken(storedCompanyToken);
+      console.log("the company token is: " + companyToken);
+    } else {
+      console.log("no company token found");
     }
   }, [companyToken]);
+
+  // useEffect(() => {
+
+  // }, []);
 
   useEffect(() => {
     const storedUserToken = localStorage.getItem("userToken");

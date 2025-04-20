@@ -133,6 +133,9 @@ exports.recommendJobs = async (req, res) => {
         $in: topCategories.map((category) => new RegExp(category, "i")),
       },
       visible: true,
+    }).populate({
+      path: "companyId",
+      select: "-password",
     });
     res.status(200).json({
       success: true,

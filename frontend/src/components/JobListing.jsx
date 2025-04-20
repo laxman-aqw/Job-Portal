@@ -6,8 +6,14 @@ import JobCard from "./JobCard";
 import { FaAngleLeft } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa";
 const JobListing = () => {
-  const { isSearched, searchFilter, setSearchFilter, jobs } =
-    useContext(AppContext);
+  const {
+    isSearched,
+    searchFilter,
+    setSearchFilter,
+    jobs,
+    fetchRecommendedJobs,
+    recommendedJobs,
+  } = useContext(AppContext);
 
   const [showFilter, setShowFilter] = useState(false);
 
@@ -18,6 +24,7 @@ const JobListing = () => {
   const [selectedLocations, setSelectedLocations] = useState([]);
 
   const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const [text, setText] = useState("vue angular html css bootstrap");
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -33,6 +40,11 @@ const JobListing = () => {
         : [...prev, location]
     );
   };
+
+  useEffect(() => {
+    fetchRecommendedJobs(text);
+    console.log("the recommended jobs state is: ", recommendedJobs);
+  }, []);
 
   useEffect(() => {
     const matchesCategory = (job) =>
@@ -184,70 +196,91 @@ const JobListing = () => {
           </ul>
         </div>
       </div>
-
-      {/* Job listing */}
-      <section className="w-full lg:w-3/4 text-gray-800 max-lg:px-4">
-        <h3 className="font-medium text-3xl py-2" id="job-list">
-          Latest Jobs
-        </h3>
-        <p className="mb-8">Get your desired job from </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredJobs
-            .slice((currentPage - 1) * 12, currentPage * 12)
-            .map((job, index) => (
-              <JobCard key={index} job={job}></JobCard>
-            ))}
-        </div>
-
-        {/* pagination */}
-        {filteredJobs.length > 0 && (
-          <div className="flex items-center justify-center space-x-2 mt-6">
-            {/* Previous Button */}
-            <button
-              onClick={() => {
-                setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-                window.scrollTo(0, 0);
-              }}
-              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
-            >
-              <FaAngleLeft />
-            </button>
-
-            {/* Page Numbers */}
-            {Array.from({ length: Math.ceil(filteredJobs.length / 12) }).map(
-              (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setCurrentPage(index + 1);
-                    window.scrollTo(0, 0);
-                  }}
-                  className={`flex hover:scale-120 items-center justify-center w-8 h-8 rounded-full transition ${
-                    currentPage === index + 1
-                      ? "bg-blue-100 text-sky-700"
-                      : "text-gray-500 hover:bg-gray-100"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
-
-            {/* Next Button */}
-            <button
-              onClick={() => {
-                setCurrentPage((prev) =>
-                  prev < Math.ceil(filteredJobs.length / 12) ? prev + 1 : prev
-                );
-                window.scrollTo(0, 0);
-              }}
-              className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
-            >
-              <FaAngleRight />
+      <div className="w-full lg:w-3/4">
+        <section className="w-full text-gray-800 max-lg:px-4 bg-gray-100 p-2 rounded-2xl ">
+          <h3 className="font-medium text-3xl py-2 " id="job-list">
+            Top 3 Recommendations
+          </h3>
+          <p className="mb-4">Jobs recommended to you </p>
+          <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {recommendedJobs
+              .slice((currentPage - 1) * 3, currentPage * 3)
+              .map((job, index) => (
+                <JobCard key={index} job={job}></JobCard>
+              ))}
+          </div>
+          <div className="flex justify-center mt-4">
+            <button className="border-b-2 font-medium cursor-pointer px-4 my-2 hover:scale-105 transition">
+              View More Recommended Jobs For You →
             </button>
           </div>
-        )}
-      </section>
+        </section>
+
+        {/* overall job listing */}
+        <section className="w-full text-gray-800 max-lg:px-4 py-4">
+          <h3 className="font-medium text-3xl py-2" id="job-list">
+            Latest Jobs
+          </h3>
+          <p className="mb-8">Get your desired job from </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {filteredJobs
+              .slice((currentPage - 1) * 6, currentPage * 6)
+              .map((job, index) => (
+                <JobCard key={index} job={job}></JobCard>
+              ))}
+          </div>
+
+          {/* pagination */}
+          {filteredJobs.length > 0 && (
+            <div className="flex items-center justify-center space-x-2 mt-6">
+              {/* Previous Button */}
+              <button
+                onClick={() => {
+                  setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+                  window.scrollTo(0, 0);
+                }}
+                className="flex items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition cursor-pointer"
+              >
+                <FaAngleLeft />
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: Math.ceil(filteredJobs.length / 6) }).map(
+                (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCurrentPage(index + 1);
+                      window.scrollTo(0, 0);
+                    }}
+                    className={`flex cursor-pointer hover:scale-120 items-center justify-center w-8 h-8 rounded-full transition  ${
+                      currentPage === index + 1
+                        ? "bg-blue-100 text-sky-700"
+                        : "text-gray-500 hover:bg-gray-100"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                )
+              )}
+
+              {/* Next Button */}
+              <button
+                onClick={() => {
+                  setCurrentPage((prev) =>
+                    prev < Math.ceil(filteredJobs.length / 12) ? prev + 1 : prev
+                  );
+                  window.scrollTo(0, 0);
+                }}
+                className="flex cursor-pointer items-center justify-center w-8 h-8 text-gray-500 bg-gray-100 rounded-full hover:bg-sky-700 hover:text-white transition"
+              >
+                <FaAngleRight />
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+      {/* recommended Job listing */}
     </div>
   );
 };

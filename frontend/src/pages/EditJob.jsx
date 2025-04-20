@@ -25,6 +25,7 @@ const EditJob = () => {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("Kathmandu");
   const [category, setCategory] = useState("IT");
+  const [roleCategory, setRoleCategory] = useState("");
   const [level, setLevel] = useState("Beginner");
   const [salary, setSalary] = useState();
   const [deadline, setDeadline] = useState(0);
@@ -75,7 +76,9 @@ const EditJob = () => {
           description,
           salary,
           category,
+          roleCategory,
           level,
+          deadline,
           location,
         },
         {
@@ -118,6 +121,9 @@ const EditJob = () => {
     }
     if (jobData?.category) {
       setCategory(jobData.category);
+    }
+    if (jobData?.roleCategory) {
+      setRoleCategory(jobData.roleCategory);
     }
     if (jobData?.location) {
       setLocation(jobData.location);
@@ -173,6 +179,20 @@ const EditJob = () => {
           value={description}
           onChange={setDescription}
           className="h-auto border border-gray-300 rounded-md"
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-gray-600 font-medium mb-2" htmlFor="title">
+          Job Role Category
+        </label>
+        <input
+          id="roleCategory"
+          type="text"
+          placeholder="Enter job role category"
+          onChange={(e) => setRoleCategory(e.target.value)}
+          value={roleCategory}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
 

@@ -1,17 +1,11 @@
-Full Stack Job Portal Website
+In this project, I have built a Full Stack Job Portal using the MERN stack — MongoDB, Express.js, React.js, and Node.js. This platform is designed to streamline the job search and application process for job seekers by offering the following core features:
 
-In this project, we will build a Full Stack Job Portal using MongoDB, Express, React, and Node.js. The platform will allow job seekers to:
+🔍 Key Features for Job Seekers:
+Search for Job Openings: Users can browse and search for jobs using various filters like location, category, and job type.
 
-- Search for job openings
-- Manage profile information
-- Apply for jobs online
-- Upload their resume to their profile
+Apply for Jobs Online: Applicants can apply for jobs directly through the portal with just a few clicks.
 
-Additionally, we will create a Recruiter Dashboard where recruiters can:
+Resume Upload & Profile Management: Job seekers can create their profile and upload their resumes to make applying faster and easier.
 
-- Post new job openings
-- Manage their published job posts
-- Review and manage applications
-- Accept or reject job applications
-- View applicants' resumes
-- Manage profile information
+🤖 Job Recommendation System:
+To enhance the user experience, I have implemented a naive algorithm to recommend jobs to users based on basic keyword matching from their uploaded resumes and profile information. This simple yet effective recommendation system helps users discover relevant opportunities without needing to search manually.

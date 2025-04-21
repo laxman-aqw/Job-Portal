@@ -6,7 +6,6 @@ const connectDB = require("./config/db");
 const companyRoutes = require("./routes/company-routes");
 const axios = require("axios");
 const connectCloudinary = require("./config/cloudinary");
-require("dotenv").config();
 const jobRoutes = require("./routes/job-routes");
 const userRoutes = require("./routes/user-routes");
 const mailerRoutes = require("./routes/mailer");

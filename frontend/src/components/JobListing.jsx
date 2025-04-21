@@ -24,7 +24,9 @@ const JobListing = () => {
   const [selectedLocations, setSelectedLocations] = useState([]);
 
   const [filteredJobs, setFilteredJobs] = useState(jobs);
-  const [text, setText] = useState("vue angular html css bootstrap");
+  const [text, setText] = useState(
+    "In this Back-End Developer role, you'll build and maintain the server-side architecture of web applications. You will be responsible for integrating front-end user interfaces with back-end systems, working with technologies like Node.js, Express, and databases such as MongoDB."
+  );
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>

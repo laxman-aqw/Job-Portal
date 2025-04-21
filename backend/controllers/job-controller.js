@@ -117,7 +117,6 @@ exports.addJobRoleCategory = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
   console.log(text);
@@ -126,24 +125,61 @@ exports.recommendJobs = async (req, res) => {
     const sortedCategories = Object.keys(scores).sort(
       (a, b) => scores[b] - scores[a]
     );
-    const topCategories = sortedCategories.slice(0, 3);
+    const topCategory = sortedCategories[0];
+    const secondCategory = sortedCategories[1];
+    const thirdCategory = sortedCategories[2];
 
-    const recommendedJobs = await Job.find({
+    let recommendedJobs = await Job.find({
       roleCategory: {
-        $in: topCategories.map((category) => new RegExp(category, "i")),
+        $in: [new RegExp(topCategory, "i")],
       },
       visible: true,
-    }).populate({
-      path: "companyId",
-      select: "-password",
-    });
+    })
+      .populate({
+        path: "companyId",
+        select: "-password ",
+      })
+      .sort({ relevanceScore: -1 });
+
+    if (recommendedJobs.length < 12) {
+      const secondCategoryJobs = await Job.find({
+        roleCategory: {
+          $in: [new RegExp(secondCategory, "i")],
+        },
+        visible: true,
+      })
+        .populate({
+          path: "companyId",
+          select: "-password ",
+        })
+        .sort({ relevanceScore: -1 });
+
+      recommendedJobs = [...recommendedJobs, ...secondCategoryJobs];
+
+      if (recommendedJobs.length < 12) {
+        const thirdCategoryJobs = await Job.find({
+          roleCategory: {
+            $in: [new RegExp(thirdCategory, "i")],
+          },
+          visible: true,
+        })
+          .populate({
+            path: "companyId",
+            select: "-password ",
+          })
+          .sort({ relevanceScore: -1 });
+
+        recommendedJobs = [...recommendedJobs, ...thirdCategoryJobs];
+      }
+    }
+
     res.status(200).json({
       success: true,
-      message: "recommended jobs fetched",
+      message: "Recommended jobs fetched",
       jobs: recommendedJobs,
     });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ success: false, message: "Internal ServerError" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

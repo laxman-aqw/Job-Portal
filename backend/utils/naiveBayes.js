@@ -4,17 +4,57 @@ let categoryWordCounts = {};
 let categoryCounts = {};
 let totalWords = 0;
 
+const stopwords = new Set([
+  "to",
+  "have",
+  "with",
+  "and",
+  "in",
+  "on",
+  "the",
+  "a",
+  "an",
+  "for",
+  "is",
+  "be",
+  "of",
+  "as",
+  "by",
+  "at",
+  "user",
+  "friendly",
+]);
+
+const synonyms = {
+  reactjs: "react",
+  "react.js": "react",
+  "redux.js": "redux",
+  js: "javascript",
+  nodejs: "node",
+  tailwind: "tailwindcss",
+  ux: "uiux",
+  ui: "uiux",
+  api: "backend",
+};
+
+function preprocess(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9+]/gi, " ")
+    .split(/\s+/)
+    .filter((word) => word && !stopwords.has(word))
+    .map((word) => synonyms[word] || word);
+}
+
 async function trainNaiveBayes() {
-  // Fetch training data from MongoDB
   const JobRoleCategory = require("../models/JobRoleCategory");
   const trainingData = await JobRoleCategory.find();
   categoryWordCounts = {};
   categoryCounts = {};
   totalWords = 0;
 
-  // Loop through training data to calculate word frequencies
   trainingData.forEach(({ text, category }) => {
-    const words = text.toLowerCase().split(/\s+/);
+    const words = preprocess(text);
 
     if (!categoryWordCounts[category]) {
       categoryWordCounts[category] = {};
@@ -32,7 +72,7 @@ async function trainNaiveBayes() {
   console.log("Training complete!");
 }
 
-// Classify a new job description
+// Classify
 function classifyJob(text) {
   const words = text.toLowerCase().split(/\s+/);
   const scores = {};
@@ -49,30 +89,7 @@ function classifyJob(text) {
     scores[category] = probability;
   });
 
-  return scores; // Return all scores
+  return scores;
 }
-
-// function classifyJob(text) {
-//   const words = text.toLowerCase().split(/\s+/);
-//   let maxCategory = null;
-//   let maxProbability = -Infinity;
-
-//   Object.keys(categoryCounts).forEach((category) => {
-//     let probability = Math.log(categoryCounts[category] / totalWords); // Prior probability
-
-//     words.forEach((word) => {
-//       const wordCount = categoryWordCounts[category][word] || 0;
-//       const wordProbability = Math.log((wordCount + 1) / (totalWords + 1)); // Laplace smoothing
-//       probability += wordProbability;
-//     });
-
-//     if (probability > maxProbability) {
-//       maxProbability = probability;
-//       maxCategory = category;
-//     }
-//   });
-
-//   return maxCategory;
-// }
 
 module.exports = { trainNaiveBayes, classifyJob };

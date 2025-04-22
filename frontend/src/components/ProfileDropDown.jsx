@@ -9,7 +9,7 @@ import "nprogress/nprogress.css";
 import "../custom/custom.css";
 import { toast } from "react-toastify";
 const ProfileDropdown = ({ user }) => {
-  console.log("The user is: ", user);
+  // console.log("The user is: ", user);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();

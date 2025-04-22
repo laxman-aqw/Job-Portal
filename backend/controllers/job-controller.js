@@ -3,6 +3,7 @@ const Job = require("../models/Job");
 const Company = require("../models/Company");
 const JobRoleCategory = require("../models/JobRoleCategory");
 const { classifyJob } = require("../utils/naiveBayes");
+const { fetchAndExtractText } = require("../utils/resumeExtraction");
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -117,9 +118,10 @@ exports.addJobRoleCategory = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
-  console.log(text);
+  // console.log(text);
   try {
     const scores = classifyJob(text);
     const sortedCategories = Object.keys(scores).sort(
@@ -181,5 +183,19 @@ exports.recommendJobs = async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+exports.parseResume = async (req, res) => {
+  const { pdfUrl } = req.body;
+  try {
+    const text = await fetchAndExtractText(pdfUrl);
+    res.status(200).json({
+      success: true,
+      message: "resume data parsed",
+      text,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };

@@ -10,6 +10,8 @@ export const AppContextProvider = (props) => {
     location: "",
   });
 
+  const [pdfUrl, setPdfUrl] = useState("");
+
   const [isSearched, setIsSearched] = useState(false);
 
   const [jobs, setJobs] = useState([]);
@@ -28,6 +30,24 @@ export const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [userApplications, setUserApplications] = useState(false);
   const [experiences, setExperiences] = useState([]);
+
+  //function to fetch user resume pdf data
+  const extractResumeText = async (pdfUrl) => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/job/parse-resume", {
+        pdfUrl,
+      });
+      if (data.success) {
+        console.log(data);
+      } else {
+        console.log("the data fetch is success");
+      }
+    } catch (error) {
+      console.log("Error fetching resume:", error);
+      toast.error(error.message);
+    }
+  };
+
   //function to fetch job data
   const fetchJobs = async () => {
     try {
@@ -89,7 +109,7 @@ export const AppContextProvider = (props) => {
       });
 
       if (data.success) {
-        console.log(data);
+        // console.log(data);
         setUser(data.user);
       } else {
         toast.error(data.message);
@@ -108,7 +128,7 @@ export const AppContextProvider = (props) => {
       });
       if (data.success) {
         setUserApplications(data.applications);
-        console.log("The user application data is", data.applications);
+        // console.log("The user application data is", data.applications);
       }
     } catch (error) {
       toast.error(error.message);
@@ -147,6 +167,9 @@ export const AppContextProvider = (props) => {
     recommendedJobs,
     setRecommendedJobs,
     fetchRecommendedJobs,
+    extractResumeText,
+    pdfUrl,
+    setPdfUrl,
   };
 
   useEffect(() => {
@@ -182,12 +205,6 @@ export const AppContextProvider = (props) => {
       fetchUserApplications();
     }
   }, [userToken]);
-
-  useEffect(() => {
-    if (user) {
-      console.log("The user is", user);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (companyToken) {

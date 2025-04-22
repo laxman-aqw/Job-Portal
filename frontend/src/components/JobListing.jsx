@@ -7,14 +7,18 @@ import { FaAngleLeft } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa";
 const JobListing = () => {
   const {
+    user,
     isSearched,
     searchFilter,
     setSearchFilter,
     jobs,
     fetchRecommendedJobs,
     recommendedJobs,
+    extractResumeText,
+    pdfUrl,
+    setPdfUrl,
   } = useContext(AppContext);
-
+  // console.log("the user for job listing", user?.resume);
   const [showFilter, setShowFilter] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,8 +48,15 @@ const JobListing = () => {
   };
 
   useEffect(() => {
+    if (user?.resume) {
+      extractResumeText(user.resume);
+      console.log("the pdf url is: ", user.resume);
+    }
+  }, [user]);
+
+  useEffect(() => {
     fetchRecommendedJobs(text);
-    console.log("the recommended jobs state is: ", recommendedJobs);
+    // console.log("the recommended jobs state is: ", recommendedJobs);
   }, []);
 
   useEffect(() => {

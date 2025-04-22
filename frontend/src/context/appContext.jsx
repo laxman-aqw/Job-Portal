@@ -34,7 +34,7 @@ export const AppContextProvider = (props) => {
   //function to fetch user resume pdf data
   const extractResumeText = async (pdfUrl) => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/job/parse-resume", {
+      const { data } = await axios.post(backendUrl + "/api/job/parse-resume", {
         pdfUrl,
       });
       if (data.success) {

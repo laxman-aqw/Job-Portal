@@ -56,7 +56,6 @@ const JobListing = () => {
 
   useEffect(() => {
     fetchRecommendedJobs(text);
-    // console.log("the recommended jobs state is: ", recommendedJobs);
   }, []);
 
   useEffect(() => {

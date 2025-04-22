@@ -5,7 +5,7 @@ const { protectCompany } = require("../middlewares/auth.middleware");
 const classifierController = require("../controllers/classification-controller");
 // const { fetchAndExtractText } = require("../utils/resumeExtraction");
 
-router.get("/parse-resume", jobController.parseResume);
+router.post("/parse-resume", jobController.parseResume);
 router.get("/", jobController.getJobs);
 router.get("/:id", jobController.getJob);
 router.put("/update-job/:id", protectCompany, jobController.updateJob);

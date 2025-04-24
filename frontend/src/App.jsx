@@ -36,6 +36,8 @@ import AddEducation from "./components/AddEducation";
 import EditEducation from "./components/EditEducation";
 import DelEduConModel from "./components/DelEduConModel";
 import VerifyOtp from "./pages/VerifyOtp";
+import CoverLettersPage from "./pages/cover-letter/CoverLettersPage";
+import CoverLetter from "./pages/cover-letter/CoverLetter";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -67,6 +69,20 @@ const App = () => {
           element={
             userValidToken ? <EditExperience></EditExperience> : <Home></Home>
           }
+        />
+        <Route
+          path="/ai-cover-letter/"
+          element={
+            userValidToken ? (
+              <CoverLettersPage></CoverLettersPage>
+            ) : (
+              <Home></Home>
+            )
+          }
+        />
+        <Route
+          path="/ai-cover-letter/:id"
+          element={userValidToken ? <CoverLetter></CoverLetter> : <Home></Home>}
         />
         <Route
           path="/edit-education/:id"

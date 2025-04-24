@@ -4,6 +4,7 @@ const Company = require("../models/Company");
 const JobRoleCategory = require("../models/JobRoleCategory");
 const { classifyJob } = require("../utils/naiveBayes");
 const { fetchAndExtractText } = require("../utils/resumeExtraction");
+const { htmlToText } = require("html-to-text");
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -119,69 +120,124 @@ exports.addJobRoleCategory = async (req, res) => {
   }
 };
 
+// exports.recommendJobs = async (req, res) => {
+//   const { text } = req.body;
+//   try {
+//     const scores = classifyJob(text);
+//     const sortedCategories = Object.keys(scores).sort(
+//       (a, b) => scores[b] - scores[a]
+//     );
+//     const topCategory = sortedCategories[0];
+//     const secondCategory = sortedCategories[1];
+//     const thirdCategory = sortedCategories[2];
+
+//     let recommendedJobs = await Job.find({
+//       roleCategory: {
+//         $in: [new RegExp(topCategory, "i")],
+//       },
+//       visible: true,
+//     })
+//       .populate({
+//         path: "companyId",
+//         select: "-password ",
+//       })
+//       .sort({ relevanceScore: -1 });
+
+//     if (recommendedJobs.length < 12) {
+//       const secondCategoryJobs = await Job.find({
+//         roleCategory: {
+//           $in: [new RegExp(secondCategory, "i")],
+//         },
+//         visible: true,
+//       })
+//         .populate({
+//           path: "companyId",
+//           select: "-password ",
+//         })
+//         .sort({ relevanceScore: -1 });
+
+//       recommendedJobs = [...recommendedJobs, ...secondCategoryJobs];
+
+//       if (recommendedJobs.length < 12) {
+//         const thirdCategoryJobs = await Job.find({
+//           roleCategory: {
+//             $in: [new RegExp(thirdCategory, "i")],
+//           },
+//           visible: true,
+//         })
+//           .populate({
+//             path: "companyId",
+//             select: "-password ",
+//           })
+//           .sort({ relevanceScore: -1 });
+
+//         recommendedJobs = [...recommendedJobs, ...thirdCategoryJobs];
+//       }
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Recommended jobs fetched",
+//       jobs: recommendedJobs,
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ success: false, message: "Internal Server Error" });
+//   }
+// };
+
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
-  // console.log(text);
+
   try {
-    const scores = classifyJob(text);
-    const sortedCategories = Object.keys(scores).sort(
-      (a, b) => scores[b] - scores[a]
+    const userScores = classifyJob(text);
+    const userSortedCategories = Object.keys(userScores).sort(
+      (a, b) => userScores[b] - userScores[a]
     );
-    const topCategory = sortedCategories[0];
-    const secondCategory = sortedCategories[1];
-    const thirdCategory = sortedCategories[2];
 
-    let recommendedJobs = await Job.find({
-      roleCategory: {
-        $in: [new RegExp(topCategory, "i")],
-      },
-      visible: true,
-    })
-      .populate({
-        path: "companyId",
-        select: "-password ",
-      })
-      .sort({ relevanceScore: -1 });
+    const topCategory = userSortedCategories[0];
+    // const secondCategory = userSortedCategories[1];
+    // const thirdCategory = userSortedCategories[2];
 
-    if (recommendedJobs.length < 12) {
-      const secondCategoryJobs = await Job.find({
-        roleCategory: {
-          $in: [new RegExp(secondCategory, "i")],
-        },
-        visible: true,
-      })
-        .populate({
-          path: "companyId",
-          select: "-password ",
-        })
-        .sort({ relevanceScore: -1 });
+    const allJobs = await Job.find({ visible: true }).populate({
+      path: "companyId",
+      select: "-password",
+    });
 
-      recommendedJobs = [...recommendedJobs, ...secondCategoryJobs];
+    let matchedJobs = [];
 
-      if (recommendedJobs.length < 12) {
-        const thirdCategoryJobs = await Job.find({
-          roleCategory: {
-            $in: [new RegExp(thirdCategory, "i")],
-          },
-          visible: true,
-        })
-          .populate({
-            path: "companyId",
-            select: "-password ",
-          })
-          .sort({ relevanceScore: -1 });
+    for (const job of allJobs) {
+      const htmlContent = job.description;
+      const plainText = htmlToText(htmlContent, {
+        wordwrap: 130,
+      });
+      const jobScores = classifyJob(plainText);
+      // console.log(job.description);
+      const jobSortedCategories = Object.keys(jobScores).sort(
+        (a, b) => jobScores[b] - jobScores[a]
+      );
 
-        recommendedJobs = [...recommendedJobs, ...thirdCategoryJobs];
+      if (jobSortedCategories[0] === topCategory) {
+        matchedJobs.push({
+          ...job._doc,
+          matchScore: userScores[jobSortedCategories] || 0,
+        });
       }
     }
+
+    // Sort by custom relevance match score
+    matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
+
+    // Take top 12
+    const topMatchedJobs = matchedJobs.slice(0, 12);
 
     res.status(200).json({
       success: true,
       message: "Recommended jobs fetched",
-      jobs: recommendedJobs,
+      jobs: topMatchedJobs,
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
@@ -197,6 +253,6 @@ exports.parseResume = async (req, res) => {
       text,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

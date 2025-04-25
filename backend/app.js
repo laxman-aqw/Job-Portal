@@ -15,7 +15,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT;
 const { trainNaiveBayes } = require("./utils/naiveBayes");
-
+require("../backend/controllers/ai-controllers/CronIndustryInsight");
 app.use(
   cors({
     origin: "http://localhost:5173",

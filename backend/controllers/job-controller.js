@@ -237,14 +237,14 @@ exports.recommendJobs = async (req, res) => {
       jobs: topMatchedJobs,
     });
   } catch (error) {
-    console.error(error);
+    console.error("errror from recommend jobs", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
 exports.parseResume = async (req, res) => {
   const { pdfUrl } = req.body;
-  console.log(pdfUrl);
+  // console.log(pdfUrl);
   try {
     const text = await fetchAndExtractText(pdfUrl);
     res.status(200).json({

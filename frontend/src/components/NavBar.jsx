@@ -13,7 +13,7 @@ const NavBar = () => {
 
   const navLinks = [
     { path: "/applications", label: "Applied Jobs" },
-    { path: "/", label: "Career Guidance" },
+    { path: "/ai/career-guidance", label: "Career Guidance" },
     { path: "/", label: "Interview Prep" },
     { path: "/", label: "Industry Insights" },
     { path: "/", label: "Resume Builder" },

@@ -38,6 +38,8 @@ import DelEduConModel from "./components/DelEduConModel";
 import VerifyOtp from "./pages/VerifyOtp";
 import CoverLettersPage from "./pages/cover-letter/CoverLettersPage";
 import CoverLetter from "./pages/cover-letter/CoverLetter";
+import NotFound from "./pages/NotFound";
+import CareerGuidance from "./pages/ai/CareerGuidance";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -83,6 +85,12 @@ const App = () => {
         <Route
           path="/ai-cover-letter/:id"
           element={userValidToken ? <CoverLetter></CoverLetter> : <Home></Home>}
+        />
+        <Route
+          path="/ai/career-guidance"
+          element={
+            userValidToken ? <CareerGuidance></CareerGuidance> : <Home></Home>
+          }
         />
         <Route
           path="/edit-education/:id"
@@ -141,6 +149,7 @@ const App = () => {
           <Route path="/dashboard" element={<Navigate to="/" />} />
         )}
         ;
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer autoClose={3000} />
     </div>

@@ -8,6 +8,7 @@ const axios = require("axios");
 const connectCloudinary = require("./config/cloudinary");
 const jobRoutes = require("./routes/job-routes");
 const userRoutes = require("./routes/user-routes");
+const aiRoutes = require("./routes/ai-routes");
 const mailerRoutes = require("./routes/mailer");
 const otpRoutes = require("./routes/OTP-routes");
 const session = require("express-session");
@@ -46,6 +47,7 @@ app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
 app.use("/api", mailerRoutes);
 app.use("/api/otp", otpRoutes);
+app.use("/api/ai", aiRoutes);
 
 const startServer = async () => {
   try {

@@ -43,10 +43,10 @@ const userSchema = new mongoose.Schema({
       ref: "Assessment",
     },
   ],
-  resume: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Resume",
-  },
+  // resume: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Resume",
+  // },
   coverLetters: [
     {
       type: mongoose.Schema.Types.ObjectId,

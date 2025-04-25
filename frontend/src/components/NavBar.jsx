@@ -136,7 +136,7 @@ const NavBar = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.path}
-                to="/"
+                to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-3 py-2 rounded-md transition-colors ${
                   location.pathname === link.path

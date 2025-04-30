@@ -16,7 +16,7 @@ export const AppContextProvider = (props) => {
 
   const [jobs, setJobs] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
-
+  const [assessments, setAssessments] = useState([]);
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
   const [confirmModel, setConfirmModel] = useState(null);
   const [showUserLogin, setShowUserLogin] = useState(false);
@@ -134,6 +134,22 @@ export const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+  const fetchAssessments = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/ai/assessments`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
+
+      if (data.success) {
+        setAssessments(data.assessments);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch assessments.");
+    }
+  };
+
   const value = {
     userApplications,
     setUserApplications,
@@ -170,7 +186,14 @@ export const AppContextProvider = (props) => {
     extractResumeText,
     pdfUrl,
     setPdfUrl,
+    assessments,
+    setAssessments,
+    fetchAssessments,
   };
+
+  useEffect(() => {
+    if (userToken && backendUrl) fetchAssessments();
+  }, [userToken, backendUrl]);
 
   useEffect(() => {
     fetchJobs();

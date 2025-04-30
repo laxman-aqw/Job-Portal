@@ -16,26 +16,27 @@ exports.generateQuiz = async (req, res) => {
         .json({ success: false, message: "User industry not found." });
     }
 
+    // console.log(user.industry, user.skills);
+
     const prompt = `
-      Generate 10 technical interview questions for a ${
-        user.industry
-      } professional${
+  Generate 10 **unique** and diverse technical interview questions for a ${
+    user.industry
+  } professional${
       user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
     }.
-      Each question should be multiple choice with 4 options.
-
-      Return the response in this JSON format only, no additional text:
-      {
-        "questions": [
-          {
+  Use randomness seed ${Math.floor(Math.random() * 100000)}.
+  Each question must be multiple choice with 4 options.
+  
+  Return JSON only:
+  {
+    "questions": [  {
             "question": "string",
             "options": ["string", "string", "string", "string"],
             "correctAnswer": "string",
             "explanation": "string"
-          }
-        ]
-      }
-    `;
+          }]
+  }
+`;
 
     const result = await model.generateContent(prompt);
     const responseText = result.response
@@ -108,7 +109,7 @@ exports.saveQuizResult = async (req, res) => {
       category: "Technical",
       improvementTip,
     });
-
+    console.log("quiz result saved to database succesfully");
     res.status(201).json({ success: true, assessment });
   } catch (error) {
     console.error("Error saving quiz result:", error);
@@ -126,10 +127,10 @@ exports.getAssessments = async (req, res) => {
     if (!user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-
     const assessments = await Assessment.find({ userId: user._id }).sort({
       createdAt: -1,
     });
+    console.log("assessment api called");
 
     res.status(200).json({ success: true, assessments });
   } catch (error) {

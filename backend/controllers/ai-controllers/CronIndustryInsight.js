@@ -5,6 +5,31 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+(async () => {
+  console.log("🚀 Checking overdue industry insights on startup...");
+
+  try {
+    const insightsToUpdate = await IndustryInsight.find({
+      nextUpdate: { $lte: new Date() },
+    });
+
+    for (const insight of insightsToUpdate) {
+      const updated = await generateAIInsights(insight.industry);
+
+      insight.set({
+        ...updated,
+        lastUpdated: new Date(),
+        nextUpdate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // +3 days
+      });
+
+      await insight.save();
+      console.log(`✅ Startup updated insights for: ${insight.industry}`);
+    }
+  } catch (err) {
+    console.error("❌ Error updating insights on startup:", err.message);
+  }
+})();
+
 const generateAIInsights = async (industry) => {
   const prompt = `
     Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:

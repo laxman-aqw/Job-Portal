@@ -51,7 +51,7 @@ app.use("/api/ai", aiRoutes);
 
 const startServer = async () => {
   try {
-    await connectCloudinary(); // Ensure Cloudinary is connected
+    await connectCloudinary();
     await connectDB();
     await trainNaiveBayes();
     app.listen(port, () => {
@@ -59,7 +59,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error("Error during startup:", error);
-    process.exit(1); // Exit if an error occurs during startup
+    process.exit(1);
   }
 };
 

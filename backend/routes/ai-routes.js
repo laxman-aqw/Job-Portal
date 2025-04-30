@@ -11,7 +11,7 @@ router.post(
   aiIndustryControllers.getIndustryInsights
 );
 router.get("/generate-quiz", protectUser, aiQuizControllers.generateQuiz);
-router.post("/save-quiz", protectUser, aiQuizControllers.saveQuizResult);
-router.get("/generate-quiz", protectUser, aiQuizControllers.generateQuiz);
+router.get("/assessments", protectUser, aiQuizControllers.getAssessments);
+router.post("/save-quiz-result", protectUser, aiQuizControllers.saveQuizResult);
 
 module.exports = router;

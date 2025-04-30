@@ -1,11 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {
-  useLocation,
-  useNavigate,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import ApplyJob from "./pages/ApplyJob";
 import Applications from "./pages/Applications";
@@ -20,8 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import AddJob from "./pages/addJob";
 import Dashboard from "./pages/Dashboard";
 import UserLogin from "./components/UserLogin";
-import axios from "axios";
-import NProgress from "nprogress";
+
 import "nprogress/nprogress.css"; // Import default NProgress styles
 import "./custom/custom.css";
 import ProfilePage from "./pages/ProfilePage";
@@ -40,6 +33,7 @@ import CoverLettersPage from "./pages/cover-letter/CoverLettersPage";
 import CoverLetter from "./pages/cover-letter/CoverLetter";
 import NotFound from "./pages/NotFound";
 import CareerGuidance from "./pages/ai/CareerGuidance";
+import MockTest from "./pages/interview/InterviewPage";
 const App = () => {
   const {
     showRecruiterLogin,
@@ -91,6 +85,10 @@ const App = () => {
           element={
             userValidToken ? <CareerGuidance></CareerGuidance> : <Home></Home>
           }
+        />
+        <Route
+          path="/ai/mock-test"
+          element={userValidToken ? <MockTest></MockTest> : <Home></Home>}
         />
         <Route
           path="/edit-education/:id"

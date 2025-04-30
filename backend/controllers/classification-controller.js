@@ -11,7 +11,6 @@ exports.trainModel = async (req, res) => {
   }
 };
 
-// Classify text input (e.g., job description or resume)
 exports.classifyText = (req, res) => {
   try {
     const { text } = req.body;

@@ -32,7 +32,7 @@ import VerifyOtp from "./pages/VerifyOtp";
 import CoverLettersPage from "./pages/cover-letter/CoverLettersPage";
 import CoverLetter from "./pages/cover-letter/CoverLetter";
 import NotFound from "./pages/NotFound";
-import CareerGuidance from "./pages/ai/CareerGuidance";
+import IndustryInsights from "./pages/ai/IndustryInsights";
 import MockTest from "./pages/interview/InterviewPage";
 const App = () => {
   const {
@@ -81,9 +81,13 @@ const App = () => {
           element={userValidToken ? <CoverLetter></CoverLetter> : <Home></Home>}
         />
         <Route
-          path="/ai/career-guidance"
+          path="/ai/industry-insights"
           element={
-            userValidToken ? <CareerGuidance></CareerGuidance> : <Home></Home>
+            userValidToken ? (
+              <IndustryInsights></IndustryInsights>
+            ) : (
+              <Home></Home>
+            )
           }
         />
         <Route

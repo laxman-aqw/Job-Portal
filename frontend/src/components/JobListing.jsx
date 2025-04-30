@@ -12,11 +12,8 @@ const JobListing = () => {
     searchFilter,
     setSearchFilter,
     jobs,
-    fetchRecommendedJobs,
     recommendedJobs,
     extractResumeText,
-    pdfUrl,
-    setPdfUrl,
   } = useContext(AppContext);
   // console.log("the user for job listing", user?.resume);
   const [showFilter, setShowFilter] = useState(false);
@@ -28,9 +25,6 @@ const JobListing = () => {
   const [selectedLocations, setSelectedLocations] = useState([]);
 
   const [filteredJobs, setFilteredJobs] = useState(jobs);
-  const [text, setText] = useState(
-    "In this Back-End Developer role, you'll build and maintain the server-side architecture of web applications. You will be responsible for integrating front-end user interfaces with back-end systems, working with technologies like Node.js, Express, and databases such as MongoDB."
-  );
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -53,10 +47,6 @@ const JobListing = () => {
       console.log("the pdf url is: ", user.resume);
     }
   }, [user]);
-
-  useEffect(() => {
-    fetchRecommendedJobs(text);
-  }, []);
 
   useEffect(() => {
     const matchesCategory = (job) =>
@@ -211,7 +201,7 @@ const JobListing = () => {
       <div className="w-full lg:w-3/4">
         <section className="w-full text-gray-800 max-lg:px-4 bg-gray-100 p-2 rounded-2xl ">
           <h3 className="font-medium text-3xl py-2 " id="job-list">
-            Top 3 Recommendations
+            Top Recommendations
           </h3>
           <p className="mb-4">Jobs recommended to you </p>
           <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

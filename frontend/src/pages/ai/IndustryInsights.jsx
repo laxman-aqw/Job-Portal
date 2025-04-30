@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import NavBar from "../../components/NavBar";
 
-const CareerGuidance = () => {
+const IndustryInsights = () => {
   const { backendUrl } = useContext(AppContext);
   const [salaryRanges, setSalaryRanges] = useState([]);
   const [growthRate, setGrowthRate] = useState(null);
@@ -260,4 +260,4 @@ const CareerGuidance = () => {
   );
 };
 
-export default CareerGuidance;
+export default IndustryInsights;

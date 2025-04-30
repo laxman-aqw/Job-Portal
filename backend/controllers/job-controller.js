@@ -196,8 +196,6 @@ exports.recommendJobs = async (req, res) => {
     );
 
     const topCategory = userSortedCategories[0];
-    // const secondCategory = userSortedCategories[1];
-    // const thirdCategory = userSortedCategories[2];
 
     const allJobs = await Job.find({ visible: true }).populate({
       path: "companyId",
@@ -208,11 +206,9 @@ exports.recommendJobs = async (req, res) => {
 
     for (const job of allJobs) {
       const htmlContent = job.description;
-      const plainText = htmlToText(htmlContent, {
-        wordwrap: 130,
-      });
-      const jobScores = classifyJob(plainText);
-      // console.log(job.description);
+
+      const plainText = await generateClassifiableJobDescription(htmlContent);
+      const jobScores = await classifyJob(plainText);
       const jobSortedCategories = Object.keys(jobScores).sort(
         (a, b) => jobScores[b] - jobScores[a]
       );
@@ -242,11 +238,12 @@ exports.recommendJobs = async (req, res) => {
   }
 };
 
-exports.parseResume = async (req, res) => {
+exports.parseResume = async (req, res, next) => {
   const { pdfUrl } = req.body;
   // console.log(pdfUrl);
   try {
-    const text = await fetchAndExtractText(pdfUrl);
+    const unfilteredText = await fetchAndExtractText(pdfUrl);
+    const text = await generateClassifiableSkills(unfilteredText);
     res.status(200).json({
       success: true,
       message: "resume data parsed",
@@ -255,4 +252,44 @@ exports.parseResume = async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
+};
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+const generateClassifiableSkills = async (resumeText) => {
+  const prompt = `
+    You are an expert resume parser for job classification systems.
+
+    Given a resume text, extract and return a summary of the candidate's job-related skills, experience, and relevant traits for classification. Do NOT include personal details, education info, certifications, or formatting. Your goal is to clean the resume into a text block that contains only useful features for a Naive Bayes job classifier.
+
+    Now extract skills and experience summary from the following resume:
+
+    ${resumeText}
+
+    return the summary of skills and experience as a plain string in a paragraph.
+  `;
+
+  const result = await model.generateContent(prompt);
+  const textResult = result.response.text().trim();
+  return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
+};
+const generateClassifiableJobDescription = async (jobDescription) => {
+  const prompt = `
+    You are an expert jop description parser for job classification systems.
+
+    Given a job description, extract and return a summary of the job. Your goal is to clean the job description into a text block that contains only useful features for a Naive Bayes job classifier.
+
+    Now extract keypoints summary from the following resume:
+
+    ${jobDescription}
+
+    return the summary of skills and experience as a plain string in a paragraph.
+  `;
+
+  const result = await model.generateContent(prompt);
+  const textResult = result.response.text().trim();
+  return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
 };

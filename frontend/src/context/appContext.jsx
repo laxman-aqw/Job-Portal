@@ -24,21 +24,40 @@ export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [companyToken, setCompanyToken] = useState(null);
   const [userToken, setUserToken] = useState(null);
-
+  const [text, setText] = useState(
+    "In this Back-End Developer role, you'll build and maintain the server-side architecture of web applications. You will be responsible for integrating front-end user interfaces with back-end systems, working with technologies like Node.js, Express, and databases such as MongoDB."
+  );
   //for company data
   const [company, setCompany] = useState(null);
   const [user, setUser] = useState(null);
   const [userApplications, setUserApplications] = useState(false);
   const [experiences, setExperiences] = useState([]);
 
+  useEffect(() => {
+    const storedUserToken = localStorage.getItem("userToken");
+
+    if (storedUserToken) {
+      setUserToken(storedUserToken);
+    }
+  }, []);
+
   //function to fetch user resume pdf data
   const extractResumeText = async (pdfUrl) => {
     try {
-      const { data } = await axios.post(backendUrl + "/api/job/parse-resume", {
-        pdfUrl,
-      });
+      const { data } = await axios.post(
+        backendUrl + "/api/job/parse-resume",
+        {
+          pdfUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
       if (data.success) {
         console.log(data);
+        setText(data.text);
       } else {
         console.log("the data fetch is success");
       }
@@ -58,24 +77,6 @@ export const AppContextProvider = (props) => {
       }
     } catch (error) {
       console.log("Error fetching jobs:", error);
-      toast.error(error.message);
-    }
-  };
-  const fetchRecommendedJobs = async (text) => {
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/job/recommend-jobs",
-        {
-          text,
-        }
-      );
-      if (data.success) {
-        setRecommendedJobs(data.jobs);
-      } else {
-        console.log("error fetching recommended jobs");
-      }
-    } catch (error) {
-      console.log("Error fetching recommended jobs:", error);
       toast.error(error.message);
     }
   };
@@ -150,6 +151,31 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  const fetchRecommendedJobs = async (text) => {
+    console.log("the user token from ac is:", userToken);
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/job/recommend-jobs",
+        {
+          text,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      if (data.success) {
+        setRecommendedJobs(data.jobs);
+      } else {
+        console.log("error fetching recommended jobs");
+      }
+    } catch (error) {
+      console.log("Error fetching recommended jobs:", error);
+      toast.error(error.message);
+    }
+  };
+
   const value = {
     userApplications,
     setUserApplications,
@@ -201,22 +227,12 @@ export const AppContextProvider = (props) => {
     if (storedCompanyToken) {
       setCompanyToken(storedCompanyToken);
       console.log("the company token is: " + companyToken);
-    } else {
-      console.log("no company token found");
     }
   }, [companyToken]);
 
   // useEffect(() => {
 
   // }, []);
-
-  useEffect(() => {
-    const storedUserToken = localStorage.getItem("userToken");
-
-    if (storedUserToken) {
-      setUserToken(storedUserToken);
-    }
-  }, []);
 
   // useEffect(() => {
   //   fetchUserData();
@@ -226,6 +242,12 @@ export const AppContextProvider = (props) => {
     if (userToken) {
       fetchUserData();
       fetchUserApplications();
+    }
+  }, [userToken]);
+
+  useEffect(() => {
+    if (userToken) {
+      fetchRecommendedJobs(text);
     }
   }, [userToken]);
 

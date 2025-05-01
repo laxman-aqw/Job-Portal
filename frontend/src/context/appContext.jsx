@@ -24,9 +24,7 @@ export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [companyToken, setCompanyToken] = useState(null);
   const [userToken, setUserToken] = useState(null);
-  const [text, setText] = useState(
-    "In this Back-End Developer role, you'll build and maintain the server-side architecture of web applications. You will be responsible for integrating front-end user interfaces with back-end systems, working with technologies like Node.js, Express, and databases such as MongoDB."
-  );
+  const [text, setText] = useState(null);
   //for company data
   const [company, setCompany] = useState(null);
   const [user, setUser] = useState(null);
@@ -46,9 +44,7 @@ export const AppContextProvider = (props) => {
     try {
       const { data } = await axios.post(
         backendUrl + "/api/job/parse-resume",
-        {
-          pdfUrl,
-        },
+        { pdfUrl },
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -56,10 +52,12 @@ export const AppContextProvider = (props) => {
         }
       );
       if (data.success) {
-        console.log(data);
+        console.log("Extracted text:", data.text);
         setText(data.text);
+        // Now trigger recommended job fetch after text is available
+        fetchRecommendedJobs(data.text);
       } else {
-        console.log("the data fetch is success");
+        toast.error("Failed to extract resume text");
       }
     } catch (error) {
       console.log("Error fetching resume:", error);
@@ -242,12 +240,6 @@ export const AppContextProvider = (props) => {
     if (userToken) {
       fetchUserData();
       fetchUserApplications();
-    }
-  }, [userToken]);
-
-  useEffect(() => {
-    if (userToken) {
-      fetchRecommendedJobs(text);
     }
   }, [userToken]);
 

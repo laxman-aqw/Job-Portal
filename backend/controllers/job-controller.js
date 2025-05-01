@@ -188,7 +188,7 @@ exports.addJobRoleCategory = async (req, res) => {
 
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
-
+  console.log(text);
   try {
     const userScores = classifyJob(text);
     const userSortedCategories = Object.keys(userScores).sort(
@@ -196,32 +196,58 @@ exports.recommendJobs = async (req, res) => {
     );
 
     const topCategory = userSortedCategories[0];
-
-    const allJobs = await Job.find({ visible: true }).populate({
+    console.log("The top category is: ", topCategory);
+    const allJobs = await Job.find({
+      visible: true,
+      // deadline: { $gt: new Date() },
+    }).populate({
       path: "companyId",
       select: "-password",
     });
 
     let matchedJobs = [];
 
+    // for (const job of allJobs) {
+    //   const htmlContent = job.description;
+
+    //   const plainText = await generateClassifiableJobDescription(htmlContent);
+    //   const jobScores = classifyJob(plainText);
+    //   const jobSortedCategories = Object.keys(jobScores).sort(
+    //     (a, b) => jobScores[b] - jobScores[a]
+    //   );
+    //   console.log(
+    //     "The top job from recommendation 1 is:",
+    //     jobSortedCategories[0]
+    //   );
+    //   const topJobCategory = jobSortedCategories[0];
+    //   if (jobSortedCategories[0] === topCategory) {
+    //     matchedJobs.push({
+    //       ...job._doc,
+    //       matchScore: userScores[topJobCategory] || 0,
+    //     });
+    //   }
+    // }
+
+    // Sort by custom relevance match score
+
     for (const job of allJobs) {
       const htmlContent = job.description;
-
       const plainText = await generateClassifiableJobDescription(htmlContent);
-      const jobScores = await classifyJob(plainText);
+      const jobScores = classifyJob(plainText);
       const jobSortedCategories = Object.keys(jobScores).sort(
         (a, b) => jobScores[b] - jobScores[a]
       );
 
-      if (jobSortedCategories[0] === topCategory) {
+      const topJobCategory = jobSortedCategories[0];
+
+      if (topJobCategory === topCategory) {
         matchedJobs.push({
           ...job._doc,
-          matchScore: userScores[jobSortedCategories] || 0,
+          matchScore: userScores[topJobCategory] || 0,
         });
       }
     }
 
-    // Sort by custom relevance match score
     matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
 
     // Take top 12

@@ -197,9 +197,10 @@ exports.recommendJobs = async (req, res) => {
 
     const topCategory = userSortedCategories[0];
     console.log("The top category is: ", topCategory);
+
     const allJobs = await Job.find({
       visible: true,
-      // deadline: { $gt: new Date() },
+      deadline: { $gt: new Date() },
     }).populate({
       path: "companyId",
       select: "-password",
@@ -266,6 +267,11 @@ exports.recommendJobs = async (req, res) => {
 
 exports.parseResume = async (req, res, next) => {
   const { pdfUrl } = req.body;
+  if (!pdfUrl) {
+    return res
+      .status(400)
+      .json({ success: false, message: "pdfUrl is required" });
+  }
   // console.log(pdfUrl);
   try {
     const unfilteredText = await fetchAndExtractText(pdfUrl);

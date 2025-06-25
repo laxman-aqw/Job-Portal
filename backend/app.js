@@ -9,13 +9,14 @@ const connectCloudinary = require("./config/cloudinary");
 const jobRoutes = require("./routes/job-routes");
 const userRoutes = require("./routes/user-routes");
 const aiRoutes = require("./routes/ai-routes");
+const adminRoutes = require("./routes/admin-routes");
 const mailerRoutes = require("./routes/mailer");
 const otpRoutes = require("./routes/OTP-routes");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT;
 const { trainNaiveBayes } = require("./utils/naiveBayes");
-require("../backend/controllers/ai-controllers/CronIndustryInsight");
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -48,6 +49,7 @@ app.use("/api/job", jobRoutes);
 app.use("/api", mailerRoutes);
 app.use("/api/otp", otpRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/admin", adminRoutes);
 
 const startServer = async () => {
   try {
@@ -64,6 +66,8 @@ const startServer = async () => {
 };
 
 startServer();
+
+require("../backend/controllers/ai-controllers/CronIndustryInsight");
 app.get("/", async (req, res) => {
   res.send("hello");
 });

@@ -93,7 +93,7 @@ export default function QuizResult({
               {!q.isCorrect && (
                 <p>
                   <span className="font-medium">Correct Answer:</span>{" "}
-                  {q.answer}
+                  {q.correctAnswer}
                 </p>
               )}
             </div>

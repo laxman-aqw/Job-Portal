@@ -39,12 +39,13 @@ exports.getIndustryInsights = async (req, res) => {
     if (!user || !user.industry) {
       return res.status(400).json({
         success: false,
-        message: "User industry not provided.",
+        message: "Please add a interested industry in you profile.",
       });
     }
 
     // Check if insights already exist
     const existing = await IndustryInsight.findOne({ industry: user.industry });
+    console.log("the industry is ", user.industry);
 
     if (existing) {
       return res.status(200).json({

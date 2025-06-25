@@ -8,6 +8,7 @@ import { FaAngleRight } from "react-icons/fa";
 const JobListing = () => {
   const {
     user,
+    userToken,
     isSearched,
     searchFilter,
     setSearchFilter,
@@ -199,25 +200,6 @@ const JobListing = () => {
         </div>
       </div>
       <div className="w-full lg:w-3/4">
-        <section className="w-full text-gray-800 max-lg:px-4 bg-gray-100 p-2 rounded-2xl ">
-          <h3 className="font-medium text-3xl py-2 " id="job-list">
-            Top Recommendations
-          </h3>
-          <p className="mb-4">Jobs recommended to you </p>
-          <div className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {recommendedJobs
-              .slice((currentPage - 1) * 3, currentPage * 3)
-              .map((job, index) => (
-                <JobCard key={index} job={job}></JobCard>
-              ))}
-          </div>
-          <div className="flex justify-center mt-4">
-            <button className="border-b-2 font-medium cursor-pointer px-4 my-2 hover:scale-105 transition">
-              View More Recommended Jobs For You →
-            </button>
-          </div>
-        </section>
-
         {/* overall job listing */}
         <section className="w-full text-gray-800 max-lg:px-4 py-4">
           <h3 className="font-medium text-3xl py-2" id="job-list">
@@ -282,7 +264,6 @@ const JobListing = () => {
           )}
         </section>
       </div>
-      {/* recommended Job listing */}
     </div>
   );
 };

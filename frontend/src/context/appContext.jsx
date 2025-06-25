@@ -15,6 +15,7 @@ export const AppContextProvider = (props) => {
   const [isSearched, setIsSearched] = useState(false);
 
   const [jobs, setJobs] = useState([]);
+  const [admin, setAdmin] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [assessments, setAssessments] = useState([]);
   const [showRecruiterLogin, setShowRecruiterLogin] = useState(false);
@@ -24,6 +25,7 @@ export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [companyToken, setCompanyToken] = useState(null);
   const [userToken, setUserToken] = useState(null);
+  const [adminToken, setAdminToken] = useState(null);
   const [text, setText] = useState(null);
   //for company data
   const [company, setCompany] = useState(null);
@@ -39,9 +41,18 @@ export const AppContextProvider = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    const storedAdminToken = localStorage.getItem("adminToken");
+    if (storedAdminToken) {
+      setAdminToken(storedAdminToken);
+    }
+  }, []);
+
   //function to fetch user resume pdf data
   const extractResumeText = async (pdfUrl) => {
     try {
+      // console.log("the user token is:", userToken);
+      console.log("the pdf url is:", pdfUrl);
       const { data } = await axios.post(
         backendUrl + "/api/job/parse-resume",
         { pdfUrl },
@@ -51,12 +62,18 @@ export const AppContextProvider = (props) => {
           },
         }
       );
+      if (data) {
+        console.log("the data is:", data);
+      } else {
+        console.log("there is not data");
+      }
       if (data.success) {
+        console.log("the data is:", data);
         console.log("Extracted text:", data.text);
         setText(data.text);
-        // Now trigger recommended job fetch after text is available
         fetchRecommendedJobs(data.text);
       } else {
+        console.log("Failed to extract resume text");
         toast.error("Failed to extract resume text");
       }
     } catch (error) {
@@ -106,7 +123,6 @@ export const AppContextProvider = (props) => {
           Authorization: `Bearer ${userToken}`,
         },
       });
-
       if (data.success) {
         // console.log(data);
         setUser(data.user);
@@ -213,6 +229,10 @@ export const AppContextProvider = (props) => {
     assessments,
     setAssessments,
     fetchAssessments,
+    admin,
+    setAdmin,
+    adminToken,
+    setAdminToken,
   };
 
   useEffect(() => {

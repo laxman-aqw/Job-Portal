@@ -58,18 +58,29 @@ exports.saveQuizResult = async (req, res) => {
   try {
     const user = req.user;
     const { questions, answers, score } = req.body;
+    // console.log("the answer is", req.body.questions);
 
     if (!user || !questions || !answers || typeof score !== "number") {
       return res
         .status(400)
         .json({ success: false, message: "Invalid input." });
     }
-
+    console.log("Question comparison debug:");
+    questions.forEach((q, i) => {
+      console.log({
+        question: q.question,
+        correctAnswer: q.answer,
+        userAnswer: answers[i],
+        isCorrect:
+          q.answer.trim().toLowerCase() === answers[i].trim().toLowerCase(),
+      });
+    });
     const questionResults = questions.map((q, index) => ({
       question: q.question,
-      answer: q.correctAnswer,
+      correctAnswer: q.answer,
       userAnswer: answers[index],
-      isCorrect: q.correctAnswer === answers[index],
+      isCorrect:
+        q.answer.trim().toLowerCase() === answers[index].trim().toLowerCase(),
       explanation: q.explanation,
     }));
 
@@ -106,7 +117,6 @@ exports.saveQuizResult = async (req, res) => {
       userId: user._id,
       quizScore: score,
       questions: questionResults,
-      category: "Technical",
       improvementTip,
     });
     console.log("quiz result saved to database succesfully");

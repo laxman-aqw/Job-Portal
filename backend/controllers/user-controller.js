@@ -109,7 +109,7 @@ exports.loginUser = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "login succesful",
-        company: {
+        user: {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
@@ -301,6 +301,7 @@ exports.updateProfile = async (req, res) => {
     githubProfile,
     linkedInProfile,
     gender,
+    industry,
   } = req.body;
   const imageFile = req.file;
   if (!firstName && !lastName) {
@@ -336,6 +337,7 @@ exports.updateProfile = async (req, res) => {
           githubProfile,
           linkedInProfile,
           gender,
+          industry,
           displayEmail,
           image: imageUrl,
         },

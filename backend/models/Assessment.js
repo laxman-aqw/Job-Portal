@@ -15,11 +15,6 @@ const assessmentSchema = new Schema({
     type: [Schema.Types.Mixed], // Or define a detailed schema if needed
     required: true,
   },
-  category: {
-    type: String,
-    required: true,
-    enum: ["Technical", "Behavioral", "Other"], // Add more categories as needed
-  },
   improvementTip: {
     type: String,
     default: null,

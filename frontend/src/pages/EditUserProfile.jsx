@@ -29,6 +29,7 @@ const EditUserProfile = () => {
   const [linkedInProfile, setLinkedInProfile] = useState("");
   const [image, setImage] = useState(null);
   const [gender, setGender] = useState("");
+  const [industry, setIndustry] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,6 +63,7 @@ const EditUserProfile = () => {
     try {
       const formData = new FormData();
       formData.append("firstName", firstName);
+      formData.append("industry", industry);
       formData.append("lastName", lastName);
       formData.append("description", description);
       formData.append("phone", phone);
@@ -129,6 +131,9 @@ const EditUserProfile = () => {
     if (user?.image) {
       setImage(user.image);
     }
+    if (user?.industry) {
+      setImage(user.industry);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -142,6 +147,7 @@ const EditUserProfile = () => {
       setGithubProfile(user.githubProfile || "");
       setLinkedInProfile(user.linkedInProfile || "");
       setGender(user.gender || "");
+      setGender(user.industry || "");
       setImage(user.image || null);
     }
   }, [user]);
@@ -228,6 +234,20 @@ const EditUserProfile = () => {
             />
             <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600">
               Profile Email
+            </label>
+          </div>
+
+          <div className="group w-full relative">
+            <input
+              type="text"
+              name="industry"
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className="w-full px-5 py-3.5 text-gray-900 bg-white rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all placeholder-transparent peer"
+              placeholder=" "
+            />
+            <label className="absolute left-4 -top-2.5 px-1 text-sm text-gray-500 bg-white transition-all duration-300 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-blue-600">
+              Industry
             </label>
           </div>
 

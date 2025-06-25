@@ -11,6 +11,8 @@ const companySchema = new mongoose.Schema({
     ref: "Job",
     required: false,
   },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Company", companySchema);

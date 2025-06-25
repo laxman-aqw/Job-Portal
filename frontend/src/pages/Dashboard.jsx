@@ -59,22 +59,6 @@ const Dashboard = () => {
             <FaBars />
           </button>
 
-          {/* Profile Section */}
-          {company && (
-            <div className="flex flex-col items-center border-b border-gray-700 pb-4">
-              <img
-                src={company.image}
-                alt="Company Icon"
-                className="w-10 h-10 rounded-full border-2 border-gray-500"
-              />
-              {isSidebarOpen && (
-                <p className="mt-2 font-semibold text-gray-700 text-center">
-                  Welcome, {company.name}
-                </p>
-              )}
-            </div>
-          )}
-
           {/* Navigation */}
           <nav className="mt-5 flex flex-col space-y-3 ">
             <NavLink to={`/dashboard/company-profile/${company?._id}`}>

@@ -3,14 +3,15 @@ const router = express.Router();
 const companyControllers = require("../controllers/company-controller");
 const upload = require("../config/multer");
 const { protectCompany } = require("../middlewares/auth.middleware");
-const { generateOTP } = require("../controllers/authController");
+const { verifyOTP } = require("../controllers/authController");
 
 router.post(
   "/register",
   upload.single("image"),
-  companyControllers.registerCompany,
-  generateOTP
+  companyControllers.registerCompany
 );
+
+router.post("/verify-otp", verifyOTP);
 
 router.post("/check-email", companyControllers.validateEmail);
 

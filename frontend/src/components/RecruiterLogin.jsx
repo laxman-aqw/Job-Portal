@@ -96,11 +96,9 @@ const RecruiterLogin = () => {
         console.log(data);
         if (data.success) {
           toast.success("Logged in successfully!");
-          // console.log("data succeed");
           setCompany(data.company);
           setCompanyToken(data.token);
           localStorage.setItem("companyToken", data.token);
-          // console.log(localStorage.getItem("companyToken"));
           setShowRecruiterLogin(false);
           navigate("/dashboard");
         }
@@ -116,11 +114,11 @@ const RecruiterLogin = () => {
           formData
         );
         if (data.success) {
-          // toast.success("Company registered successfully!");
+          localStorage.setItem(
+            "verifiedData",
+            JSON.stringify(data.verifiedData)
+          );
           console.log("data succeed");
-          // setCompany(data.company);
-          // setCompanyToken(data.token);
-          // localStorage.setItem("companyToken", data.token);
           setShowRecruiterLogin(false);
           navigate("/verifyOtp");
         }

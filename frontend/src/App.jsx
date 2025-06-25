@@ -34,18 +34,24 @@ import CoverLetter from "./pages/cover-letter/CoverLetter";
 import NotFound from "./pages/NotFound";
 import IndustryInsights from "./pages/ai/IndustryInsights";
 import MockTest from "./pages/interview/InterviewPage";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import RecommendedJobs from "./pages/RecommendedJobs";
 const App = () => {
   const {
     showRecruiterLogin,
     confirmModel,
     showUserLogin,
     companyToken,
+    adminToken,
     userToken,
   } = useContext(AppContext);
-  // console.log("companyToken:", companyToken);
+
   const companyValidToken =
     companyToken || localStorage.getItem("companyToken");
   const userValidToken = userToken || localStorage.getItem("userToken");
+  const adminValidToken = adminToken || localStorage.getItem("adminToken");
 
   return (
     <div>
@@ -121,11 +127,47 @@ const App = () => {
           }
         />
         <Route
+          path="/ai/recommended-jobs"
+          element={
+            userValidToken ? <RecommendedJobs></RecommendedJobs> : <Home></Home>
+          }
+        />
+        <Route
           path="/update-profile"
           element={
             userValidToken ? <EditUserProfile></EditUserProfile> : <Home></Home>
           }
         />
+        {/* admin */}
+        {adminValidToken ? (
+          <Route path="/admin" element={<AdminHome></AdminHome>}>
+            <>
+              <Route index element={<Navigate to="dashboard" />} />
+              <Route
+                path="dashboard"
+                element={<AdminDashboard></AdminDashboard>}
+              />
+              <Route
+                path="company-profile/:id"
+                element={<CompanyProfile></CompanyProfile>}
+              />
+              <Route path="edit-job/:id" element={<EditJob></EditJob>} />
+              <Route
+                path="edit-profile"
+                element={<EditCompanyProfile></EditCompanyProfile>}
+              />
+              <Route path="manage-jobs" element={<ManageJobs></ManageJobs>} />
+              <Route
+                path="view-applications"
+                element={<ViewApplication></ViewApplication>}
+              />
+            </>
+          </Route>
+        ) : (
+          <Route path="/admin" element={<Navigate to="/" />} />
+        )}
+        <Route path="/admin/login" element={<AdminLogin></AdminLogin>} />
+        {/* company */}
         {companyValidToken ? (
           <Route path="/dashboard" element={<Dashboard></Dashboard>}>
             <>

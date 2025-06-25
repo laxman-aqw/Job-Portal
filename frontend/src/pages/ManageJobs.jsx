@@ -18,7 +18,6 @@ const ManageJobs = () => {
 
   const [jobs, setJobs] = useState(false);
   const { backendUrl, companyToken } = useContext(AppContext);
-  // function to fetch jobs list
 
   //change visibility
   const changeJobVisibility = async (id, currentVisibility) => {

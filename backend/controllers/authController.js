@@ -1,76 +1,60 @@
 const mongoose = require("mongoose");
 const otpGenerator = require("otp-generator");
 const OTP = require("../models/OTP");
+const Company = require("../models/Company");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
-exports.generateOTP = async (req, res) => {
-  const { name, email } = req.verifiedData;
-  const existingOTP = await OTP.findOne({ email: email });
-  if (existingOTP) {
-    // If an OTP exists, delete the old one
-    await OTP.deleteOne({ email: email });
-    console.log(`Deleted existing OTP for ${email}`);
+const generateToken = require("../utils/generateToken");
+exports.verifyOTP = async (req, res) => {
+  const { otp, name, email, password, image } = req.body;
+  if (!otp) {
+    return res.status(400).json({ success: false, message: "OTP is required" });
   }
-  if (!email) {
+  const existingOTP = await OTP.findOne({ email });
+  if (!existingOTP) {
     return res
-      .status(400)
-      .json({ success: false, message: "Email is required" });
+      .status(404)
+      .json({ success: false, message: "OTP not found or expired" });
   }
 
-  try {
-    // Generate OTP
-    const otp = otpGenerator.generate(6, {
-      digits: true,
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    });
-
-    const otpExpiryTime = 10 * 60 * 1000;
-    const expiresAt = new Date(Date.now() + otpExpiryTime);
-
-    // Save OTP to MongoDB
-    const otpEntry = new OTP({
-      email: email,
-      otp: otp,
-      expiresAt: expiresAt,
-    });
-
-    await otpEntry.save();
-    console.log("OTP generated and saved to database:", otp);
-
-    // Send OTP to email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const message = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Dear Your OTP for registration",
-      text: `Dear ${name} Your OTP is: ${otp}`,
-      html: `<p>Your OTP for registration is <strong>${otp} for ${email}</strong></p>`,
-    };
-
-    await transporter.sendMail(message);
-    req.session.tempUser = req.verifiedData;
-    console.log("The req.session.tempUser data is: ", req.session.tempUser);
-    res.status(200).json({
-      verifiedData: req.verifiedData,
-      success: true,
-      message: "OTP has been sent to your email address.",
-    });
-  } catch (err) {
-    console.error("Error generating OTP:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+  if (existingOTP.otp !== otp) {
+    return res.status(401).json({ success: false, message: "Invalid OTP" });
   }
+  if (existingOTP.expiresAt < new Date()) {
+    await OTP.deleteOne({ email });
+    return res.status(410).json({ success: false, message: "OTP expired" });
+  }
+  await OTP.deleteOne({ email });
+  console.log(`Deleted OTP after successful verification for ${email}`);
+
+  // Save the company to DB
+  const newCompany = new Company({
+    name,
+    email,
+    password,
+    image,
+  });
+  await newCompany.save();
+
+  const payload = {
+    id: newCompany._id,
+    email: newCompany.email,
+    name: newCompany.name,
+    image: newCompany.image,
+  };
+  return res.status(201).json({
+    success: true,
+    message: "Company registered successfully",
+    company: {
+      name: newCompany.name,
+      email: newCompany.email,
+      image: newCompany.image,
+    },
+    token: generateToken(payload),
+  });
 };
 
-exports.verifyOTP = async (req, res) => {
+exports.verifyOTPp = async (req, res) => {
   const tempUser = req.session.tempUser;
   console.log(tempUser);
   // Check if session data is missing

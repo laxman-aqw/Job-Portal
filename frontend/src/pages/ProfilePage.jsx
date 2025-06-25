@@ -170,6 +170,55 @@ const ProfilePage = () => {
             </div>
           </div>
 
+          <div className="relative flex justify-between items-center mb-6">
+            {/* Experience Button - Left side */}
+            {userToken && (
+              <div>
+                {user?.experience?.length > 0 ? null : (
+                  <a
+                    href="/add-experience"
+                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
+                  >
+                    <FaEdit className="w-5 h-5" />
+                    <span className="font-medium">Add Experience</span>
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Education Button - Center */}
+            {userToken && (
+              <div className="flex-1 text-center">
+                {user?.education?.length > 0 ? null : (
+                  <a
+                    href="/add-education" // Changed to education route
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
+                  >
+                    <FaEdit className="w-5 h-5" />
+                    <span className="font-medium">Add Education</span>
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Skills Button - Right side */}
+            {userToken && (
+              <div>
+                {user?.skills?.length > 0 ? null : (
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all"
+                  >
+                    <FaEdit className="w-5 h-5" />
+                    <span className="font-medium">
+                      {user?.skills?.length > 0 ? "Edit Skills" : "Add Skills"}
+                    </span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* Detailed Sections */}
           <div className="p-8 space-y-8">
             <section>
@@ -179,7 +228,7 @@ const ProfilePage = () => {
               <p>{user?.description}</p>
             </section>
             {/* Experience */}
-            {user?.experience?.length > 0 && (
+            {user?.experience.length > 0 && (
               <section className="relative">
                 {userToken && (
                   <a

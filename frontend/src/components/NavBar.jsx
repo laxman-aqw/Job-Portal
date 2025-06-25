@@ -16,7 +16,7 @@ const NavBar = () => {
     { path: "/ai/industry-insights", label: "Industry Insights" },
     { path: "/ai/mock-test", label: "Interview Prep" },
 
-    { path: "/resume-builder", label: "Resume Builder" },
+    { path: "/ai/recommended-jobs", label: "Recommended Jobs" },
   ];
 
   return (

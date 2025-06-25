@@ -24,7 +24,7 @@ const AddJob = () => {
   const [description, setDescription] = useState(""); // Added state to capture description
   const [location, setLocation] = useState("Kathmandu");
   const [category, setCategory] = useState("Information Technology");
-  const [roleCategory, setRoleCategory] = useState("");
+  // const [roleCategory, setRoleCategory] = useState("");
   const [level, setLevel] = useState("Beginner");
   const [salary, setSalary] = useState();
   const sevenDaysFromNow = () => {
@@ -66,7 +66,6 @@ const AddJob = () => {
           description,
           salary,
           category,
-          roleCategory,
           level,
           location,
           deadline,
@@ -142,7 +141,7 @@ const AddJob = () => {
           className="h-auto border border-gray-300 rounded-md"
         />
       </div>
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <label className="block text-gray-600 font-medium mb-2" htmlFor="title">
           Job Role Category
         </label>
@@ -154,7 +153,7 @@ const AddJob = () => {
           value={roleCategory}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
         <div>
           <label

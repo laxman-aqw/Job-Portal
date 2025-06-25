@@ -8,6 +8,9 @@ const Job = require("../models/Job");
 const mongoose = require("mongoose");
 const Application = require("../models/Application");
 const nodemailer = require("nodemailer");
+const OTP = require("../models/OTP");
+const otpGenerator = require("otp-generator");
+// 123@password
 exports.registerCompany = async (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -31,13 +34,66 @@ exports.registerCompany = async (req, res, next) => {
 
     const imageUpload = await cloudinary.uploader.upload(imageFile.path);
 
-    req.verifiedData = {
+    const verifiedData = {
       name,
       email,
       password: hashedPassword,
       image: imageUpload.secure_url,
     };
-    next();
+
+    try {
+      const existingOTP = await OTP.findOne({ email: email });
+      if (existingOTP) {
+        await OTP.deleteOne({ email: email });
+        console.log(`Deleted existing OTP for ${email}`);
+      }
+      // Generate OTP
+      const otp = otpGenerator.generate(6, {
+        digits: true,
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+      });
+
+      const otpExpiryTime = 10 * 60 * 1000;
+      const expiresAt = new Date(Date.now() + otpExpiryTime);
+
+      // Save OTP to MongoDB
+      const otpEntry = new OTP({
+        email: email,
+        otp: otp,
+        expiresAt: expiresAt,
+      });
+
+      await otpEntry.save();
+      console.log("OTP generated and saved to database:", otp);
+
+      // Send OTP to email
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const message = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Dear Your OTP for registration",
+        text: `Dear ${name} Your OTP is: ${otp}`,
+        html: `<p>Your OTP for registration is <strong>${otp} for ${email}</strong></p>`,
+      };
+      await transporter.sendMail(message);
+      return res.status(200).json({
+        success: true,
+        message: "OTP sent to email. Please verify to complete registration.",
+        verifiedData,
+      });
+    } catch (err) {
+      console.error("Error generating OTP:", err);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
   } catch (error) {
     console.error("Error checking existing company:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -125,26 +181,10 @@ exports.getCompanyData = async (req, res) => {
 };
 
 exports.postJob = async (req, res) => {
-  const {
-    title,
-    description,
-    level,
-    deadline,
-    location,
-    salary,
-    category,
-    roleCategory,
-  } = req.body;
+  const { title, description, category, level, deadline, location, salary } =
+    req.body;
 
-  if (
-    !title ||
-    !level ||
-    !description ||
-    !location ||
-    !salary ||
-    !category ||
-    !roleCategory
-  ) {
+  if (!title || !level || !description || !location || !salary || !category) {
     return res.status(400).json({
       success: false,
       message: "All fields are required",
@@ -161,9 +201,8 @@ exports.postJob = async (req, res) => {
       location,
       salary,
       level,
-      category,
       companyId,
-      roleCategory,
+      category,
     });
 
     await Company.findByIdAndUpdate(

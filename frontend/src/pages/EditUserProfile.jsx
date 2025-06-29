@@ -132,7 +132,7 @@ const EditUserProfile = () => {
       setImage(user.image);
     }
     if (user?.industry) {
-      setImage(user.industry);
+      setIndustry(user.industry);
     }
   }, [user]);
 

@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     },
   ],
   skills: [{ type: String }],
-  savedJobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
+
   industryInsight: [
     { type: mongoose.Schema.Types.ObjectId, ref: "IndustryInsight" },
   ],
@@ -43,27 +43,9 @@ const userSchema = new mongoose.Schema({
       ref: "Assessment",
     },
   ],
-  // resume: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Resume",
-  // },
-  coverLetters: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "CoverLetter",
-    },
-  ],
-  notifications: [
-    {
-      type: String,
-      message: String,
-      read: { type: Boolean, default: false },
-      timestamp: { type: Date, default: Date.now },
-    },
-  ],
   linkedInProfile: String,
   githubProfile: String,
-  portfolioWebsite: String,
+
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   industry: String,

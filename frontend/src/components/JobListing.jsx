@@ -6,16 +6,8 @@ import JobCard from "./JobCard";
 import { FaAngleLeft } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa";
 const JobListing = () => {
-  const {
-    user,
-    userToken,
-    isSearched,
-    searchFilter,
-    setSearchFilter,
-    jobs,
-    recommendedJobs,
-    extractResumeText,
-  } = useContext(AppContext);
+  const { isSearched, searchFilter, setSearchFilter, jobs } =
+    useContext(AppContext);
   // console.log("the user for job listing", user?.resume);
   const [showFilter, setShowFilter] = useState(false);
 
@@ -42,12 +34,12 @@ const JobListing = () => {
     );
   };
 
-  useEffect(() => {
-    if (user?.resume) {
-      extractResumeText(user.resume);
-      console.log("the pdf url is: ", user.resume);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.resume) {
+  //     extractResumeText(user.resume);
+  //     console.log("the pdf url is: ", user.resume);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     const matchesCategory = (job) =>

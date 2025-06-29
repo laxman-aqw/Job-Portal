@@ -5,6 +5,11 @@ const JobRoleCategory = require("../models/JobRoleCategory");
 const { classifyJob } = require("../utils/naiveBayes");
 const { fetchAndExtractText } = require("../utils/resumeExtraction");
 const { htmlToText } = require("html-to-text");
+
+// const { stripHtml } = require("string-strip-html");
+// const natural = require("natural");
+// const sw = require("stopword");
+
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -233,7 +238,14 @@ exports.recommendJobs = async (req, res) => {
 
     for (const job of allJobs) {
       const htmlContent = job.description;
-      const plainText = await generateClassifiableJobDescription(htmlContent);
+      const plainText = htmlToText(htmlContent, {
+        wordwrap: 1000,
+        selectors: [
+          { selector: "a", options: { ignoreHref: true } }, // Skip hrefs if needed
+        ],
+      });
+      // console.log("the job content is:", plainText);
+      // const plainText = await generateClassifiableJobDescription(htmlContent);
       const jobScores = classifyJob(plainText);
       const jobSortedCategories = Object.keys(jobScores).sort(
         (a, b) => jobScores[b] - jobScores[a]
@@ -274,8 +286,16 @@ exports.parseResume = async (req, res, next) => {
   }
   // console.log(pdfUrl);
   try {
-    const unfilteredText = await fetchAndExtractText(pdfUrl);
-    const text = await generateClassifiableSkills(unfilteredText);
+    // const unfilteredText = await fetchAndExtractText(pdfUrl);
+    // const text = await fetchAndExtractText(pdfUrl);
+    // console.log("the unfiltered text is:", unfilteredText);
+    // const text = await generateClassifiableSkills(unfilteredText);
+    // console.log("text from generateClassifiable skills:", text);
+    const text = await fetchAndExtractText(pdfUrl);
+
+    // const processedText = preprocessResume(rawText);
+    // console.log("Preprocessed text:", processedText);
+    // const text = stripHtml(rawText).result;
     res.status(200).json({
       success: true,
       message: "resume data parsed",
@@ -291,37 +311,37 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const generateClassifiableSkills = async (resumeText) => {
-  const prompt = `
-    You are an expert resume parser for job classification systems.
+// const generateClassifiableSkills = async (resumeText) => {
+//   const prompt = `
+//     You are an expert resume parser for job classification systems.
 
-    Given a resume text, extract and return a summary of the candidate's job-related skills, experience, and relevant traits for classification. Do NOT include personal details, education info, certifications, or formatting. Your goal is to clean the resume into a text block that contains only useful features for a Naive Bayes job classifier.
+//     Given a resume text, extract and return a summary of the candidate's job-related skills, experience, and relevant traits for classification. Do NOT include personal details, education info, certifications, or formatting. Your goal is to clean the resume into a text block that contains only useful features for a Naive Bayes job classifier.
 
-    Now extract skills and experience summary from the following resume:
+//     Now extract skills and experience summary from the following resume:
 
-    ${resumeText}
+//     ${resumeText}
 
-    return the summary of skills and experience as a plain string in a paragraph.
-  `;
+//     return the summary of skills and experience as a plain string in a paragraph.
+//   `;
 
-  const result = await model.generateContent(prompt);
-  const textResult = result.response.text().trim();
-  return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
-};
-const generateClassifiableJobDescription = async (jobDescription) => {
-  const prompt = `
-    You are an expert jop description parser for job classification systems.
+//   const result = await model.generateContent(prompt);
+//   const textResult = result.response.text().trim();
+//   return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
+// };
+// const generateClassifiableJobDescription = async (jobDescription) => {
+//   const prompt = `
+//     You are an expert jop description parser for job classification systems.
 
-    Given a job description, extract and return a summary of the job. Your goal is to clean the job description into a text block that contains only useful features for a Naive Bayes job classifier.
+//     Given a job description, extract and return a summary of the job. Your goal is to clean the job description into a text block that contains only useful features for a Naive Bayes job classifier.
 
-    Now extract keypoints summary from the following resume:
+//     Now extract keypoints summary from the following resume:
 
-    ${jobDescription}
+//     ${jobDescription}
 
-    return the summary of skills and experience as a plain string in a paragraph.
-  `;
+//     return the summary of skills and experience as a plain string in a paragraph.
+//   `;
 
-  const result = await model.generateContent(prompt);
-  const textResult = result.response.text().trim();
-  return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
-};
+//   const result = await model.generateContent(prompt);
+//   const textResult = result.response.text().trim();
+//   return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
+// };

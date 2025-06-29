@@ -62,11 +62,6 @@ export const AppContextProvider = (props) => {
           },
         }
       );
-      if (data) {
-        console.log("the data is:", data);
-      } else {
-        console.log("there is not data");
-      }
       if (data.success) {
         console.log("the data is:", data);
         console.log("Extracted text:", data.text);

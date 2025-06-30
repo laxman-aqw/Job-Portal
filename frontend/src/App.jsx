@@ -23,7 +23,7 @@ import CompanyProfile from "./pages/CompanyProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
 import EditUserProfile from "./pages/EditUserProfile";
 import EditExperience from "./components/EditExperience";
-import AddExperience from "./components/addExperience";
+import AddExperience from "./components/AddExperience";
 import ConfirmModel from "./components/ConfirmationModel";
 import AddEducation from "./components/AddEducation";
 import EditEducation from "./components/EditEducation";

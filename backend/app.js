@@ -16,7 +16,8 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT;
 const { trainNaiveBayes } = require("./utils/naiveBayes");
-
+const path = require("path");
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -26,7 +27,7 @@ app.use(
 app.use(express.json());
 
 const store = new MongoDBStore({
-  uri: process.env.DatabaseURI, // Your MongoDB connection string
+  uri: process.env.DatabaseURI,
   collection: "sessions",
 });
 

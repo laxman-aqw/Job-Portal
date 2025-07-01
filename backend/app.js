@@ -68,7 +68,7 @@ const startServer = async () => {
 
 startServer();
 
-require("../backend/controllers/ai-controllers/CronIndustryInsight");
+require("./controllers/ai-controllers/CronIndustryInsight");
 app.get("/", async (req, res) => {
   res.send("hello");
 });

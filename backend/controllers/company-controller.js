@@ -80,7 +80,7 @@ exports.registerCompany = async (req, res, next) => {
       const message = {
         from: process.env.EMAIL_USER,
         to: email,
-        subject: "Dear Your OTP for registration",
+        subject: "Your OTP for registration",
         text: `Dear ${name} Your OTP is: ${otp}`,
         html: `<p>Your OTP for registration is <strong>${otp} for ${email}</strong></p>`,
       };

@@ -46,6 +46,7 @@ function preprocess(text) {
     .map((word) => synonyms[word] || word);
 }
 
+
 async function trainNaiveBayes() {
   const JobRoleCategory = require("../models/JobRoleCategory");
   const trainingData = await JobRoleCategory.find();

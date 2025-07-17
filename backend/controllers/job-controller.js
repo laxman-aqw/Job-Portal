@@ -6,10 +6,6 @@ const { classifyJob } = require("../utils/naiveBayes");
 const { fetchAndExtractText } = require("../utils/resumeExtraction");
 const { htmlToText } = require("html-to-text");
 
-// const { stripHtml } = require("string-strip-html");
-// const natural = require("natural");
-// const sw = require("stopword");
-
 exports.getJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ visible: true }).populate({
@@ -124,72 +120,6 @@ exports.addJobRoleCategory = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-
-// exports.recommendJobs = async (req, res) => {
-//   const { text } = req.body;
-//   try {
-//     const scores = classifyJob(text);
-//     const sortedCategories = Object.keys(scores).sort(
-//       (a, b) => scores[b] - scores[a]
-//     );
-//     const topCategory = sortedCategories[0];
-//     const secondCategory = sortedCategories[1];
-//     const thirdCategory = sortedCategories[2];
-
-//     let recommendedJobs = await Job.find({
-//       roleCategory: {
-//         $in: [new RegExp(topCategory, "i")],
-//       },
-//       visible: true,
-//     })
-//       .populate({
-//         path: "companyId",
-//         select: "-password ",
-//       })
-//       .sort({ relevanceScore: -1 });
-
-//     if (recommendedJobs.length < 12) {
-//       const secondCategoryJobs = await Job.find({
-//         roleCategory: {
-//           $in: [new RegExp(secondCategory, "i")],
-//         },
-//         visible: true,
-//       })
-//         .populate({
-//           path: "companyId",
-//           select: "-password ",
-//         })
-//         .sort({ relevanceScore: -1 });
-
-//       recommendedJobs = [...recommendedJobs, ...secondCategoryJobs];
-
-//       if (recommendedJobs.length < 12) {
-//         const thirdCategoryJobs = await Job.find({
-//           roleCategory: {
-//             $in: [new RegExp(thirdCategory, "i")],
-//           },
-//           visible: true,
-//         })
-//           .populate({
-//             path: "companyId",
-//             select: "-password ",
-//           })
-//           .sort({ relevanceScore: -1 });
-
-//         recommendedJobs = [...recommendedJobs, ...thirdCategoryJobs];
-//       }
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Recommended jobs fetched",
-//       jobs: recommendedJobs,
-//     });
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json({ success: false, message: "Internal Server Error" });
-//   }
-// };
 
 exports.recommendJobs = async (req, res) => {
   const { text } = req.body;
@@ -310,38 +240,3 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-// const generateClassifiableSkills = async (resumeText) => {
-//   const prompt = `
-//     You are an expert resume parser for job classification systems.
-
-//     Given a resume text, extract and return a summary of the candidate's job-related skills, experience, and relevant traits for classification. Do NOT include personal details, education info, certifications, or formatting. Your goal is to clean the resume into a text block that contains only useful features for a Naive Bayes job classifier.
-
-//     Now extract skills and experience summary from the following resume:
-
-//     ${resumeText}
-
-//     return the summary of skills and experience as a plain string in a paragraph.
-//   `;
-
-//   const result = await model.generateContent(prompt);
-//   const textResult = result.response.text().trim();
-//   return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
-// };
-// const generateClassifiableJobDescription = async (jobDescription) => {
-//   const prompt = `
-//     You are an expert jop description parser for job classification systems.
-
-//     Given a job description, extract and return a summary of the job. Your goal is to clean the job description into a text block that contains only useful features for a Naive Bayes job classifier.
-
-//     Now extract keypoints summary from the following resume:
-
-//     ${jobDescription}
-
-//     return the summary of skills and experience as a plain string in a paragraph.
-//   `;
-
-//   const result = await model.generateContent(prompt);
-//   const textResult = result.response.text().trim();
-//   return textResult.replace(/^["']|["']$/g, ""); // remove quotes if any
-// };

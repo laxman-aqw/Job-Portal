@@ -15,20 +15,20 @@ exports.generateResume = async (req, res) => {
       achievements,
       education,
       certifications,
-      customInstructions
+      customInstructions,
     } = req.body;
-      console.log(user);
+    console.log(user);
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "User not authenticated."
+        message: "User not authenticated.",
       });
     }
 
     if (!jobTitle || !yearsOfExperience) {
       return res.status(400).json({
         success: false,
-        message: "Job title and years of experience are required."
+        message: "Job title and years of experience are required.",
       });
     }
 
@@ -36,17 +36,21 @@ exports.generateResume = async (req, res) => {
       Generate a professional resume for a ${jobTitle} position with ${yearsOfExperience} years of experience.
       
       User Information:
-      - Name: ${user.firstName + " " + user.lastName || 'Your Name'}
+      - Name: ${user.firstName + " " + user.lastName || "Your Name"}
       - Email: ${user.email}
-      - Industry: ${user.industry || 'Not specified'}
-      ${user.skills?.length ? `- Current Skills: ${user.skills.join(", ")}` : ''}
+      - Industry: ${user.industry || "Not specified"}
+      ${
+        user.skills?.length ? `- Current Skills: ${user.skills.join(", ")}` : ""
+      }
       
       Additional Information:
-      ${keySkills ? `- Key Skills: ${keySkills}` : ''}
-      ${achievements ? `- Key Achievements: ${achievements}` : ''}
-      ${education ? `- Education: ${education}` : ''}
-      ${certifications ? `- Certifications: ${certifications}` : ''}
-      ${customInstructions ? `- Custom Instructions: ${customInstructions}` : ''}
+      ${keySkills ? `- Key Skills: ${keySkills}` : ""}
+      ${achievements ? `- Key Achievements: ${achievements}` : ""}
+      ${education ? `- Education: ${education}` : ""}
+      ${certifications ? `- Certifications: ${certifications}` : ""}
+      ${
+        customInstructions ? `- Custom Instructions: ${customInstructions}` : ""
+      }
       
       Generate a comprehensive, professional resume in the following JSON format:
       {
@@ -87,21 +91,20 @@ exports.generateResume = async (req, res) => {
       .text()
       .replace(/```(?:json)?\n?/g, "")
       .trim();
-    
+
     const resume = JSON.parse(responseText);
 
     res.status(200).json({
       success: true,
       message: "Resume generated successfully",
-      resume: resume
+      resume: resume,
     });
-
   } catch (error) {
     console.error("Error generating resume:", error);
     res.status(500).json({
       success: false,
       message: "Failed to generate resume",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -115,31 +118,21 @@ exports.saveResume = async (req, res) => {
     if (!user || !resumeData) {
       return res.status(400).json({
         success: false,
-        message: "User and resume data are required."
+        message: "User and resume data are required.",
       });
     }
-
-    // Here you would typically save to a Resume model
-    // For now, we'll just return success
-    // const savedResume = await Resume.create({
-    //   userId: user._id,
-    //   name: resumeName || 'Generated Resume',
-    //   data: resumeData,
-    //   createdAt: new Date()
-    // });
 
     res.status(200).json({
       success: true,
       message: "Resume saved successfully",
-    //   resume: savedResume
+      //   resume: savedResume
     });
-
   } catch (error) {
     console.error("Error saving resume:", error);
     res.status(500).json({
       success: false,
       message: "Failed to save resume",
-      error: error.message
+      error: error.message,
     });
   }
 };
